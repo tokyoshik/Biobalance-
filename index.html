@@ -3,437 +3,253 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthLogic | Научный подход к питанию и нутрициологии</title>
+    <meta name="description" content="Экспертные разборы питания, калькуляторы КБЖУ и гиды по добавкам. Только доказательная медицина.">
     
-    <title>HealthLogic | Научный подход к питанию, добавкам и долголетию</title>
-    <meta name="description" content="Экспертные разборы питания, калькулятор калорий и гиды по добавкам. Только проверенные факты со ссылками на научные исследования и рекомендации врачей.">
-    <link rel="canonical" href="https://yourdomain.com/">
-    
-    <meta property="og:title" content="HealthLogic - Ваша база знаний о здоровье">
-    <meta property="og:description" content="Научно обоснованные советы по питанию и биодобавкам без медицинских обещаний.">
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://yourdomain.com/">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=1200&q=80">
-
     <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* 
-        ========================================
-        CSS VARIABLES & THEME
-        ========================================
-        */
         :root {
-            --color-milk: #FDF5E6;
-            --color-beige: #F5F5DC;
-            --color-green: #556B2F;
-            --color-green-light: #879676;
-            --color-text: #2D2D2D;
-            --color-text-muted: #575757;
-            --color-white: #FFFFFF;
-            --color-border: #E5E0D5;
-            --width-content: 780px;
-            --font-main: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            --shadow-sm: 0 2px 4px rgba(0,0,0,0.05);
-            --shadow-md: 0 4px 12px rgba(0,0,0,0.08);
+            --bg: #FDF5E6;
+            --black: #1A1A1A;
+            --muted-text: #444444;
+            --green: #4A5759;
+            --beige: #DED7B1;
+            --white: #FFFFFF;
+            --container-width: 1200px;
+            --content-width: 780px;
         }
 
-        /* Reset & Base */
+        /* Base Reset */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { 
-            font-family: var(--font-main); 
-            background-color: var(--color-milk); 
-            color: var(--color-text); 
-            line-height: 1.8;
-            overflow-x: hidden;
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: var(--black); 
+            line-height: 1.7; 
+            -webkit-font-smoothing: antialiased;
         }
 
-        h1, h2, h3 { line-height: 1.3; margin-bottom: 1.5rem; font-weight: 700; }
-        h1 { font-size: 2.8rem; }
-        h2 { font-size: 2rem; margin-top: 3rem; color: var(--color-green); }
-        p { margin-bottom: 1.5rem; font-size: 1.125rem; }
-
-       .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        /* Layout Structure */
+       .container { max-width: var(--container-width); margin: 0 auto; padding: 0 20px; }
         
-        /* 
-        ========================================
-        LAYOUT COMPONENTS
-        ========================================
-        */
-        header {
-            background: var(--color-white);
-            border-bottom: 1px solid var(--color-border);
-            padding: 20px 0;
-            position: sticky;
-            top: 0;
-            z-index: 1000;
+        header { 
+            background: var(--white); 
+            border-bottom: 2px solid var(--black); 
+            padding: 15px 0; 
+            position: sticky; 
+            top: 0; 
+            z-index: 1000; 
         }
 
-       .header-inner {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+       .nav-wrapper { display: flex; justify-content: space-between; align-items: center; }
+       .logo { font-size: 24px; font-weight: 800; text-transform: uppercase; letter-spacing: -1px; color: var(--black); text-decoration: none; }
+       .nav-links { display: flex; gap: 20px; }
+       .nav-links a { text-decoration: none; color: var(--black); font-weight: 600; font-size: 14px; }
+
+        /* Main Content & Sidebar Grid */
+       .main-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 300px; 
+            gap: 40px; 
+            margin-top: 40px; 
         }
 
-       .logo {
-            font-size: 24px;
-            font-weight: 700;
-            color: var(--color-green);
-            text-decoration: none;
-            letter-spacing: -0.5px;
-        }
-
-        nav ul { display: flex; list-style: none; gap: 25px; }
-        nav a { text-decoration: none; color: var(--color-text); font-weight: 500; font-size: 0.95rem; transition: 0.2s; }
-        nav a:hover { color: var(--color-green); }
-
-       .main-grid {
-            display: grid;
-            grid-template-columns: 1fr 300px;
-            gap: 40px;
-            margin-top: 40px;
-        }
-
-       .content-block {
-            max-width: var(--width-content);
-            background: var(--color-white);
-            padding: 40px;
-            border-radius: 12px;
-            box-shadow: var(--shadow-sm);
-        }
-
-        /* 
-        ========================================
-        ADVERTISING SLOTS
-        ========================================
-        */
-       .ad-unit {
-            background: #fcfcfc;
-            border: 1px dashed #d0d0d0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #999;
-            font-size: 11px;
-            text-transform: uppercase;
-            margin: 2rem 0;
-            overflow: hidden;
-        }
-
-       .ad-leaderboard { width: 970px; height: 250px; margin: 20px auto; }
-       .ad-inline { width: 100%; height: 90px; }
-       .ad-sidebar { width: 300px; height: 600px; position: sticky; top: 100px; }
-       .ad-mobile-sticky { 
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 50px; 
-            background: var(--color-white); z-index: 2000; display: none;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
-            justify-content: center; align-items: center;
-        }
-
-        /* 
-        ========================================
-        ARTICLE ELEMENTS
-        ========================================
-        */
-       .article-lead {
-            font-size: 1.35rem;
-            color: var(--color-text-muted);
-            font-weight: 500;
-            border-left: 4px solid var(--color-green);
-            padding-left: 25px;
-            margin-bottom: 2.5rem;
-        }
-
-       .featured-image {
-            width: 100%;
-            height: 450px;
-            object-fit: cover;
-            border-radius: 10px;
-            margin-bottom: 2rem;
-        }
-
-       .fact-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 2.5rem 0;
-            font-size: 1rem;
-        }
-
-       .fact-table th,.fact-table td {
-            padding: 15px;
-            border: 1px solid var(--color-border);
-            text-align: left;
-        }
-
-       .fact-table th { background-color: var(--color-beige); font-weight: 700; }
-
-       .faq-card {
-            background: #FAFAFA;
-            padding: 25px;
-            border-radius: 8px;
-            margin: 2rem 0;
-            border-left: 4px solid var(--color-green-light);
-        }
-
-        /* 
-        ========================================
-        TOOLS (CALCULATOR, QUIZ, CHECKLIST)
-        ========================================
-        */
-       .tool-container {
-            background: var(--color-beige);
-            padding: 40px;
-            border-radius: 16px;
-            margin: 3rem 0;
-        }
-
-       .form-group { margin-bottom: 20px; }
-       .form-group label { display: block; margin-bottom: 8px; font-weight: 600; }
-       .form-group input,.form-group select {
-            width: 100%;
-            padding: 12px;
-            border: 1px solid var(--color-border);
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-       .btn {
-            background: var(--color-green);
-            color: white;
-            padding: 15px 30px;
-            border: none;
-            border-radius: 8px;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            display: inline-block;
-            text-align: center;
-            width: 100%;
-        }
-
-       .btn:hover { background: #3d4d22; transform: translateY(-2px); }
-
-        /* Quiz Specific */
-       .quiz-step { display: none; }
-       .quiz-step.active { display: block; animation: fadeIn 0.5s; }
-
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        /* 
-        ========================================
-        CTA & SPONSOR BLOCKS
-        ========================================
-        */
-       .sponsor-block {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            margin-top: 40px;
-        }
-
-       .product-card {
-            border: 1px solid var(--color-border);
-            padding: 20px;
-            border-radius: 10px;
-            text-align: center;
-            background: var(--color-white);
-        }
-
-       .product-card img { max-width: 100px; margin-bottom: 15px; }
-       .product-card h4 { font-size: 1rem; margin-bottom: 10px; }
-       .coupon-btn { font-size: 12px; padding: 8px 15px; width: auto; }
-
-        /* 
-        ========================================
-        MOBILE FIRST RESPONSIVENESS
-        ========================================
-        */
-        @media (max-width: 1024px) {
+        @media (max-width: 992px) {
            .main-grid { grid-template-columns: 1fr; }
-           .ad-sidebar { display: none; }
-           .ad-leaderboard { display: none; }
-           .ad-mobile-sticky { display: flex; }
-            h1 { font-size: 2.2rem; }
-           .content-block { padding: 25px; border-radius: 0; }
+           .sidebar { order: 2; }
         }
 
-        @media (max-width: 600px) {
-           .sponsor-block { grid-template-columns: 1fr; }
+        /* Content Blocks */
+        article { max-width: var(--content-width); margin-bottom: 60px; }
+       .post-card { background: var(--white); border: 2px solid var(--black); padding: 30px; border-radius: 4px; box-shadow: 8px 8px 0px var(--black); }
+       .post-img { width: 100%; height: 400px; object-fit: cover; border: 2px solid var(--black); margin-bottom: 20px; display: block; }
+        
+        h1 { font-size: clamp(28px, 5vw, 42px); font-weight: 800; line-height: 1.1; margin-bottom: 20px; }
+        h2 { font-size: 24px; font-weight: 800; margin: 40px 0 20px; border-left: 5px solid var(--green); padding-left: 15px; }
+        p { margin-bottom: 20px; font-size: 18px; color: var(--black); }
+       .lead { font-size: 20px; font-weight: 600; color: var(--muted-text); margin-bottom: 30px; border-bottom: 1px solid var(--beige); padding-bottom: 15px; }
+
+        /* Interactive Tools */
+       .tool-section { background: var(--black); color: var(--white); padding: 40px; border-radius: 4px; margin: 40px 0; }
+       .tool-section h2 { color: var(--beige); border: none; padding: 0; margin-top: 0; }
+       .form-group { margin-bottom: 20px; }
+       .form-group label { display: block; margin-bottom: 8px; font-weight: 600; font-size: 14px; text-transform: uppercase; }
+       .form-group input,.form-group select { width: 100%; padding: 12px; border: 2px solid var(--beige); background: #222; color: white; font-size: 16px; }
+        
+       .btn { 
+            display: inline-block; 
+            background: var(--beige); 
+            color: var(--black); 
+            padding: 15px 30px; 
+            text-decoration: none; 
+            font-weight: 800; 
+            text-transform: uppercase; 
+            border: 2px solid var(--black); 
+            cursor: pointer; 
+            transition: 0.2s; 
         }
+       .btn:hover { background: var(--white); transform: translate(-3px, -3px); box-shadow: 5px 5px 0px var(--green); }
+
+        /* Tables & Facts */
+       .fact-table { width: 100%; border-collapse: collapse; margin: 30px 0; font-size: 16px; }
+       .fact-table th,.fact-table td { border: 2px solid var(--black); padding: 15px; text-align: left; }
+       .fact-table th { background: var(--beige); font-weight: 800; }
+
+        /* Ad Slots */
+       .ad-label { font-size: 10px; color: #999; text-align: center; margin-bottom: 5px; text-transform: uppercase; }
+       .ad-box { background: #eee; border: 1px dashed #ccc; display: flex; align-items: center; justify-content: center; margin-bottom: 30px; overflow: hidden; }
+       .leaderboard { width: 970px; height: 250px; margin: 20px auto; }
+       .sidebar-ad { width: 300px; height: 600px; position: sticky; top: 100px; }
+       .mobile-sticky { position: fixed; bottom: 0; left: 0; width: 100%; height: 60px; background: white; border-top: 2px solid var(--black); z-index: 2000; display: flex; align-items: center; justify-content: center; }
+
+        @media (max-width: 768px) {
+           .leaderboard { display: none; }
+           .post-img { height: 250px; }
+        }
+
+        /* Results Display */
+       .result-area { background: #2a2a2a; padding: 20px; border-radius: 4px; margin-top: 20px; display: none; }
+       .result-area.active { display: block; }
     </style>
 </head>
 <body>
 
-    <header>
-        <div class="container header-inner">
-            <a href="#" class="logo">HealthLogic</a>
-            <nav>
-                <ul>
-                    <li><a href="#nutrition">Питание</a></li>
-                    <li><a href="#supplements">Добавки</a></li>
-                    <li><a href="#tools">Инструменты</a></li>
-                    <li><a href="#advertise">Реклама</a></li>
-                </ul>
-            </nav>
-        </div>
-    </header>
+<header>
+    <div class="container nav-wrapper">
+        <a href="#" class="logo">HealthLogic</a>
+        <nav class="nav-links">
+            <a href="#articles">Статьи</a>
+            <a href="#tools">Инструменты</a>
+            <a href="#about">О нас</a>
+        </nav>
+    </div>
+</header>
 
-    <div class="container">
-        <div class="ad-unit ad-leaderboard" data-ad-slot="header-main-970x250">
-            Leaderboard 970 × 250 (Desktop Only)
-        </div>
+<div class="container">
+    <div class="ad-label">Реклама</div>
+    <div class="ad-box leaderboard" data-ad-slot="header-lb-01">970 x 250 Leaderboard</div>
 
-        <main class="main-grid">
-            <div class="content-area">
+    <div class="main-grid">
+        <main id="articles">
+            <article class="post-card">
+                <img src="https://images.unsplash.com/photo-1511688858344-1854ef99c4ad?q=80&w=1200" alt="Здоровое питание и метаболизм" class="post-img">
+                <div style="font-weight: 800; color: var(--green); text-transform: uppercase; font-size: 12px; margin-bottom: 10px;">Метаболическое здоровье • 2026</div>
+                <h1>Питание при использовании GLP-1: как сохранить мышцы и энергию</h1>
+                <p class="lead">Популярность препаратов GLP-1 (Оземпик, Мунджаро) меняет культуру питания. Исследования показывают, что до 30% веса при похудении может приходиться на мышечную массу, если не соблюдать диету.</p>
                 
-                <article class="content-block" id="article-magnesium">
-                    <div class="meta" style="font-size: 14px; color: var(--color-text-muted); margin-bottom: 1rem;">
-                        <span>24 мая 2025</span> • <span>Автор: Д-р Алексей Воронцов</span> • <span>6 мин чтения</span>
+                <p>Главная проблема терапии — сильное подавление аппетита, из-за чего пациенты не добирают критически важные нутриенты. В 2026 году эксперты рекомендуют стратегию «Плотность прежде всего»: каждая калория должна нести максимум пользы.</p>
+
+                <div class="ad-box" style="height: 90px; width: 100%;" data-ad-slot="inline-ad-01">728 x 90 Responsive Banner</div>
+
+                <h2>Ключевые правила нутритивной поддержки</h2>
+                <p>Для предотвращения «саркопении» (потери мышц) необходимо повысить потребление белка до 1.2–1.5 г на кг веса. Также важна клетчатка для поддержания моторики ЖКТ, которая замедляется под действием препаратов.</p>
+
+                <table class="fact-table">
+                    <thead>
+                        <tr>
+                            <th>Нутриент</th>
+                            <th>Цель (день)</th>
+                            <th>Зачем это нужно</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Белок</td>
+                            <td>80–120 г</td>
+                            <td>Защита мышечной ткани</td>
+                        </tr>
+                        <tr>
+                            <td>Клетчатка</td>
+                            <td>25–30 г</td>
+                            <td>Здоровье кишечника и сытость</td>
+                        </tr>
+                        <tr>
+                            <td>Вода</td>
+                            <td>2–2.5 л</td>
+                            <td>Профилактика побочных эффектов</td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <div style="background: var(--beige); padding: 20px; border: 2px solid var(--black);">
+                    <strong>Совет эксперта:</strong> Используйте имбирь или мяту, если испытываете легкую тошноту — это наиболее распространенный побочный эффект в начале терапии.
+                </div>
+            </article>
+
+            <section id="tools" class="tool-section">
+                <h2>Калькулятор калорий (Mifflin-St Jeor)</h2>
+                <p style="color: #ccc; font-size: 14px;">Узнайте вашу базовую норму энергии на основе современных алгоритмов.</p>
+                
+                <div class="form-group">
+                    <label>Пол</label>
+                    <select id="gender">
+                        <option value="male">Мужской</option>
+                        <option value="female">Женский</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                    <div class="form-group">
+                        <label>Вес (кг)</label>
+                        <input type="number" id="weight" placeholder="70">
                     </div>
-                    
-                    <h1>Магний для сна: научные доказательства и правила приема</h1>
-                    
-                    <p class="article-lead">
-                        Магний является четвертым по распространенности минералом в организме человека, играющим ключевую роль в более чем 300 ферментативных реакциях. В последние годы он стал «золотым стандартом» среди добавок для улучшения качества сна и снижения тревожности.
-                    </p>
-
-                    <img src="https://images.unsplash.com/photo-1550573104-4eb82614b4f5?auto=format&fit=crop&w=800&q=80" alt="Магний и релаксация" class="featured-image" loading="lazy">
-
-                    <p>На химическом уровне магний помогает организму расслабиться, активируя парасимпатическую нервную систему — систему, ответственную за состояние покоя и переваривания пищи. Он регулирует нейротрансмиттеры, которые посылают сигналы по всей нервной системе, и гормон мелатонин, управляющий циклами сна и бодрствования.[4, 37]</p>
-
-                    <div class="ad-unit ad-inline" data-ad-slot="inline-after-h2-728x90">
-                        Banner 728 × 90 (После первого H2)
+                    <div class="form-group">
+                        <label>Рост (см)</label>
+                        <input type="number" id="height" placeholder="175">
                     </div>
+                </div>
+                <div class="form-group">
+                    <label>Возраст (лет)</label>
+                    <input type="number" id="age" placeholder="30">
+                </div>
+                <div class="form-group">
+                    <label>Активность</label>
+                    <select id="activity">
+                        <option value="1.2">Минимальная (офис)</option>
+                        <option value="1.375">Легкая (1-3 тренировки)</option>
+                        <option value="1.55">Средняя (3-5 тренировок)</option>
+                        <option value="1.725">Высокая (каждый день)</option>
+                    </select>
+                </div>
+                <button class="btn" onclick="calcBMR()">Рассчитать результат</button>
 
-                    <h2>Как магний взаимодействует с ГАМК-рецепторами</h2>
-                    <p>Одним из наиболее важных механизмов влияния магния на сон является его способность связываться с рецепторами гамма-аминомасляной кислоты (ГАМК). ГАМК — это тормозной нейромедиатор, ответственный за снижение активности нервной системы. Действуя аналогично некоторым рецептурным препаратам для сна, магний помогает «успокоить» мозг, облегчая процесс засыпания.[28, 37]</p>
+                <div id="bmr-res" class="result-area">
+                    <div style="font-size: 14px; text-transform: uppercase;">Ваш TDEE (общий расход):</div>
+                    <div id="tdee-val" style="font-size: 32px; font-weight: 800; color: var(--beige);">0</div>
+                    <p style="font-size: 14px; margin-top: 10px;">Это количество калорий для поддержания веса.</p>
+                </div>
+            </section>
 
-                    <table class="fact-table">
-                        <thead>
-                            <tr>
-                                <th>Параметр</th>
-                                <th>Детали и рекомендации</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Оптимальная дозировка</td>
-                                <td>200–350 мг элементарного магния в сутки для взрослых.[11, 30]</td>
-                            </tr>
-                            <tr>
-                                <td>Лучшее время приема</td>
-                                <td>За 30–60 минут до отхода ко сну, желательно с небольшим приемом пищи.[38]</td>
-                            </tr>
-                            <tr>
-                                <td>Популярные формы</td>
-                                <td>Глицинат (максимальное расслабление), Цитрат (при склонности к запорам).[30]</td>
-                            </tr>
-                            <tr>
-                                <td>Побочные эффекты</td>
-                                <td>Диарея, спазмы в животе, тошнота при превышении дозы >350 мг.[11, 39]</td>
-                            </tr>
-                        </tbody>
-                    </table>
+            <article class="post-card">
+                <img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?q=80&w=1200" alt="Сон и релаксация" class="post-img">
+                <div style="font-weight: 800; color: var(--green); text-transform: uppercase; font-size: 12px; margin-bottom: 10px;">Добавки • Исследование</div>
+                <h1>Магний и сон: почему Глицинат побеждает Оксид?</h1>
+                <p>Магний участвует в 300+ реакциях организма, включая активацию парасимпатической нервной системы. Но форма добавки определяет, попадет ли минерал в мозг или останется в кишечнике.[9, 10]</p>
+                
+                <h2>Сравнение форм</h2>
+                <p>Глицинат магния — это соединение с аминокислотой глицином, которое обладает высокой биодоступностью и не оказывает слабительного эффекта в отличие от оксида.[11, 12]</p>
+                
+                <table class="fact-table">
+                    <tr>
+                        <th>Форма</th>
+                        <th>Усвоение</th>
+                        <th>Основное применение</th>
+                    </tr>
+                    <tr>
+                        <td>Глицинат</td>
+                        <td>90%</td>
+                        <td>Сон, стресс, тревога [13]</td>
+                    </tr>
+                    <tr>
+                        <td>Цитрат</td>
+                        <td>70%</td>
+                        <td>Мышечные судороги, запоры [14]</td>
+                    </tr>
+                </table>
+            </article>
 
-                    <h2>Предостережения и противопоказания</h2>
-                    <p>Хотя магний считается безопасным для большинства здоровых взрослых, избыточное накопление минерала может быть опасным. Лицам с хроническими заболеваниями почек следует избегать добавок магния без прямого указания врача, так как почки могут не справиться с выведением излишков, что приведет к токсичности.[12, 23] Также магний может взаимодействовать с антибиотиками, снижая их эффективность. Обязательно соблюдайте интервал в 2–4 часа между приемами этих средств.[11]</p>
-
-                    <div class="faq-card">
-                        <h3>Часто задаваемые вопросы (FAQ)</h3>
-                        <div style="margin-top: 1rem;">
-                            <strong>Вопрос: Какая форма магния лучше всего подходит для сна?</strong>
-                            <p>Ответ: Магний глицинат считается оптимальным выбором для улучшения сна, так как он связан с аминокислотой глицином, которая сама по себе обладает успокаивающим эффектом на мозг и хорошо переносится желудком.[29, 30]</p>
-                        </div>
-                    </div>
-
-                    <p style="font-size: 0.9rem; color: var(--color-text-muted); font-style: italic;">
-                        Отказ от ответственности: Данная статья носит информационный характер. Пожалуйста, проконсультируйтесь с врачом перед началом приема любых добавок.
-                    </p>
-
-                    <div class="sponsor-block" id="sponsors-magnesium">
-                        <div class="product-card">
-                            <img src="https://via.placeholder.com/100" alt="Magnesium Glycinate">
-                            <h4>Magnesium Glycinate 200mg</h4>
-                            <button class="btn coupon-btn">Посмотреть купон</button>
-                        </div>
-                        <div class="product-card">
-                            <img src="https://via.placeholder.com/100" alt="Complex Support">
-                            <h4>Sleep Support Complex</h4>
-                            <button class="btn coupon-btn">Посмотреть купон</button>
-                        </div>
-                        <div class="product-card">
-                            <img src="https://via.placeholder.com/100" alt="Magnesium Drops">
-                            <h4>Liquid Magnesium Citrate</h4>
-                            <button class="btn coupon-btn">Посмотреть купон</button>
-                        </div>
-                    </div>
-                </article>
-
-                <section class="tool-container" id="tools">
-                    <h2 style="margin-top: 0;">Инструмент: Калькулятор калорий и TDEE</h2>
-                    <p>Рассчитайте свою норму калорий на основе формулы Миффлина — Сан-Жеора, признанной золотым стандартом современной диетологии.[24]</p>
-                    
-                    <div id="calorie-app">
-                        <div class="form-group">
-                            <label>Ваш пол</label>
-                            <select id="calc-gender">
-                                <option value="male">Мужской</option>
-                                <option value="female">Женский</option>
-                            </select>
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
-                            <div class="form-group">
-                                <label>Вес (кг)</label>
-                                <input type="number" id="calc-weight" placeholder="70">
-                            </div>
-                            <div class="form-group">
-                                <label>Рост (см)</label>
-                                <input type="number" id="calc-height" placeholder="175">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Возраст (лет)</label>
-                            <input type="number" id="calc-age" placeholder="30">
-                        </div>
-                        <div class="form-group">
-                            <label>Уровень активности</label>
-                            <select id="calc-activity">
-                                <option value="1.2">Сидячий (минимум упражнений)</option>
-                                <option value="1.375">Легкий (1-2 дня в неделю)</option>
-                                <option value="1.55">Умеренный (3-5 дней в неделю)</option>
-                                <option value="1.725">Высокий (ежедневно)</option>
-                                <option value="1.9">Экстремальный (2 раза в день)</option>
-                            </select>
-                        </div>
-                        <button class="btn" onclick="runCalorieCalculation()">Рассчитать результат</button>
-                        
-                        <div id="calc-result" style="display: none; margin-top: 30px; padding: 25px; background: white; border-radius: 12px; border: 2px solid var(--color-green);">
-                            <h3 style="margin-bottom: 10px;">Ваш результат:</h3>
-                            <p id="tdee-output" style="font-size: 2.5rem; font-weight: 700; color: var(--color-green); margin-bottom: 0;"></p>
-                            <p style="font-size: 0.9rem; margin-top: 10px;">Это количество калорий для поддержания текущего веса (TDEE).</p>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="tool-container" id="supplement-quiz">
-                    <h2 style="margin-top: 0;">Инструмент: Подбор добавок по цели</h2>
-                    <p>Ответьте на 3 вопроса, чтобы получить персонализированную рекомендацию на основе ваших потребностей.[40]</p>
-                    
-                    <div id="quiz-container">
-                        <div class="quiz-step active" id="step-1">
-                            <p><strong>1. Какая ваша главная цель в области здоровья сейчас?</strong></p>
-                            <button class="btn" onclick="quizNext(2, 'sleep')" style="margin-bottom: 10px;">Улучшение качества сна</button>
-                            <button class="btn" onclick="quizNext(2, 'energy')" style="margin-bottom: 10px;">Повышение уровня энергии</button>
-                            <button class="btn" onclick="quizNext(2, 'immune')">Поддержка иммунитета</button>
-                        </div>
-                        
-                        <div class="quiz-step" id="step-2">
-                            <p><strong>2. Есть ли у вас ограничения в питании?</strong></p>
-                            <button class="btn" onclick="quizNext(3, 'none')" style="margin-bottom: 10px;">Нет ограничений</button>
-                            <button class="btn" onclick="quizNext(3, 'vegan')" style="margin-bottom: 10px;">Я веган / вегетарианец</button>
-                            <button class="btn" onclick="quizNext(3, 'keto')">Я на кето-диете</button>
-                        </div>
-
-                        <div class="quiz-step" id="
+            <section class="tool-section" style="background: var(--green);">
+                <h2 style="color: white;">Smart Quiz: Подбор добавки</h2>
+                <div class="form-group">
+                    <label style="color: var(--beige);">Какая ваша основная цель?</label>
