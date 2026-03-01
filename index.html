@@ -3,175 +3,139 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BioBalance — Твой гид по здоровью и нутре</title>
+    <title>BioBalance | Система Управления Биокапиталом</title>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Montserrat:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #FDFBF7; --green: #5E7153; --beige: #E8E1D5; --text: #2D2926; }
-        body { font-family: sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; margin: 0; padding: 0; }
-        header { background: #fff; padding: 15px; text-align: center; border-bottom: 2px solid var(--beige); }
-        nav { padding: 10px; display: flex; justify-content: center; gap: 15px; font-size: 14px; overflow-x: auto; }
-        .ad-box { background: #eee; text-align: center; padding: 10px; font-size: 10px; color: #999; margin: 15px 0; border: 1px dashed #ccc; }
-        .container { max-width: 700px; margin: 0 auto; padding: 15px; }
-        h1 { color: var(--green); font-size: 24px; }
-        h2 { color: var(--green); margin-top: 30px; }
-        .lead { font-style: italic; color: #666; border-left: 3px solid var(--beige); padding-left: 10px; margin-bottom: 20px; }
-        table { width: 100%; border-collapse: collapse; margin: 15px 0; font-size: 14px; }
-        th, td { border: 1px solid var(--beige); padding: 10px; text-align: left; }
-        th { background: var(--beige); }
-        .footer { background: var(--beige); padding: 20px; text-align: center; margin-top: 40px; font-size: 12px; }
-        .btn { background: var(--green); color: white; padding: 10px 20px; text-decoration: none; border-radius: 5px; display: inline-block; }
-        img { max-width: 100%; border-radius: 10px; }
+        :root { --primary: #1B3022; --accent: #C5A059; --bg: #F4F9F4; --white: #FFFFFF; --text: #1A1A1A; --warning: #8b0000; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Montserrat', sans-serif; line-height: 1.8; }
+        .disclaimer-bar { background: var(--warning); color: white; padding: 10px; text-align: center; font-size: 11px; font-weight: bold; position: sticky; top: 0; z-index: 100; }
+        header { padding: 100px 20px; text-align: center; background: var(--white); border-bottom: 1px solid #eee; }
+        h1 { font-family: 'Playfair Display', serif; font-size: clamp(40px, 8vw, 80px); color: var(--primary); }
+        .container { max-width: 850px; margin: 0 auto; padding: 40px 20px; }
+        .article { background: var(--white); border-radius: 40px; margin-bottom: 60px; padding: 45px; box-shadow: 0 20px 40px rgba(0,0,0,0.05); }
+        h2 { font-family: 'Playfair Display', serif; font-size: 36px; margin-bottom: 25px; color: var(--primary); }
+        .hook { font-size: 19px; color: #333; margin-bottom: 30px; border-left: 4px solid var(--accent); padding-left: 20px; font-weight: 400; }
+        .details { display: none; padding-top: 30px; border-top: 1px solid #eee; font-size: 16px; margin-top: 30px; animation: fadeIn 0.5s ease; }
+        .btn-more { background: none; border: 2px solid var(--accent); color: var(--accent); padding: 14px 35px; border-radius: 50px; font-weight: bold; cursor: pointer; text-transform: uppercase; font-size: 12px; transition: 0.3s; }
+        .btn-more:hover { background: var(--accent); color: white; }
+        .ai-zone { margin-top: 40px; padding: 25px; background: #fafafa; border-radius: 20px; border: 1px dashed #ccc; }
+        .ai-btn { background: var(--primary); color: white; border: none; padding: 18px; border-radius: 12px; width: 100%; cursor: pointer; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
+        .ai-response { display: none; margin-top: 20px; padding: 20px; background: #fffdf2; border-radius: 15px; border-left: 5px solid var(--accent); font-size: 14px; line-height: 1.7; }
+        .calc-section { background: var(--primary); color: white; padding: 50px; border-radius: 40px; margin-bottom: 60px; }
+        input { width: 100%; padding: 18px; margin: 15px 0; border-radius: 12px; border: 1px solid rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); color: white; font-size: 16px; }
+        footer { background: #0a110c; color: #666; padding: 80px 20px; text-align: center; font-size: 12px; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
 
-<header><strong>BIO</strong>BALANCE</header>
+<div class="disclaimer-bar">⚠️ ВНИМАНИЕ: ДАННЫЙ САЙТ НЕ ЯВЛЯЕТСЯ МЕДИЦИНСКИМ РЕСУРСОМ. ВСЯ ИНФОРМАЦИЯ ОЗНАКОМИТЕЛЬНАЯ.</div>
 
-<nav>
-    <span>Питание</span> <span>Добавки</span> <span>Рецепты</span> <span>О нас</span>
-</nav>
+<header>
+    <h1>BioBalance</h1>
+    <p style="letter-spacing: 6px; text-transform: uppercase; font-size: 12px; color: var(--accent); margin-top: 15px;">Интеллектуальная лаборатория саморазвития</p>
+</header>
 
 <div class="container">
-    <div class="ad-box" data-ad-slot="top-banner">МЕСТО ПОД БАННЕР (Leaderboard)</div>
 
-    <article>
-        <h1>Магний: зачем он нужен и какую форму выбрать?</h1>
-        <p class="lead">Разбираемся, почему магний называют «минералом спокойствия» и как не выкинуть деньги на ветер, купив нерабочую форму в аптеке.</p>
-        
-        <img src="https://images.unsplash.com/photo-1550573105-df27e457247c?w=500" style="width:100%;" alt="Health">
-
-        <h2>Почему возникает дефицит?</h2>
-        <p>Стресс, кофе и рафинированные продукты буквально «вымывают» магний из организма. Первые признаки: дергающийся глаз, судороги в икрах и плохой сон.</p>
-
-        <div class="ad-box" data-ad-slot="mid-article">МЕСТО ПОД БАННЕР (Внутри статьи)</div>
-
-        <h2>Сравнение форм магния</h2>
-        <table>
-            <tr><th>Форма</th><th>Усвоение</th><th>Эффект</th></tr>
-            <tr><td>Глицинат</td><td>Лучшее</td><td>Сон и антистресс</td></tr>
-            <tr><td>Цитрат</td><td>Хорошее</td><td>Пищеварение</td></tr>
-            <tr><td>Оксид</td><td>Худшее</td><td>Почти не усваивается</td></tr>
-        </table>
-
-        <p><strong>Важно:</strong> Перед приемом любых добавок обязательно проконсультируйтесь с врачом. Статья носит ознакомительный характер.</p>
-
-        <div style="text-align:center; margin-top:30px;">
-            <a href="#vitamin-quiz" class="btn" style="display:inline-block; margin-top:15px;">Подобрать витамины (Quiz)</a>
+    <!-- Статья 1: Дофамин -->
+    <article class="article">
+        <h2>Дофаминовая десенситизация: Почему мир теряет вкус?</h2>
+        <div class="hook">
+            Задумывались ли вы, почему после часа бесконечного скроллинга ленты вы чувствуете себя не отдохнувшим, а опустошенным? Это явление называется «дофаминовой десенситизацией». Наш мозг, эволюционировавший в условиях дефицита, сегодня буквально тонет в океане дешевого удовольствия. Каждое уведомление, лайк или быстрый углевод — это микро-всплеск, который заставляет рецепторы снижать чувствительность. В итоге обычные радости жизни перестают приносить удовольствие, а воля превращается в ничто. Это не лень — это биохимия.
         </div>
-    </article><hr style="margin: 40px 0; border: 0; border-top: 1px solid #E8E1D5;">
-
-<article>
-    <h1>Интервальное голодание 16/8: инструкция для начинающих</h1>
-    <p class="lead">Самый популярный метод похудения без жестких диет. Узнайте, как окно приема пищи влияет на уровень инсулина и метаболизм.</p>
-    
-    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?auto=format&fit=crop&w=800&q=80" alt="Полезный завтрак">
-
-    <h2>В чем суть метода?</h2>
-    <p>Вы отказываетесь от еды на 16 часов, а все калории потребляете в течение 8-часового "окна". Например, с 10:00 до 18:00.</p>
-
-    <div class="ad-box">МЕСТО ПОД БАННЕР (Responsive)</div>
-
-    <h2>3 главных правила:</h2>
-    <ul>
-        <li>В период голода можно пить воду, черный кофе и чай без сахара.</li>
-        <li>Первый прием пищи должен быть самым плотным.</li>
-        <li>Не переедайте в "окно" — калории все еще имеют значение.</li>
-    </ul>
-
-    <p style="font-size: 14px; color: #888;">Источник: Harvard Health Publishing.</p>
-    </article> 
-    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #E8E1D5;">
-<article>
-    <h2>Омега-3: 3 признака качественного рыбьего жира</h2>
-    <p class="lead">Разбираемся, почему цена не всегда гарантирует качество и как проверить капсулы на свежесть.</p>
-    
-    <img src="https://images.unsplash.com/photo-1471193945509-9ad0617afabf?w=600" style="width:100%; border-radius:10px;" alt="Омега 3">
-
-    <p>Многие смотрят только на общую массу (1000 мг), но это ошибка. Смотреть нужно на содержание кислот <strong>EPA и DHA</strong>. Если их меньше 500 мг на капсулу — вы платите за дешевый жир-наполнитель.</p>
-    
-    <div class="ad-box">AD: РЕКОМЕНДУЕМАЯ ОМЕГА-3 (TOTOX < 26)</div>
-
-    <p><strong>Важное правило:</strong> Ищите форму "Triglycerides" (Триглицериды) — они усваиваются на 70% лучше, чем этиловый спирт (Ethyl Esters), который чаще всего продают в аптеках.</p>
-</article>
-
-<hr style="margin: 40px 0; border: 0; border-top: 1px solid #E8E1D5;">
-<article>
-    <h2>Витамин D3 и K2: Опасный дуэт или идеальный союз?</h2>
-    <p>Если вы принимаете витамин D3 в высоких дозах без витамина K2, кальций может начать оседать не в костях, а в сосудах и почках.</p>
-    
-    <img src="https://images.unsplash.com/photo-1576073719131-48286a11e860?w=600" style="width:100%; border-radius:10px;" alt="Витамин D3">
-
-    <div class="ad-box">AD: КОМПЛЕКС D3+K2 С ВЫСОКОЙ БИОДОСТУПНОСТЬЮ</div>
-
-    <p>Витамин K2 (в форме MK-7) работает как навигатор: он направляет кальций строго в костную ткань. Без него прием высоких доз D3 может привести к кальцинозу в долгосрочной перспективе.</p>
-    <p><em>Совет: Принимайте D3 строго утром с жирной пищей для лучшего усвоения.</em></p>
+        <button class="btn-more" onclick="toggle(this)">Развернуть подробности (450 слов) ↓</button>
+        <div class="details">
+            Дофамин долгое время считался «гормоном удовольствия», но на самом деле — это гормон ожидания и мотивации. Его главная роль — заставить вас встать с пещеры и найти еду или партнера. Однако современные алгоритмы соцсетей созданы так, чтобы эксплуатировать этот древний механизм. Когда стимуляция становится хронической, нейроны в полосатом теле мозга начинают уменьшать количество активных дофаминовых рецепторов. Мозгу нужно «прикрутить громкость», чтобы не сгореть от избытка сигналов. <br><br>
+            В результате возникает состояние, когда вам нужно всё больше контента, чтобы просто чувствовать себя нормально. Это прямой путь к ангедонии — неспособности радоваться простым вещам. Психиатр Анна Лембке в своей работе «Дофаминовая нация» описывает это как качели боли и удовольствия: перегружая чашу удовольствия, мы заставляем организм давить на чашу боли для восстановления баланса (гомеостаза). <br><br>
+            Как восстановить чувствительность? Основной метод — «дофаминовый пост» или протоколы осознанной скуки. Это не означает уход в монастырь, а создание зон, свободных от стимуляции. Минимум один час после пробуждения без телефона и один час до сна. Это позволяет префронтальной коре — центру вашего «Я» — вернуть контроль над лимбической системой. Исследования показывают, что 30-дневное ограничение искусственных стимулов способно вернуть уровень дофаминовых рецепторов к базовой норме, возвращая вкус к жизни и способность к глубокой концентрации.
+            <div class="ai-zone">
+                <button class="ai-btn" onclick="askAI(this, 'Сгенерируй пошаговый план выхода из дофаминовой зависимости на неделю на основе статьи')">Gemini: Составить ИИ-план выхода ✨</button>
+                <div class="ai-response"></div>
+            </div>
+        </div>
     </article>
 
-    <div class="ad-box" data-ad-slot="bottom-sticky" style="position:fixed; bottom:0; left:0; width:100%; margin:0; background:#fff; border-top: 1px solid #ccc;">
-        MOBILE STICKY AD (320x50)
-    </div>
+    <!-- Калькулятор Энергии -->
+    <section class="calc-section">
+        <h2 style="color:var(--accent); text-align:center;">Биометрическая Лаборатория</h2>
+        <p style="text-align:center; opacity:0.8; margin-bottom: 20px;">Введите данные для получения ИИ-анализа вашего метаболизма.</p>
+        <input type="number" id="weight" placeholder="Ваш вес (кг)">
+        <input type="number" id="age" placeholder="Ваш возраст (лет)">
+        <button class="ai-btn" style="background:var(--accent);" onclick="runCalc()">Рассчитать через Gemini AI ✨</button>
+        <div id="calc-res" class="ai-response" style="display:block; color: black; background: white;">Результаты появятся здесь...</div>
+    </section>
+
+    <!-- Статья 2: Сон -->
+    <article class="article">
+        <h2>Глимфатическая очистка: Как мозг «моется» во сне</h2>
+        <div class="hook">
+            Вы спите не для того, чтобы отдохнули мышцы — они прекрасно расслабляются и лежа. Сон нужен прежде всего вашему мозгу. Каждую ночь, пока вы находитесь в фазе глубокого сна, включается глимфатическая система — уникальный дренажный механизм, который буквально вымывает нейротоксичные отходы, накопленные за день. Если вы крадете у себя 2 часа сна, вы оставляете свой мозг «грязным». Это приводит к туману в мыслях, снижению IQ и накоплению белков, вызывающих Альцгеймер.
+        </div>
+        <button class="btn-more" onclick="toggle(this)">Читать научный разбор ↓</button>
+        <div class="details">
+            Открытие глимфатической системы в 2012 году перевернуло наше понимание сна. Исследователи из Университета Рочестера обнаружили, что во время сна пространство между нейронами увеличивается на 60%. Это позволяет спинномозговой жидкости (ликвору) свободно циркулировать и вымывать бета-амилоиды — «биологический мусор». Этот процесс происходит преимущественно во время стадии N3 (глубокий сон). <br><br>
+            Важно понимать: после 16-18 часов бодрствования когнитивные способности человека падают до уровня легкого алкогольного опьянения. Это происходит именно из-за накопления метаболитов. Глимфатическая система работает эффективно только при соблюдении трех условий. Во-первых, температура. Мозгу нужно охладиться на 1.5 градуса для входа в глубокую фазу. Во-вторых, темнота. Мелатонин — это не просто снотворное, а мощнейший антиоксидант, который защищает нейроны во время «мойки». <br><br>
+            Интересный факт: положение на боку способствует более эффективному лимфодренажу мозга по сравнению со сном на спине. Оптимизация сна — это не роскошь, а биологическая необходимость. Настройка циркадных ритмов (ложиться до 23:00) позволяет синхронизировать очистку мозга с пиками гормонального восстановления. Помните: один час сна до полуночи равен двум часам после по своей восстановительной силе для вашей психики.
+            <div class="ai-zone">
+                <button class="ai-btn" onclick="askAI(this, 'Как настроить режим сна для максимальной очистки мозга за 5 шагов?')">Gemini: Чек-лист по сну ✨</button>
+                <div class="ai-response"></div>
+            </div>
+        </div>
+    </article>
+
 </div>
 
-
-    <hr style="margin: 40px 0; border: 0; border-top: 1px solid #E8E1D5;">
-<section id="vitamin-quiz" style="background: #fff; padding: 25px; border-radius: 12px; border: 1px solid var(--beige); box-shadow: 0 4px 6px rgba(0,0,0,0.05);">
-    <h2 style="margin-top: 0;">Какой витамин нужен вам прямо сейчас?</h2>
-    <p style="font-size: 14px; color: #666;">Ответьте на 1 вопрос, чтобы получить персональную рекомендацию от BioBalance.</p>
-    
-    <div id="quiz-question" style="margin-bottom: 20px;">
-        <p style="font-weight: bold; margin-bottom: 15px;">Какая у вас главная цель?</p>
-        <button onclick="showResult('sleep')" style="display:block; width:100%; margin-bottom:10px; padding:12px; border:1px solid var(--green); background:transparent; color:var(--green); border-radius:6px; cursor:pointer; font-size: 16px;">Улучшить сон и снять стресс</button>
-        <button onclick="showResult('energy')" style="display:block; width:100%; margin-bottom:10px; padding:12px; border:1px solid var(--green); background:transparent; color:var(--green); border-radius:6px; cursor:pointer; font-size: 16px;">Больше энергии с утра</button>
-        <button onclick="showResult('immunity')" style="display:block; width:100%; padding:12px; border:1px solid var(--green); background:transparent; color:var(--green); border-radius:6px; cursor:pointer; font-size: 16px;">Поддержать иммунитет</button>
-    </div>
-
-    <div id="quiz-result" style="display: none; text-align: center; padding: 15px; background: #FDFBF7; border-radius: 8px; border: 1px dashed var(--green);">
-        <h3 id="result-title" style="color: var(--green); margin-top: 0;"></h3>
-        <p id="result-text" style="font-size: 14px;"></p>
-        <button onclick="resetQuiz()" style="background: var(--beige); border: none; padding: 8px 15px; border-radius: 4px; cursor: pointer; margin-top: 10px; font-size: 12px;">Пройти заново</button>
-    </div>
-</section>
+<footer>
+    <div style="font-size:24px; color:white; font-family:'Playfair Display'; margin-bottom:15px;">BioBalance</div>
+    <p>Проект по изучению человеческого потенциала © 2026</p>
+    <p style="max-width:500px; margin:25px auto; opacity:0.5; font-size:10px;">
+        ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ: Использование данного сайта не заменяет консультацию врача. ИИ-ответы могут содержать ошибки. Всегда проверяйте информацию у специалистов.
+    </p>
+</footer>
 
 <script>
-    // Логика работы квиза
-    function showResult(goal) {
-        document.getElementById('quiz-question').style.display = 'none';
-        document.getElementById('quiz-result').style.display = 'block';
-        
-        let title = '';
-        let text = '';
-        
-        if (goal === 'sleep') {
-            title = 'Ваш выбор: Магний Глицинат';
-            text = 'Магний расслабит нервную систему. Принимайте 200-400 мг за 1-2 часа до сна. Избегайте формы "Оксид".';
-        } else if (goal === 'energy') {
-            title = 'Ваш выбор: Витамины группы B + Омега-3';
-            text = 'Комплекс B-витаминов запустит метаболизм, а качественная Омега-3 поддержит работу мозга и сосудов.';
-        } else if (goal === 'immunity') {
-            title = 'Ваш выбор: Витамин D3 + K2';
-            text = 'База для иммунитета. Обязательно принимайте их вместе во время плотного завтрака с полезными жирами.';
-        }
-        
-        document.getElementById('result-title').innerText = title;
-        document.getElementById('result-text').innerText = text;
+    const apiKey = "";
+
+    function toggle(btn) {
+        const div = btn.nextElementSibling;
+        const isV = div.style.display === 'block';
+        div.style.display = isV ? 'none' : 'block';
+        btn.innerText = isV ? 'Развернуть подробности ↓' : 'Скрыть подробности ↑';
     }
 
-    function resetQuiz() {
-        document.getElementById('quiz-question').style.display = 'block';
-        document.getElementById('quiz-result').style.display = 'none';
+    async function callGemini(prompt, system = "Ты - эксперт-биохакер. Отвечай кратко, по пунктам. В начале ВСЕГДА пиши: 'ВНИМАНИЕ: Ознакомительная информация'.") {
+        try {
+            const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: prompt }] }],
+                    systemInstruction: { parts: [{ text: system }] }
+                })
+            });
+            const data = await response.json();
+            return data.candidates[0].content.parts[0].text;
+        } catch(e) { return "Ошибка API. Проверьте соединение."; }
     }
-</script><hr style="margin: 40px 0; border: 0; border-top: 1px solid #E8E1D5;">
 
-<section style="background: #fff; padding: 25px; border-radius: 12px; border: 1px solid var(--beige);">
-    <h3>Сотрудничество и реклама</h3>
-    <p>BioBalance — быстрорастущий медиа-проект о здоровье. Мы открыты к размещению баннеров и нативных обзоров качественных добавок.</p>
-    <p><strong>По вопросам рекламы:</strong> <a href="mailto:твой-email@mail.ru" style="color: var(--green);">напишите нам почту</a></p>
-    <p style="font-size: 12px; color: #999;">Цена размещения баннера (300x250) — от 500 руб/мес.</p>
-</section>
+    async function askAI(btn, prompt) {
+        const resBox = btn.nextElementSibling;
+        resBox.style.display = 'block';
+        resBox.innerText = "ИИ анализирует статью и готовит ответ...";
+        resBox.innerText = await callGemini(prompt);
+    }
 
-<div class="footer">
-    <p><strong>Отказ от ответственности:</strong> Информация на сайте BioBalance носит справочный характер. Мы не ставим диагнозы и не назначаем лечение. Перед приемом любых препаратов обязательно проконсультируйтесь с лечащим врачом.</p>
-    <p>&copy; 2026 BioBalance — Осознанный подход к здоровью.</p>
-</div>
+    async function runCalc() {
+        const res = document.getElementById('calc-res');
+        const w = document.getElementById('weight').value;
+        const a = document.getElementById('age').value;
+        if(!w) { alert("Введите данные!"); return; }
+        res.innerText = "Анализирую ваши показатели через нейросеть...";
+        res.innerText = await callGemini(`Пользователь весом ${w}кг и возрастом ${a}лет. Рассчитай примерный базовый обмен веществ и дай 3 совета по оптимизации здоровья для этого возраста.`);
+    }
+</script>
 
 </body>
-</html>
+    </html>
