@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Fibermaxxing: Гайд по клетчатке | HealthLogic</title>
+    
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='black'/%3E%3Cpath d='M30 30v40M70 30v40M30 50h40' stroke='white' stroke-width='12' stroke-linecap='square'/%3E%3C/svg%3E">
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #FDF5E6; 
+            --black: #000000;
+            --white: #FFFFFF;
+            --accent: #DED7B1;
+            --green-ui: #4A5759;
+            --border-thick: 4px solid #000000;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background-color: var(--bg); font-family: 'Inter', sans-serif; color: var(--black); line-height: 1.6; }
+        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 20px; }
+
+        header { background: var(--white); border-bottom: var(--border-thick); padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 900; font-size: 24px; text-decoration: none; color: #000; letter-spacing: -1px; }
+
+        .article-hero { padding: 60px 0; border-bottom: var(--border-thick); background: var(--green-ui); color: var(--white); }
+        h1 { font-size: clamp(32px, 8vw, 64px); font-weight: 900; line-height: 0.9; letter-spacing: -2px; text-transform: uppercase; margin-bottom: 20px; }
+        
+        .badge { display: inline-block; background: var(--black); color: var(--white); padding: 5px 15px; font-weight: 900; text-transform: uppercase; font-size: 12px; margin-bottom: 20px; }
+
+        .content { padding: 60px 0; font-size: 18px; }
+        .content p { margin-bottom: 25px; }
+        .content h2 { font-size: 32px; font-weight: 900; margin: 50px 0 20px; text-transform: uppercase; border-left: 10px solid var(--black); padding-left: 20px; }
+
+        .info-card { border: var(--border-thick); padding: 30px; margin: 40px 0; background: var(--white); box-shadow: 15px 15px 0px var(--black); }
+        .info-card h3 { font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+
+        .list-ui { margin: 30px 0; list-style: none; }
+        .list-ui li { padding: 15px; border: 2px solid var(--black); margin-bottom: 10px; background: #fff; font-weight: 700; display: flex; align-items: center; gap: 15px; }
+        .list-ui li::before { content: '→'; color: var(--green-ui); font-size: 24px; }
+
+        .btn-back { display: inline-block; margin-top: 40px; padding: 15px 30px; background: var(--black); color: var(--white); text-decoration: none; font-weight: 900; text-transform: uppercase; transition: 0.3s; }
+        .btn-back:hover { background: var(--accent); color: var(--black); transform: translate(-5px, -5px); box-shadow: 5px 5px 0px #000; }
+
+        footer { background: #000; padding: 60px 0; margin-top: 100px; }
+        .safe-notice { border: 2px solid #fff; padding: 30px; }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container nav-wrap">
+        <a href="index.html" class="logo">HEALTHLOGIC.</a>
+        <a href="index.html" style="text-decoration: none; color: #000; font-weight: 900; font-size: 14px;">← НА ГЛАВНУЮ</a>
+    </div>
+</header>
+
+<main>
+    <article class="article-hero">
+        <div class="container">
+            <span class="badge">Nutrition / Longevity</span>
+            <h1>Fibermaxxing: Твой путь к чистому разуму.</h1>
+            <p style="font-size: 22px; font-weight: 700; opacity: 0.9;">Как 30+ грамм клетчатки в день превращают твой кишечник в суперкомпьютер.</p>
+        </div>
+    </article>
+
+    <div class="container content">
+        <p>В мире биохакинга 2026 года все забыли про базу. Мы пьем дорогие ноотропы, но забываем кормить тех, кто реально управляет нашим настроением — бактерии в кишечнике. Fibermaxxing — это стратегия максимального потребления пищевых волокон для разгона мозга и иммунитета.</p>
+        
+        <p>Клетчатка — это не просто "щетка" для ЖКТ. Это пребиотик, который превращается в короткоцепочечные жирные кислоты (SCFA), такие как бутират. Бутират напрямую снижает воспаление в мозге.</p>
+
+        <h2>Твой стартовый набор:</h2>
+        <ul class="list-ui">
+            <li><strong>Псиллиум:</strong> Король клетчатки. 1 ложка = 5г чистого волокна.</li>
+            <li><strong>Семена чиа:</strong> Омега-3 + фантастическая текстура для сытости.</li>
+            <li><strong>Бобовые:</strong> Чечевица и нут — база для стабильного сахара.</li>
+            <li><strong>Ягоды:</strong> Минимум сахара, максимум антоцианов и волокон.</li>
+        </ul>
+
+        <div class="info-card">
+            <h3>⚠️ Главное правило:</h3>
+            <p>Не пытайся съесть 50г клетчатки в первый же день. Твой микробиом просто "взорвется". Добавляй по 5г каждые 3 дня и **ПЕЙ МНОГО ВОДЫ**. Без воды клетчатка превращается в клей внутри тебя.</p>
+        </div>
+
+        <h2>Эффекты через 14 дней:</h2>
+        <p>1. <strong>Исчезновение "тумана" в голове:</strong> Твой мозг перестает отвлекаться на микро-воспаления в теле.</p>
+        <p>2. <strong>Стабильная энергия:</strong> Никаких скачков сахара и сонливости после обеда.</p>
+        <p>3. <strong>Контроль аппетита:</strong> Гормон сытости лептин начинает работать как швейцарские часы.</p>
+
+        <a href="index.html" class="btn-back">Вернуться к статьям</a>
+    </div>
+</main>
+
+<footer style="background: #000;">
+    <div class="container">
+        <div class="safe-notice">
+            <p style="color: #FFFFFF !important; font-size: 14px; line-height: 1.6;">
+                <strong style="color: #FFFFFF !important; text-transform: uppercase;">Юридический отказ:</strong> 
+                Контент предоставлен для ознакомления. Fibermaxxing может быть противопоказан людям с синдромом раздраженного кишечника (СРК) или болезнью Крона в фазе обострения. 
+                <strong style="color: #FFFFFF !important;">ОБЯЗАТЕЛЬНО ПРОКОНСУЛЬТИРУЙТЕСЬ С ГАСТРОЭНТЕРОЛОГОМ.</strong>
+            </p>
+        </div>
+        <p style="text-align: center; color: #444; font-size: 10px; margin-top: 30px;">© 2026 HEALTHLOGIC</p>
+    </div>
+</footer>
+
+</body>
+  </html>
+          
