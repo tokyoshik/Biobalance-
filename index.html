@@ -24,7 +24,7 @@
         .menu { display: flex; gap: 30px; align-items: center; }
         .menu a { text-decoration: none; color: #000; font-weight: 800; font-size: 14px; text-transform: uppercase; }
 
-        .login-btn { background: var(--black); color: var(--white) !important; padding: 8px 15px; border: 2px solid var(--black); transition: 0.2s; cursor: pointer; text-decoration: none; }
+        .login-btn { background: var(--black); color: var(--white) !important; padding: 8px 15px; border: 2px solid var(--black); cursor: pointer; text-decoration: none; font-weight: 800; }
         .login-btn:hover { background: var(--accent); color: #000 !important; }
 
         section { padding: 80px 0; border-bottom: var(--border-thick); }
@@ -40,7 +40,7 @@
         .calc-container { background: #1A1A1A; color: #fff; padding: 40px; border: var(--border-thick); box-shadow: 30px 30px 0px var(--accent); }
         .input-group { margin-bottom: 25px; }
         .input-group label { display: block; font-weight: 900; text-transform: uppercase; font-size: 12px; color: var(--accent); margin-bottom: 8px; }
-        .input-group input, .input-group select { width: 100%; padding: 15px; background: #222; border: 2px solid var(--accent); color: #fff; font-family: 'Inter'; font-weight: 700; font-size: 18px; }
+        .input-group input, .input-group select { width: 100%; padding: 15px; background: #222; border: 2px solid var(--accent); color: #fff; font-family: 'Inter'; font-weight: 700; font-size: 18px; outline: none; }
 
         .grid-posts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
         .post-card { background: #fff; border: var(--border-thick); transition: 0.3s; }
@@ -49,7 +49,7 @@
         .post-content { padding: 25px; }
 
         #config-section { background: #000; color: #fff; display: none; }
-        .config-area { width: 100%; height: 250px; background: #111; border: 3px solid var(--accent); color: #00FF00; padding: 20px; font-family: monospace; font-size: 16px; margin-top: 20px; }
+        .config-area { width: 100%; height: 250px; background: #111; border: 3px solid var(--accent); color: #00FF00; padding: 20px; font-family: monospace; font-size: 16px; margin-top: 20px; outline: none;}
 
         footer { background: #000; color: #fff; padding: 60px 0; }
         .disclaimer-box { border: 1px solid #fff; padding: 20px; max-width: 800px; margin: 0 auto; text-align: left; font-size: 12px; opacity: 0.9; }
@@ -112,12 +112,12 @@
                 </div>
 
                 <div class="input-group">
-                    <label>Активность</label>
+                    <label>Уровень активности</label>
                     <select id="activity">
-                        <option value="1.2">Минимальная</option>
+                        <option value="1.2">Минимальный</option>
                         <option value="1.375">1-3 тренировки</option>
                         <option value="1.55">3-5 тренировок</option>
-                        <option value="1.725">Высокая</option>
+                        <option value="1.725">Высокий</option>
                     </select>
                 </div>
 
@@ -129,7 +129,27 @@
             </div>
             <div>
                 <h2 style="font-size: 40px; font-weight: 900; text-transform: uppercase;">Зачем считать?</h2>
-                <p>Метаболизм — это чистая математика. Управляй своим весом осознанно.</p>
+                <p>Метаболизм — это математика. Управляй своим весом осознанно с HealthLogic.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="articles">
+        <div class="container">
+            <h2 style="font-size: 40px; font-weight: 900; text-transform: uppercase; margin-bottom: 40px; text-align: center;">База знаний</h2>
+            <div class="grid-posts">
+                <div class="post-card">
+                    <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500">
+                    <div class="post-content"><h3>Как правильно качаться: наука гипертрофии</h3><a href="training.html" class="btn" style="width: 100%; text-align: center; padding: 10px;">Читать</a></div>
+                </div>
+                <div class="post-card">
+                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500">
+                    <div class="post-content"><h3>Магний для сна: разбор всех форм</h3><a href="magnesium.html" class="btn" style="width: 100%; text-align: center; padding: 10px;">Читать</a></div>
+                </div>
+                <div class="post-card">
+                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500">
+                    <div class="post-content"><h3>Fibermaxxing: клетчатка и мозг</h3><a href="fiber.html" class="btn" style="width: 100%; text-align: center; padding: 10px;">Читать</a></div>
+                </div>
             </div>
         </div>
     </section>
@@ -150,15 +170,37 @@
         <div class="disclaimer-box">
             <p><strong>ЮРИДИЧЕСКИЙ ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:</strong> Контент предоставлен только для ознакомления. <strong>ОБЯЗАТЕЛЬНО ПРОКОНСУЛЬТИРУЙТЕСЬ С ВРАЧОМ.</strong></p>
         </div>
-        <p style="margin-top: 30px; font-weight: 900; letter-spacing: 2px;">© 2026 HEALTHLOGIC. Независимая модель.</p>
+        <p style="margin-top: 30px; font-weight: 900; letter-spacing: 2px; text-align: center;">© 2026 HEALTHLOGIC. Независимая модель.</p>
     </div>
 </footer>
 
 <script>
-    // 1. КОНФИГ FIREBASE
+    // 1. ФУНКЦИЯ КАЛЬКУЛЯТОРА (РАБОТАЕТ ВСЕГДА, СТОИТ ПЕРВОЙ)
+    function calculate() {
+        console.log("Клик по калькулятору");
+        const gender = document.getElementById('gender').value;
+        const weight = parseFloat(document.getElementById('weight').value);
+        const height = parseFloat(document.getElementById('height').value);
+        const age = parseInt(document.getElementById('age').value);
+        const activity = parseFloat(document.getElementById('activity').value);
+
+        if (!weight || !height || !age) {
+            alert("Заполни все данные!");
+            return;
+        }
+
+        let bmr = (gender === 'male') ? 
+            (10 * weight + 6.25 * height - 5 * age + 5) : 
+            (10 * weight + 6.25 * height - 5 * age - 161);
+
+        document.getElementById('calories').innerText = Math.round(bmr * activity);
+        document.getElementById('result').style.display = 'block';
+        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    // 2. FIREBASE (ИЗОЛИРОВАН В TRY-CATCH)
     const firebaseConfig = С ададададададададвжжвыжжывжвжвжвжвжвжвжвжв В;
 
-    // Инициализация (с защитой от ошибок)
     try {
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -185,30 +227,10 @@
             }
         };
         window.logout = () => auth.signOut().then(() => location.reload());
-    } catch (e) { console.log("Firebase ждет конфиг..."); }
-
-    // 2. ФУНКЦИЯ КАЛЬКУЛЯТОРА (РАБОТАЕТ ВСЕГДА)
-    function calculate() {
-        const gender = document.getElementById('gender').value;
-        const weight = parseFloat(document.getElementById('weight').value);
-        const height = parseFloat(document.getElementById('height').value);
-        const age = parseInt(document.getElementById('age').value);
-        const activity = parseFloat(document.getElementById('activity').value);
-
-        if (!weight || !height || !age) {
-            alert("Заполни данные!");
-            return;
-        }
-
-        let bmr = (gender === 'male') ? 
-            (10 * weight + 6.25 * height - 5 * age + 5) : 
-            (10 * weight + 6.25 * height - 5 * age - 161);
-
-        document.getElementById('calories').innerText = Math.round(bmr * activity);
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+    } catch (e) {
+        console.warn("Firebase ждет настройки...");
     }
 </script>
 </body>
-        </html>
-        
+    </html>
+    
