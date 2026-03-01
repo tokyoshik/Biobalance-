@@ -58,9 +58,19 @@
         .input-ui label { display: block; font-size: 11px; font-weight: 900; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; }
         .input-ui input, .input-ui select { width: 100%; padding: 18px; background: #222; border: 2px solid var(--accent); color: #fff; font-size: 18px; border-radius: 0; outline: none; }
 
-        /* ИСПРАВЛЕННЫЕ ЦВЕТА ДЛЯ ЗАЩИТЫ */
-        .safe-notice { font-size: 12px; line-height: 1.6; color: #CCCCCC; text-align: left; max-width: 900px; margin: 0 auto; }
-        .safe-notice strong { color: #FFFFFF; text-transform: uppercase; }
+        /* МАКСИМАЛЬНО ЗАМЕТНЫЙ ДИСКЛЕЙМЕР */
+        .safe-notice { 
+            font-size: 13px; 
+            line-height: 1.6; 
+            color: #FFFFFF; /* Чисто белый цвет */
+            text-align: left; 
+            max-width: 900px; 
+            margin: 0 auto;
+            border: 2px solid #FFFFFF; /* Белая рамка */
+            padding: 25px;
+            background: rgba(255, 255, 255, 0.05); /* Легкий отсвет внутри */
+        }
+        .safe-notice strong { color: #FFFFFF; text-decoration: underline; }
 
         @media (max-width: 1000px) {
             .hero-grid { grid-template-columns: 1fr; }
@@ -124,7 +134,7 @@
                     <div id="res-box" style="display: none; margin-top: 40px; border-top: 2px solid #444; padding-top: 20px;">
                         <span style="font-size: 14px; text-transform: uppercase; color: var(--accent);">Твой суточный расход (TDEE):</span>
                         <div id="bmr-val" style="font-size: 60px; font-weight: 900; color: var(--accent); margin-bottom: 15px;">0</div>
-                        <p style="font-size: 11px; color: #888; font-style: italic;">Результат является ориентировочным и носит ознакомительный характер. Мы не рекомендуем использовать эти данные для медицинских целей.</p>
+                        <p style="font-size: 11px; color: #FFFFFF; font-style: italic; opacity: 0.8;">Результат является ориентировочным и носит ознакомительный характер. Мы не рекомендуем использовать эти данные для медицинских целей.</p>
                     </div>
                 </div>
                 <div>
@@ -180,11 +190,12 @@
 
 <footer style="background: #000; color: #fff; padding: 60px 0; border-top: var(--border-thick);">
     <div class="container">
-        <div class="logo" style="color: #fff; margin-bottom: 25px;">HEALTHLOGIC.</div>
+        <div class="logo" style="color: #fff; margin-bottom: 35px;">HEALTHLOGIC.</div>
+        
         <div class="safe-notice">
-            <p style="margin-bottom: 15px;"><strong>ВАЖНОЕ УВЕДОМЛЕНИЕ:</strong> Контент на сайте HEALTHLOGIC предоставлен исключительно в информационных целях. Мы не являемся медицинской организацией, не ставим диагнозы и не назначаем лечение. Информация на этом сайте не должна использоваться в качестве замены профессиональной медицинской консультации.</p>
-            <p style="margin-bottom: 20px;">Администрация не несет ответственности за любые травмы или последствия, возникшие в результате использования предоставленной информации. Вы используете эти данные на свой страх и риск. Обязательно консультируйтесь с врачом перед любыми изменениями в режиме тренировок или питания.</p>
-            <p style="font-size: 10px; color: #444;">© 2026 HEALTHLOGIC. Независимое медиа.</p>
+            <p style="margin-bottom: 20px;"><strong>ЮРИДИЧЕСКИЙ ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:</strong> Контент на этом сайте (включая расчеты калькулятора и статьи) предоставлен только для образовательных и ознакомительных целей. HEALTHLOGIC не является медицинской организацией. Мы не даем профессиональных медицинских советов, не ставим диагнозы и не лечим заболевания.</p>
+            <p style="margin-bottom: 20px;">Использование любых данных с этого ресурса осуществляется на ваш собственный страх и риск. Администрация проекта не несет ответственности за любые негативные последствия для вашего здоровья, возникшие в результате следования рекомендациям. Перед любым действием — будь то прием БАД или смена режима тренировок — <strong>ОБЯЗАТЕЛЬНО ПРОКОНСУЛЬТИРУЙТЕСЬ С ВРАЧОМ.</strong></p>
+            <p style="font-size: 11px; color: #888; border-top: 1px solid #444; padding-top: 15px;">© 2026 HEALTHLOGIC. Независимое медиа о здоровье и долголетии.</p>
         </div>
     </div>
 </footer>
@@ -205,5 +216,5 @@
 </script>
 
 </body>
-                                                                                                                                                                                 </html>
-    
+                        </html>
+                        
