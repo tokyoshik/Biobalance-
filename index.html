@@ -3,121 +3,196 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthLogic | Интеллектуальное управление телом</title>
+    <title>HEALTHLOGIC | NEURAL PROTOCOL</title>
     
     <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Syncopate:wght@400;700&family=Inter:wght@400;900&display=swap" rel="stylesheet">
 
     <style>
-        :root { --bg: #FDF5E6; --black: #000; --white: #fff; --accent: #DED7B1; --border: 5px solid #000; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); font-family: 'Inter', sans-serif; overflow-x: hidden; color: var(--black); }
-        
-        /* Loader / Transition */
-        .page-transition { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 9999; transform: translateY(100%); transition: transform 0.6s cubic-bezier(0.77, 0, 0.175, 1); }
-        
-        header { padding: 30px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: var(--border); background: #fff; sticky; top: 0; z-index: 100; }
-        .logo { font-weight: 900; font-size: 35px; letter-spacing: -3px; text-decoration: none; color: #000; }
-        
-        .hero { height: 90vh; display: flex; align-items: center; justify-content: center; text-align: center; border-bottom: var(--border); position: relative; overflow: hidden; }
-        .hero-content h1 { font-size: clamp(50px, 12vw, 150px); font-weight: 900; line-height: 0.8; text-transform: uppercase; letter-spacing: -5px; }
-        
-        /* Движущаяся строка (Marquee) */
-        .marquee { background: #000; color: #fff; padding: 20px 0; overflow: hidden; white-space: nowrap; border-bottom: var(--border); }
-        .marquee div { display: inline-block; animation: marquee 20s linear infinite; font-weight: 900; font-size: 40px; text-transform: uppercase; }
-        @keyframes marquee { 0% { transform: translateX(100%); } 100% { transform: translateX(-100%); } }
+        :root { 
+            --bg: #050505; 
+            --neon: #00ff41; /* Кибер-зеленый */
+            --neon-purple: #bc13fe;
+            --white: #ffffff;
+            --border: 2px solid var(--neon);
+        }
 
-        .section-title { font-size: 60px; font-weight: 900; text-transform: uppercase; margin-bottom: 50px; padding: 0 5%; }
+        * { box-sizing: border-box; margin: 0; padding: 0; cursor: crosshair; }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--white); overflow-x: hidden; }
         
-        /* Карточки Базы Знаний */
-        .knowledge-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); border-bottom: var(--border); }
-        .card { border-right: var(--border); padding: 40px; background: #fff; transition: 0.4s; cursor: pointer; position: relative; overflow: hidden; min-height: 500px; display: flex; flex-direction: column; justify-content: flex-end; }
-        .card:hover { background: var(--accent); }
-        .card img { position: absolute; top: 0; left: 0; width: 100%; height: 60%; object-fit: cover; border-bottom: var(--border); grayscale: 100%; transition: 0.5s; }
-        .card:hover img { grayscale: 0%; transform: scale(1.05); }
-        .card h3 { font-size: 32px; font-weight: 900; text-transform: uppercase; z-index: 10; }
-
-        /* Переход в калькулятор */
-        .calc-cta { background: #000; color: #fff; padding: 100px 5%; text-align: center; }
-        .calc-cta h2 { font-size: clamp(40px, 8vw, 100px); margin-bottom: 40px; }
-        .cta-btn { display: inline-block; padding: 30px 60px; background: var(--accent); color: #000; font-weight: 900; font-size: 24px; text-decoration: none; border: var(--border); box-shadow: 15px 15px 0px #fff; transition: 0.3s; }
-        .cta-btn:hover { transform: translate(-5px, -5px); box-shadow: 25px 25px 0px #fff; }
-
-        footer { padding: 80px 5%; background: #000; color: #fff; }
-        .disclaimer { border: 2px solid #fff; padding: 30px; font-size: 14px; line-height: 1.6; max-width: 900px; margin-bottom: 40px; opacity: 0.8; }
+        /* Глитч-эффект для текста */
+        .glitch { font-family: 'Syncopate', sans-serif; font-weight: 900; position: relative; color: var(--white); }
         
-        @media (max-width: 768px) { .knowledge-grid { grid-template-columns: 1fr; } .card { border-right: none; border-bottom: var(--border); } }
+        header { 
+            padding: 20px 5%; 
+            display: flex; justify-content: space-between; align-items: center; 
+            border-bottom: var(--border); 
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            position: fixed; width: 100%; top: 0; z-index: 1000;
+        }
+        .logo { font-family: 'Syncopate'; font-size: 24px; color: var(--neon); text-decoration: none; letter-spacing: 5px; }
+        .nav-links { display: flex; gap: 30px; }
+        .nav-links a { color: var(--white); text-decoration: none; font-weight: 700; font-size: 12px; text-transform: uppercase; transition: 0.3s; }
+        .nav-links a:hover { color: var(--neon); text-shadow: 0 0 10px var(--neon); }
+
+        /* Hero блок с неоновым шумом */
+        .hero { 
+            height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            background: radial-gradient(circle at center, #111 0%, #000 100%);
+            position: relative; border-bottom: var(--border);
+        }
+        .hero::before {
+            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: url('https://www.transparenttextures.com/patterns/carbon-fibre.png'); opacity: 0.2;
+        }
+
+        .hero h1 { 
+            font-size: clamp(40px, 10vw, 120px); text-align: center; line-height: 0.9; z-index: 1;
+            text-transform: uppercase; filter: drop-shadow(0 0 15px var(--neon));
+        }
+
+        /* Цепочка (Timeline) */
+        .chain-container { padding: 100px 10%; position: relative; }
+        .chain-step { 
+            display: flex; align-items: center; margin-bottom: 100px; position: relative; z-index: 2;
+        }
+        .chain-number { 
+            font-size: 80px; font-family: 'Syncopate'; color: transparent; -webkit-text-stroke: 1px var(--neon);
+            margin-right: 40px; opacity: 0.5;
+        }
+        .chain-info { max-width: 500px; border-left: 4px solid var(--neon); padding-left: 30px; }
+        .chain-info h3 { font-size: 28px; color: var(--neon); text-transform: uppercase; margin-bottom: 15px; }
+        
+        /* База знаний - в ряд */
+        .knowledge-row { 
+            display: grid; grid-template-columns: repeat(3, 1fr); gap: 0; 
+            border-top: var(--border); border-bottom: var(--border);
+        }
+        .k-card { 
+            border-right: var(--border); padding: 60px 30px; position: relative; 
+            transition: 0.5s; overflow: hidden; height: 600px; display: flex; flex-direction: column; justify-content: flex-end;
+        }
+        .k-card:last-child { border-right: none; }
+        .k-card img { 
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%; 
+            object-fit: cover; z-index: -1; opacity: 0.3; transition: 0.5s; filter: grayscale(100%);
+        }
+        .k-card:hover { background: rgba(0, 255, 65, 0.1); }
+        .k-card:hover img { opacity: 0.7; filter: grayscale(0%) contrast(1.2); transform: scale(1.1); }
+        .k-card h3 { font-size: 30px; text-transform: uppercase; margin-bottom: 20px; text-shadow: 2px 2px #000; }
+
+        /* Кнопка калькулятора */
+        .scanner-btn {
+            margin-top: 50px; padding: 25px 50px; background: none; border: var(--border);
+            color: var(--neon); font-family: 'Syncopate'; font-weight: 900; font-size: 20px;
+            cursor: pointer; position: relative; transition: 0.3s; overflow: hidden;
+            text-decoration: none; display: inline-block;
+        }
+        .scanner-btn::after {
+            content: ""; position: absolute; top: -50%; left: -50%; width: 200%; height: 200%;
+            background: linear-gradient(0deg, transparent, var(--neon), transparent);
+            transform: rotate(45deg); animation: scan 3s infinite; opacity: 0.3;
+        }
+        @keyframes scan { 0% { top: -100%; } 100% { top: 100%; } }
+        .scanner-btn:hover { background: var(--neon); color: #000; box-shadow: 0 0 50px var(--neon); }
+
+        footer { padding: 100px 5%; background: #000; border-top: var(--border); }
+        .disclaimer { color: #555; font-size: 12px; border: 1px solid #333; padding: 20px; margin-bottom: 40px; }
+
+        @media (max-width: 1000px) {
+            .knowledge-row { grid-template-columns: 1fr; }
+            .k-card { border-right: none; border-bottom: var(--border); height: 400px; }
+        }
     </style>
 </head>
 <body>
 
-<div class="page-transition" id="loader"></div>
-
 <header>
-    <a href="index.html" class="logo">HEALTHLOGIC.</a>
-    <nav style="display: flex; gap: 30px;">
-        <a href="calc.html" style="font-weight: 900; text-decoration: none; color: #000; border: 3px solid #000; padding: 10px 20px;">CALC_SYSTEM</a>
-    </nav>
+    <a href="index.html" class="logo">HL.LOGIC</a>
+    <div class="nav-links">
+        <a href="about.html">О Нас</a>
+        <a href="articles.html">База</a>
+        <a href="calc.html" style="color: var(--neon);">Калькулятор</a>
+        <a href="auth.html" style="border: 1px solid var(--white); padding: 5px 15px;">Вход</a>
+    </div>
 </header>
 
 <section class="hero">
-    <div class="hero-content" data-aos="zoom-in">
-        <h1>SCIENCE<br><span style="color: var(--accent); -webkit-text-stroke: 3px #000;">LOGIC</span><br>BODY</h1>
+    <h1 data-aos="zoom-out-up">Neural<br><span style="color: var(--neon);">Protocol</span><br>2026</h1>
+    <a href="calc.html" class="scanner-btn">ИНИЦИИРОВАТЬ РАСЧЕТ</a>
+</section>
+
+
+
+<section class="chain-container">
+    <h2 style="font-family: 'Syncopate'; font-size: 40px; margin-bottom: 80px; text-align: center;">ПРОТОКОЛ РАЗВИТИЯ</h2>
+    
+    <div class="chain-step" data-aos="fade-right">
+        <div class="chain-number">01</div>
+        <div class="chain-info">
+            <h3>АНАЛИЗ ДАННЫХ</h3>
+            <p>Прежде чем менять тело, нужно оцифровать его текущее состояние. Калории, гормоны, фазы сна — твоя база.</p>
+        </div>
+    </div>
+
+    <div class="chain-step" data-aos="fade-left" style="justify-content: flex-end;">
+        <div class="chain-info" style="border-left: none; border-right: 4px solid var(--neon); padding-left: 0; padding-right: 30px; text-align: right;">
+            <h3>СИНТЕЗ СТРАТЕГИИ</h3>
+            <p>На основе данных мы строим алгоритм питания и нагрузок. Никакой интуиции — только чистая биологическая логика.</p>
+        </div>
+        <div class="chain-number" style="margin-right: 0; margin-left: 40px;">02</div>
+    </div>
+
+    <div class="chain-step" data-aos="fade-right">
+        <div class="chain-number">03</div>
+        <div class="chain-info">
+            <h3>ТРАНСФОРМАЦИЯ</h3>
+            <p>Постоянный мониторинг и корректировка курса. Мы оптимизируем твою систему до пиковых показателей.</p>
+        </div>
     </div>
 </section>
 
-<div class="marquee">
-    <div>БИОХАКИНГ • ДОКАЗАТЕЛЬНАЯ МЕДИЦИНА • ПИТАНИЕ • ТРЕНИРОВКИ • ГИПЕРТРОФИЯ • СОН • ГОРМОНЫ • БИОХАКИНГ • ДОКАЗАТЕЛЬНАЯ МЕДИЦИНА</div>
-</div>
 
-<section style="padding: 100px 5%;">
-    <h2 class="section-title" data-aos="fade-right">Что такое HealthLogic?</h2>
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 50px;">
-        <p style="font-size: 24px; font-weight: 500;" data-aos="fade-up">Мы не продаем курсы и не верим в "волшебные таблетки". Наша цель — дать тебе инструменты для управления собственной биологией. Цифры, графики и биохимия вместо пустых обещаний.</p>
-        <div class="img-frame" style="border: var(--border); height: 300px; background: url('https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800') center/cover;" data-aos="flip-up"></div>
-    </div>
-</section>
 
-<h2 class="section-title">База Знаний</h2>
-<section class="knowledge-grid">
-    <div class="card" onclick="location.href='training.html'" data-aos="fade-up">
-        <img src="https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=600">
-        <h3>Наука Гипертрофии</h3>
-        <p>Разбор механизмов роста мышц и периодизации.</p>
+<h2 style="padding: 50px 5%; font-family: 'Syncopate'; font-size: 30px;">БАЗА_ДАННЫХ_ЗНАНИЙ</h2>
+<section class="knowledge-row">
+    <div class="k-card" data-aos="fade-up">
+        <img src="https://images.unsplash.com/photo-1550345332-09e3ac987658?w=800">
+        <h3>ГИПЕРТРОФИЯ</h3>
+        <p>Механика мышечного отказа и рекрутирование волокон.</p>
+        <a href="training.html" style="color: var(--neon); font-weight: 900;">[ ОТКРЫТЬ ФАЙЛ ]</a>
     </div>
-    <div class="card" onclick="location.href='magnesium.html'" data-aos="fade-up" data-aos-delay="200">
-        <img src="https://images.unsplash.com/photo-1616670411624-785764bba8e0?w=600">
-        <h3>Эффект Магния</h3>
-        <p>Как формы магния влияют на ЦНС и качество сна.</p>
+    <div class="k-card" data-aos="fade-up" data-aos-delay="200">
+        <img src="https://images.unsplash.com/photo-1512069772995-ec65ed45afd6?w=800">
+        <h3>НУТРИЕНТЫ</h3>
+        <p>Микроэлементы как патчи для твоей нервной системы.</p>
+        <a href="magnesium.html" style="color: var(--neon); font-weight: 900;">[ ОТКРЫТЬ ФАЙЛ ]</a>
     </div>
-    <div class="card" onclick="location.href='fiber.html'" data-aos="fade-up" data-aos-delay="400">
-        <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=600">
-        <h3>Микробиом</h3>
-        <p>Связь кишечника и когнитивных способностей.</p>
+    <div class="k-card" data-aos="fade-up" data-aos-delay="400">
+        <img src="https://images.unsplash.com/photo-1507413245164-6160d8298b31?w=800">
+        <h3>БИОХИМИЯ</h3>
+        <p>Как кортизол и дофамин управляют твоей продуктивностью.</p>
+        <a href="fiber.html" style="color: var(--neon); font-weight: 900;">[ ОТКРЫТЬ ФАЙЛ ]</a>
     </div>
-</section>
-
-<section class="calc-cta">
-    <h2 data-aos="slide-up">Готов узнать свои цифры?</h2>
-    <a href="calc.html" class="cta-btn" data-aos="zoom-in">ОТКРЫТЬ КАЛЬКУЛЯТОР КБЖУ</a>
 </section>
 
 <footer>
     <div class="disclaimer">
-        <strong>ЮРИДИЧЕСКИЙ ОТКАЗ:</strong> Информация на портале HealthLogic носит ознакомительный характер. Мы не врачи. Любые изменения в диете, тренировках или приеме БАДов должны быть согласованы со специалистом. Ты сам несешь ответственность за свое здоровье.
+        ВНИМАНИЕ: Протоколы HealthLogic не являются медицинским назначением. Все действия производятся пользователем в режиме эксперимента на свой страх и риск. Консультация со специалистом обязательна.
     </div>
-    <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+    <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
         <div>
-            <p style="font-weight: 900; font-size: 24px;">PARTNERSHIP:</p>
-            <p style="font-size: 20px;">TTOKYOSHIK@GMAIL.COM</p>
+            <p style="font-family: 'Syncopate'; color: var(--neon);">CONNECT:</p>
+            <p>TTOKYOSHIK@GMAIL.COM</p>
         </div>
-        <p>© 2026 HEALTHLOGIC. INDEPENDENT MODEL.</p>
+        <p style="opacity: 0.5;">© 2026 NEURAL INTERFACE // HEALTHLOGIC</p>
     </div>
 </footer>
 
 <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    AOS.init({ duration: 1000, once: true });
+    AOS.init({ duration: 800, once: false });
 </script>
 </body>
-</html>
+            </html>
+        
