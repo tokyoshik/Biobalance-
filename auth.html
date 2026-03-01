@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthLogic | Вход в систему</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+
+    <style>
+        :root { --bg: #FDF5E6; --black: #000000; --white: #FFFFFF; --accent: #DED7B1; --border: 4px solid #000; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px; }
+        
+        .auth-container { background: #fff; border: var(--border); box-shadow: 20px 20px 0px #000; width: 100%; max-width: 450px; padding: 40px; }
+        .logo-auth { font-weight: 900; font-size: 32px; text-decoration: none; color: #000; display: block; margin-bottom: 30px; text-align: center; border-bottom: var(--border); padding-bottom: 10px; }
+        
+        h2 { text-transform: uppercase; font-weight: 900; font-size: 24px; margin-bottom: 20px; text-align: center; }
+        
+        .f-group { margin-bottom: 20px; }
+        .f-group label { display: block; font-size: 12px; font-weight: 900; text-transform: uppercase; margin-bottom: 8px; }
+        .f-group input { width: 100%; padding: 15px; background: #f0f0f0; border: 2px solid #000; font-family: 'Inter'; font-weight: 700; outline: none; }
+        .f-group input:focus { background: var(--accent); }
+
+        .auth-btn { width: 100%; padding: 18px; background: #000; color: #fff; border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.2s; margin-bottom: 15px; }
+        .auth-btn:hover { background: var(--accent); color: #000; }
+        
+        .toggle-link { text-align: center; font-size: 14px; font-weight: 700; cursor: pointer; text-decoration: underline; display: block; }
+        .back-link { display: block; text-align: center; margin-top: 20px; color: #666; text-decoration: none; font-size: 12px; text-transform: uppercase; font-weight: 800; }
+    </style>
+</head>
+<body>
+
+<div class="auth-container">
+    <a href="index.html" class="logo-auth">HEALTHLOGIC.</a>
+    
+    <div id="login-form">
+        <h2>ВХОД</h2>
+        <div class="f-group">
+            <label>Email</label>
+            <input type="email" id="login-email" placeholder="email@test.com">
+        </div>
+        <div class="f-group">
+            <label>Пароль</label>
+            <input type="password" id="login-password" placeholder="******">
+        </div>
+        <button class="auth-btn" onclick="handleLogin()">ВОЙТИ В СИСТЕМУ</button>
+        <p class="toggle-link" onclick="toggleAuth()">Нет аккаунта? Создать</p>
+    </div>
+
+    <div id="register-form" style="display: none;">
+        <h2>РЕГИСТРАЦИЯ</h2>
+        <div class="f-group">
+            <label>Email</label>
+            <input type="email" id="reg-email" placeholder="email@test.com">
+        </div>
+        <div class="f-group">
+            <label>Пароль</label>
+            <input type="password" id="reg-password" placeholder="******">
+        </div>
+        <button class="auth-btn" onclick="handleRegister()">ЗАРЕГИСТРИРОВАТЬСЯ</button>
+        <p class="toggle-link" onclick="toggleAuth()">Уже есть аккаунт? Войти</p>
+    </div>
+
+    <a href="index.html" class="back-link">← На главную</a>
+</div>
+
+<script>
+    // 1. ТВОЙ КОНФИГ FIREBASE (Вставь сюда тот же самый ключ!)
+    const firebaseConfig = С ададададададададвжжвыжжывжвжвжвжвжвжвжвжв В;
+
+    // Инициализация
+    firebase.initializeApp(firebaseConfig);
+    const auth = firebase.auth();
+
+    // Переключение между Входом и Регистрацией
+    function toggleAuth() {
+        const login = document.getElementById('login-form');
+        const reg = document.getElementById('register-form');
+        if (login.style.display === 'none') {
+            login.style.display = 'block';
+            reg.style.display = 'none';
+        } else {
+            login.style.display = 'none';
+            reg.style.display = 'block';
+        }
+    }
+
+    // ЛОГИКА ВХОДА
+    async function handleLogin() {
+        const email = document.getElementById('login-email').value;
+        const pass = document.getElementById('login-password').value;
+
+        try {
+            await auth.signInWithEmailAndPassword(email, pass);
+            alert("Вход выполнен успешно!");
+            window.location.href = "index.html"; // Уходим на главную
+        } catch (error) {
+            alert("Ошибка входа: " + error.message);
+        }
+    }
+
+    // ЛОГИКА РЕГИСТРАЦИИ
+    async function handleRegister() {
+        const email = document.getElementById('reg-email').value;
+        const pass = document.getElementById('reg-password').value;
+
+        if (pass.length < 6) {
+            alert("Пароль должен быть не менее 6 символов!");
+            return;
+        }
+
+        try {
+            await auth.createUserWithEmailAndPassword(email, pass);
+            alert("Аккаунт создан!");
+            window.location.href = "index.html";
+        } catch (error) {
+            alert("Ошибка регистрации: " + error.message);
+        }
+    }
+</script>
+
+</body>
+</html>
+
