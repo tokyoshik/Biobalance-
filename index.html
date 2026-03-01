@@ -2,220 +2,168 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HealthLogic | Калькулятор КБЖУ 2026</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthLogic | 2026</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
 
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        :root { --bg: #FDF5E6; --black: #000000; --white: #FFFFFF; --accent: #DED7B1; --border-thick: 4px solid #000000; }
+        :root { --bg: #FDF5E6; --black: #000000; --white: #FFFFFF; --accent: #DED7B1; --border: 4px solid #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg); font-family: 'Inter', sans-serif; color: var(--black); line-height: 1.4; overflow-x: hidden; }
-        .container { width: 100%; max-width: 1400px; margin: 0 auto; padding: 0 20px; }
-
-        header { background: var(--white); border-bottom: var(--border-thick); padding: 20px 0; position: sticky; top: 0; z-index: 1000; }
-        .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 900; font-size: 28px; text-decoration: none; color: #000; letter-spacing: -2px; }
-        .menu { display: flex; gap: 30px; align-items: center; }
-        .menu a { text-decoration: none; color: #000; font-weight: 800; font-size: 14px; text-transform: uppercase; }
-
-        .login-btn { background: var(--black); color: var(--white) !important; padding: 8px 15px; border: 2px solid var(--black); cursor: pointer; text-decoration: none; font-weight: 800; }
-        .login-btn:hover { background: var(--accent); color: #000 !important; }
-
-        section { padding: 80px 0; border-bottom: var(--border-thick); }
-        h1 { font-size: clamp(40px, 8vw, 90px); font-weight: 900; line-height: 0.85; letter-spacing: -4px; text-transform: uppercase; margin-bottom: 20px; }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; overflow-x: hidden; }
+        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
         
-        .hero-grid { display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 40px; align-items: center; }
-        .img-frame { border: var(--border-thick); background: #fff; box-shadow: 20px 20px 0px #000; height: 500px; }
-        .img-frame img { width: 100%; height: 100%; object-fit: cover; }
+        header { background: #fff; border-bottom: var(--border); padding: 20px 0; display: flex; justify-content: space-between; align-items: center; padding: 20px 5%; }
+        .logo { font-weight: 900; font-size: 28px; text-decoration: none; color: #000; }
+        .menu { display: flex; gap: 20px; align-items: center; }
+        .menu a { font-weight: 800; text-decoration: none; color: #000; text-transform: uppercase; font-size: 14px; }
+        
+        section { padding: 60px 0; border-bottom: var(--border); }
 
-        .btn { display: inline-block; background: var(--black); color: var(--white); padding: 20px 40px; text-decoration: none; font-weight: 900; text-transform: uppercase; border: none; cursor: pointer; transition: 0.2s; }
-        .btn:hover { background: var(--accent); color: #000; transform: translate(-5px, -5px); box-shadow: 5px 5px 0px #000; }
+        /* ЧИСТЫЙ КАЛЬКУЛЯТОР БЕЗ ГОВНА */
+        .simple-calc { background: #1a1a1a; color: #fff; padding: 40px; border: var(--border); max-width: 600px; margin: 0 auto; }
+        .simple-calc h2 { color: var(--accent); text-transform: uppercase; margin-bottom: 20px; font-weight: 900; }
+        .f-group { margin-bottom: 15px; }
+        .f-group label { display: block; font-size: 12px; text-transform: uppercase; margin-bottom: 5px; color: var(--accent); }
+        .f-group input, .f-group select { width: 100%; padding: 12px; background: #000; border: 2px solid var(--accent); color: #fff; font-weight: 700; }
+        .calc-btn { width: 100%; padding: 20px; background: var(--accent); border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; }
+        #res-box { display: none; margin-top: 20px; padding: 20px; border: 2px dashed var(--accent); text-align: center; }
 
-        .calc-container { background: #1A1A1A; color: #fff; padding: 40px; border: var(--border-thick); box-shadow: 30px 30px 0px var(--accent); }
-        .input-group { margin-bottom: 25px; }
-        .input-group label { display: block; font-weight: 900; text-transform: uppercase; font-size: 12px; color: var(--accent); margin-bottom: 8px; }
-        .input-group input, .input-group select { width: 100%; padding: 15px; background: #222; border: 2px solid var(--accent); color: #fff; font-family: 'Inter'; font-weight: 700; font-size: 18px; outline: none; }
+        .grid-posts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-top: 40px; }
+        .post-card { background: #fff; border: var(--border); }
+        .post-card img { width: 100%; height: 200px; object-fit: cover; border-bottom: var(--border); }
+        .post-card { padding: 15px; }
+        
+        #config-section { display: none; background: #000; color: #fff; padding: 40px; }
+        .config-area { width: 100%; height: 200px; background: #111; color: #0f0; border: 2px solid var(--accent); padding: 15px; margin: 15px 0; }
 
-        .grid-posts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; }
-        .post-card { background: #fff; border: var(--border-thick); transition: 0.3s; }
-        .post-card:hover { transform: translateY(-10px); box-shadow: 15px 15px 0px #000; }
-        .post-card img { width: 100%; height: 220px; object-fit: cover; border-bottom: var(--border-thick); }
-        .post-content { padding: 25px; }
-
-        #config-section { background: #000; color: #fff; display: none; }
-        .config-area { width: 100%; height: 250px; background: #111; border: 3px solid var(--accent); color: #00FF00; padding: 20px; font-family: monospace; font-size: 16px; margin-top: 20px; outline: none;}
-
-        footer { background: #000; color: #fff; padding: 60px 0; }
-        .disclaimer-box { border: 1px solid #fff; padding: 20px; max-width: 800px; margin: 0 auto; text-align: left; font-size: 12px; opacity: 0.9; }
-
-        @media (max-width: 900px) { .hero-grid { grid-template-columns: 1fr; } .menu { display: none; } }
+        footer { background: #000; color: #fff; padding: 40px; text-align: center; }
+        .disc { border: 1px solid #fff; padding: 15px; font-size: 11px; max-width: 700px; margin: 0 auto 20px; text-align: left; }
     </style>
 </head>
 <body>
 
 <header>
-    <div class="container nav-wrap">
-        <a href="index.html" class="logo">HEALTHLOGIC.</a>
-        <nav class="menu">
-            <a href="#articles">База знаний</a>
-            <a href="#calc">Калькулятор</a>
-            <a href="about.html">О нас</a>
-            <div id="auth-menu" style="display: none; align-items: center; gap: 20px;">
-                <a href="#config-section" style="color: var(--accent); font-weight: 800; text-decoration: none;">[ МОЙ КОНФИГ ]</a>
-                <button onclick="logout()" class="login-btn" style="background: #ff4444; border: none;">Выход</button>
-            </div>
-            <a href="auth.html" id="login-link" class="login-btn">Войти в аккаунт</a>
-        </nav>
-    </div>
+    <a href="#" class="logo">HEALTHLOGIC.</a>
+    <nav class="menu">
+        <a href="#articles">База знаний</a>
+        <a href="#calc">Калькулятор</a>
+        <div id="auth-menu" style="display:none; gap:15px;">
+            <a href="#config-section" style="color:var(--accent)">[КОНФИГ]</a>
+            <button onclick="logout()" style="background:red; color:#fff; border:none; padding:5px 10px; cursor:pointer;">ВЫХОД</button>
+        </div>
+        <a href="auth.html" id="login-link">ВОЙТИ</a>
+    </nav>
 </header>
 
-<main>
-    <section>
-        <div class="container hero-grid">
-            <div>
-                <h1>Твой интеллект в управлении телом.</h1>
-                <p style="font-size: 20px; margin-bottom: 40px; font-weight: 500;">Проект для тех, кто хочет понимать физиологию.</p>
-                <a href="#calc" class="btn">Начать расчет КБЖУ</a>
+<section id="config-section">
+    <div class="container">
+        <h2>ЛИЧНЫЙ КОНФИГ</h2>
+        <textarea id="userConfig" class="config-area"></textarea>
+        <button onclick="saveToFirebase()" class="calc-btn" style="width:200px">СОХРАНИТЬ</button>
+    </div>
+</section>
+
+<section id="calc">
+    <div class="container">
+        <div class="simple-calc">
+            <h2>BMR КАЛЬКУЛЯТОР</h2>
+            <div class="f-group">
+                <label>Пол</label>
+                <select id="gender"><option value="male">Мужской</option><option value="female">Женский</option></select>
             </div>
-            <div class="img-frame"><img src="https://images.unsplash.com/photo-1544367567-0f2fcb009e0b?w=800"></div>
-        </div>
-    </section>
-
-    <section id="config-section">
-        <div class="container">
-            <h2 style="font-size: 40px; font-weight: 900; text-transform: uppercase; color: var(--accent);">Личный Конфиг Системы</h2>
-            <textarea id="userConfig" class="config-area" placeholder="Вставьте ваш JSON..."></textarea>
-            <button class="btn" style="margin-top: 20px; background: var(--accent); color: #000;" onclick="saveToFirebase()">Сохранить в облако</button>
-        </div>
-    </section>
-
-    <section id="calc" style="background: #fff;">
-        <div class="container hero-grid">
-            <div class="calc-container">
-                <h2 style="color: var(--accent); font-size: 32px; margin-bottom: 30px; font-weight: 900; text-transform: uppercase;">BMR Анализатор</h2>
-                
-                <div class="input-group">
-                    <label>Биологический пол</label>
-                    <select id="gender"><option value="male">Мужской</option><option value="female">Женский</option></select>
-                </div>
-
-                <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px;">
-                    <div class="input-group"><label>Возраст</label><input type="number" id="age" placeholder="25"></div>
-                    <div class="input-group"><label>Вес (кг)</label><input type="number" id="weight" placeholder="75"></div>
-                    <div class="input-group"><label>Рост (см)</label><input type="number" id="height" placeholder="180"></div>
-                </div>
-
-                <div class="input-group">
-                    <label>Уровень активности</label>
-                    <select id="activity">
-                        <option value="1.2">Минимальный</option>
-                        <option value="1.375">1-3 тренировки</option>
-                        <option value="1.55">3-5 тренировок</option>
-                        <option value="1.725">Высокий</option>
-                    </select>
-                </div>
-
-                <button class="btn" style="width: 100%; background: var(--accent); color: #000;" onclick="calculate()">Рассчитать</button>
-                
-                <div id="result" style="display:none; margin-top: 30px; text-align: center; border: 2px dashed var(--accent); padding: 20px;">
-                    <span id="calories" style="font-size: 48px; font-weight: 900;">0</span> ККАЛ
-                </div>
+            <div class="f-group">
+                <label>Вес (кг)</label>
+                <input type="number" id="weight" placeholder="70">
             </div>
-            <div>
-                <h2 style="font-size: 40px; font-weight: 900; text-transform: uppercase;">Зачем считать?</h2>
-                <p>Метаболизм — это математика. Управляй своим весом осознанно с HealthLogic.</p>
+            <div class="f-group">
+                <label>Рост (см)</label>
+                <input type="number" id="height" placeholder="175">
+            </div>
+            <div class="f-group">
+                <label>Возраст</label>
+                <input type="number" id="age" placeholder="25">
+            </div>
+            <div class="f-group">
+                <label>Активность</label>
+                <select id="act">
+                    <option value="1.2">Минимальная</option>
+                    <option value="1.375">1-3 тренировки</option>
+                    <option value="1.55">3-5 тренировок</option>
+                    <option value="1.725">Высокая</option>
+                </select>
+            </div>
+            <button class="calc-btn" onclick="runCalc()">РАССЧИТАТЬ НОРМУ</button>
+            
+            <div id="res-box">
+                <span style="font-size:40px; font-weight:900;" id="cal-res">0</span> ККАЛ
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="articles">
-        <div class="container">
-            <h2 style="font-size: 40px; font-weight: 900; text-transform: uppercase; margin-bottom: 40px; text-align: center;">База знаний</h2>
-            <div class="grid-posts">
-                <div class="post-card">
-                    <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500">
-                    <div class="post-content"><h3>Как правильно качаться: наука гипертрофии</h3><a href="training.html" class="btn" style="width: 100%; text-align: center; padding: 10px;">Читать</a></div>
-                </div>
-                <div class="post-card">
-                    <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500">
-                    <div class="post-content"><h3>Магний для сна: разбор всех форм</h3><a href="magnesium.html" class="btn" style="width: 100%; text-align: center; padding: 10px;">Читать</a></div>
-                </div>
-                <div class="post-card">
-                    <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500">
-                    <div class="post-content"><h3>Fibermaxxing: клетчатка и мозг</h3><a href="fiber.html" class="btn" style="width: 100%; text-align: center; padding: 10px;">Читать</a></div>
-                </div>
+<section id="articles">
+    <div class="container">
+        <h2 style="text-align:center; font-size:40px; font-weight:900; text-transform:uppercase;">База знаний</h2>
+        <div class="grid-posts">
+            <div class="post-card">
+                <img src="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=500">
+                <h3>Гипертрофия: Наука</h3>
+                <a href="training.html">ЧИТАТЬ</a>
+            </div>
+            <div class="post-card">
+                <img src="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=500">
+                <h3>Магний и Сон</h3>
+                <a href="magnesium.html">ЧИТАТЬ</a>
+            </div>
+            <div class="post-card">
+                <img src="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=500">
+                <h3>Fibermaxxing</h3>
+                <a href="fiber.html">ЧИТАТЬ</a>
             </div>
         </div>
-    </section>
+    </div>
+</section>
 
-    <section id="partnership" style="text-align: center; background: var(--bg);">
-        <div class="container">
-            <h2 style="font-size: clamp(40px, 8vw, 80px); font-weight: 900; text-transform: uppercase;">PARTNERSHIP.</h2>
-            <p style="margin-bottom: 30px; font-weight: 700;">Мы открыты для сотрудничества.</p>
-            <div style="display: inline-block; border: var(--border-thick); background: #fff; padding: 20px 40px; box-shadow: 10px 10px 0px #000; font-weight: 900; font-size: 24px;">
-                TTOKYOSHIK@GMAIL.COM
-            </div>
-        </div>
-    </section>
-</main>
+<section style="text-align:center;">
+    <div class="container">
+        <h2 style="font-size:60px; font-weight:900;">PARTNERSHIP.</h2>
+        <p>TTOKYOSHIK@GMAIL.COM</p>
+    </div>
+</section>
 
 <footer>
-    <div class="container">
-        <div class="disclaimer-box">
-            <p><strong>ЮРИДИЧЕСКИЙ ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:</strong> Контент предоставлен только для ознакомления. <strong>ОБЯЗАТЕЛЬНО ПРОКОНСУЛЬТИРУЙТЕСЬ С ВРАЧОМ.</strong></p>
-        </div>
-        <p style="margin-top: 30px; font-weight: 900; letter-spacing: 2px; text-align: center;">© 2026 HEALTHLOGIC. Независимая модель.</p>
+    <div class="disc">
+        <p><strong>ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:</strong> Не является медицинской рекомендацией. Консультируйтесь с врачом.</p>
     </div>
+    <p>© 2026 HEALTHLOGIC</p>
 </footer>
 
 <script>
-    // 1. ФУНКЦИЯ КАЛЬКУЛЯТОРА (РАБОТАЕТ ВСЕГДА, СТОИТ ПЕРВОЙ)
-    function calculate() {
-        console.log("Клик по калькулятору");
-        const gender = document.getElementById('gender').value;
-        const weight = parseFloat(document.getElementById('weight').value);
-        const height = parseFloat(document.getElementById('height').value);
-        const age = parseInt(document.getElementById('age').value);
-        const activity = parseFloat(document.getElementById('activity').value);
+    // 1. ФУНКЦИЯ РАСЧЕТА (ВЫНЕСЕНА В САМОЕ НАЧАЛО, ЧТОБЫ РАБОТАЛА СРАЗУ)
+    function runCalc() {
+        console.log("Расчет запущен");
+        const w = parseFloat(document.getElementById('weight').value);
+        const h = parseFloat(document.getElementById('height').value);
+        const a = parseInt(document.getElementById('age').value);
+        const g = document.getElementById('gender').value;
+        const ac = parseFloat(document.getElementById('act').value);
 
-        if (!weight || !height || !age) {
-            alert("Заполни все данные!");
-            return;
-        }
+        if(!w || !h || !a) return alert("Заполни цифры!");
 
-        let bmr = (gender === 'male') ? 
-            (10 * weight + 6.25 * height - 5 * age + 5) : 
-            (10 * weight + 6.25 * height - 5 * age - 161);
+        let bmr = (g === 'male') ? (10*w + 6.25*h - 5*a + 5) : (10*w + 6.25*h - 5*a - 161);
+        let res = Math.round(bmr * ac);
 
-        document.getElementById('calories').innerText = Math.round(bmr * activity);
-        document.getElementById('result').style.display = 'block';
-        document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        document.getElementById('cal-res').innerText = res;
+        document.getElementById('res-box').style.display = 'block';
     }
 
-    // 2. FIREBASE (ИЗОЛИРОВАН В TRY-CATCH)
-    const firebaseConfig =// Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-const firebaseConfig = {
-  apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
-  authDomain: "healthlogic-fe5bd.firebaseapp.com",
-  projectId: "healthlogic-fe5bd",
-  storageBucket: "healthlogic-fe5bd.firebasestorage.app",
-  messagingSenderId: "177114233773",
-  appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);;
+    // 2. FIREBASE (ВНИЗУ, ЧТОБЫ НЕ МЕШАЛ)
+    const firebaseConfig = С ададададададададвжжвыжжывжвжвжвжвжвжвжвжв В;
 
     try {
         firebase.initializeApp(firebaseConfig);
@@ -223,19 +171,19 @@ const app = initializeApp(firebaseConfig);;
         const db = firebase.firestore();
 
         auth.onAuthStateChanged(user => {
-            if (user) {
+            if(user) {
                 document.getElementById('login-link').style.display = 'none';
                 document.getElementById('auth-menu').style.display = 'flex';
                 document.getElementById('config-section').style.display = 'block';
                 db.collection("userConfigs").doc(user.uid).get().then(doc => {
-                    if (doc.exists) document.getElementById('userConfig').value = doc.data().configData;
+                    if(doc.exists) document.getElementById('userConfig').value = doc.data().configData;
                 });
             }
         });
 
-        window.saveToFirebase = () => {
+        window.saveToFirebase = function() {
             const user = auth.currentUser;
-            if (user) {
+            if(user) {
                 db.collection("userConfigs").doc(user.uid).set({
                     configData: document.getElementById('userConfig').value,
                     lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
@@ -243,10 +191,8 @@ const app = initializeApp(firebaseConfig);;
             }
         };
         window.logout = () => auth.signOut().then(() => location.reload());
-    } catch (e) {
-        console.warn("Firebase ждет настройки...");
-    }
+    } catch(e) { console.log("Firebase off"); }
 </script>
 </body>
-    </html>
+            </html>
     
