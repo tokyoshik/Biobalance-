@@ -4,52 +4,34 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     
-    <title>Наука гипертрофии: как эффективно растить мышцы | HealthLogic</title>
-    <meta name="description" content="Разбираем физиологию роста мышц: прогрессия нагрузок, восстановление и почему ваши тренировки могут не работать. Научный подход к спорту.">
-    <meta property="og:title" content="Наука гипертрофии: Как правильно расти?">
-    <meta property="og:description" content="Почему мышцы растут во сне, а не в зале. Главные принципы тренировок 2026 на HealthLogic.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1541534741688-6078c6bfb5c5?w=800">
-    <meta property="og:type" content="article">
+    <title>Fibermaxxing: Гайд по клетчатке и микробиому | HealthLogic</title>
+    <meta name="description" content="Зачем нужен псиллиум, как клетчатка влияет на энергию мозга и почему это главный тренд биохакинга 2026.">
+    <meta property="og:title" content="Fibermaxxing: Твой путь к чистому разуму и энергии">
+    <meta property="og:description" content="Как 30+ грамм клетчатки превращают твой кишечник в суперкомпьютер. Разбор на HealthLogic.">
+    <meta property="og:image" content="https://images.unsplash.com/photo-1490645935967-10de6ba17061?w=800">
 
     <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='black'/%3E%3Cpath d='M30 30v40M70 30v40M30 50h40' stroke='white' stroke-width='12' stroke-linecap='square'/%3E%3C/svg%3E">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --bg: #FDF5E6; 
-            --black: #000000;
-            --white: #FFFFFF;
-            --accent: #DED7B1;
-            --border-thick: 4px solid #000000;
-        }
-
+        :root { --bg: #FDF5E6; --black: #000; --white: #fff; --accent: #DED7B1; --green: #4A5759; --border: 4px solid #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg); font-family: 'Inter', sans-serif; color: var(--black); line-height: 1.6; }
-        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 20px; }
-
-        header { background: var(--white); border-bottom: var(--border-thick); padding: 20px 0; position: sticky; top: 0; z-index: 100; }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--black); line-height: 1.6; }
+        .container { max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        header { background: var(--white); border-bottom: var(--border); padding: 20px 0; position: sticky; top: 0; z-index: 100; }
         .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
         .logo { font-weight: 900; font-size: 24px; text-decoration: none; color: #000; letter-spacing: -1px; }
-
-        .article-hero { padding: 60px 0; border-bottom: var(--border-thick); background: #000; color: #fff; }
-        h1 { font-size: clamp(32px, 8vw, 64px); font-weight: 900; line-height: 0.9; letter-spacing: -2px; text-transform: uppercase; margin-bottom: 20px; }
-        
-        .badge { display: inline-block; background: var(--accent); color: var(--black); padding: 5px 15px; font-weight: 900; text-transform: uppercase; font-size: 12px; margin-bottom: 20px; }
-
-        .content { padding: 60px 0; font-size: 18px; }
+        .article-hero { padding: 80px 0; border-bottom: var(--border); background: var(--green); color: #fff; }
+        h1 { font-size: clamp(32px, 8vw, 64px); font-weight: 900; line-height: 0.9; text-transform: uppercase; margin-bottom: 20px; }
+        .content { padding: 60px 0; font-size: 19px; }
         .content p { margin-bottom: 25px; }
-        .content h2 { font-size: 32px; font-weight: 900; margin: 50px 0 20px; text-transform: uppercase; border-left: 10px solid var(--black); padding-left: 20px; }
-
-        .info-card { border: var(--border-thick); padding: 30px; margin: 40px 0; background: var(--white); box-shadow: 15px 15px 0px var(--black); }
-        .info-card h3 { font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
-
-        .btn-action { display: inline-block; margin-top: 20px; padding: 15px 30px; background: var(--black); color: var(--white); text-decoration: none; font-weight: 900; text-transform: uppercase; border: none; cursor: pointer; }
-        .btn-action:hover { background: var(--accent); color: #000; }
-
-        footer { background: #000; color: #fff; padding: 60px 0; margin-top: 100px; }
-        .safe-notice { border: 2px solid #fff; padding: 25px; font-size: 14px; color: #fff !important; }
+        .content h2 { font-size: 36px; font-weight: 900; margin: 50px 0 25px; text-transform: uppercase; border-left: 12px solid var(--black); padding-left: 20px; line-height: 1; }
+        .info-card { border: var(--border); padding: 30px; margin: 40px 0; background: #fff; box-shadow: 15px 15px 0 #000; }
+        .list-ui { margin: 30px 0; list-style: none; }
+        .list-ui li { padding: 20px; border: 2px solid #000; margin-bottom: 15px; background: #fff; font-weight: 700; display: flex; align-items: center; gap: 15px; }
+        .list-ui li::before { content: '⚡'; font-size: 20px; }
+        .btn-action { display: inline-block; padding: 15px 30px; background: #000; color: #fff; text-decoration: none; font-weight: 900; text-transform: uppercase; border: none; cursor: pointer; }
+        footer { background: #000; color: #fff; padding: 60px 0; margin-top: 60px; }
     </style>
 </head>
 <body>
@@ -61,62 +43,60 @@
     </div>
 </header>
 
-<main>
-    <article class="article-hero">
-        <div class="container">
-            <span class="badge">Performance / Science</span>
-            <h1>Наука гипертрофии: как правильно расти.</h1>
-            <p style="font-size: 22px; font-weight: 700; opacity: 0.9;">Почему мышцы растут во сне, а не в тренажерном зале.</p>
-        </div>
-    </article>
-
-    <div class="container content">
-        <p>Гипертрофия — это адаптация вашего тела к нагрузке. Чтобы расти, вам не нужно убивать себя в зале каждый день. Вам нужно понимать три кита успеха.</p>
-
-        <h2>Три столпа роста:</h2>
-        <div class="info-card">
-            <h3>1. Механическое напряжение</h3>
-            <p>Вы должны постоянно увеличивать вес на штанге или количество повторений. Это называется <strong>прогрессией нагрузок</strong>.</p>
-        </div>
-
-        <div class="info-card">
-            <h3>2. Метаболический стресс</h3>
-            <p>Работа в диапазоне 8-12 повторений с правильной техникой создает необходимый "памп" и химический сигнал для роста.</p>
-        </div>
-
-        <div class="info-card">
-            <h3>3. Восстановление</h3>
-            <p>Мышцы восстанавливаются 48-72 часа. Если вы тренируете одну и ту же группу мышц каждый день — вы не растете, вы разрушаетесь.</p>
-        </div>
-
-        <button class="btn-action" onclick="shareArticle()">🔗 Поделиться статьей</button>
-        <br>
-        <a href="index.html" class="btn-action" style="background:none; color:#000; border: 2px solid #000; margin-top: 10px;">Вернуться к статьям</a>
+<article class="article-hero">
+    <div class="container">
+        <h1>Fibermaxxing: Интеллект начинается в кишечнике.</h1>
+        <p style="font-size: 22px; font-weight: 700; opacity: 0.9;">Почему клетчатка — это самый недооцененный чит-код для мозга в 2026 году.</p>
     </div>
-</main>
+</article>
+
+<div class="container content">
+    <p>Современный человек потребляет в среднем 10-15г клетчатки в день. Наши предки ели около 100г. Эта огромная разница — причина не только проблем с весом, но и "тумана в голове", депрессивных состояний и низкого уровня энергии.</p>
+
+    [attachment_0](attachment)
+
+    <h2>Ось «Кишечник-Мозг»</h2>
+    <p>Ваш кишечник напрямую соединен с мозгом через блуждающий нерв. Бактерии в вашем животе производят около 90% серотонина (гормона радости) и 50% дофамина. Если вы не кормите эти бактерии клетчаткой, они начинают буквально поедать слизистую оболочку вашего кишечника, вызывая воспаление, которое бьет по когнитивным способностям.</p>
+
+    <div class="info-card">
+        <h3>📊 НОРМА 2026:</h3>
+        <p>Для оптимальной работы мозга и иммунитета стремитесь к <strong>30-35 граммам</strong> клетчатки в сутки. Если вы тренируетесь и едите много белка, эта цифра обязательна к выполнению.</p>
+    </div>
+
+    <h2>Топ-3 источника для биохакера</h2>
+    <ul class="list-ui">
+        <li><strong>Псиллиум (шелуха подорожника):</strong> Состоит на 80% из растворимой клетчатки. Одна порция утром нормализует сахар в крови на весь день.</li>
+        <li><strong>Бобовые (чечевица, нут):</strong> Идеальное комбо белка и медленных углеводов.</li>
+        <li><strong>Ягоды и авокадо:</strong> Источники полифенолов, которые работают как удобрение для ваших "хороших" бактерий.</li>
+    </ul>
+
+    <div class="info-card" style="background: var(--accent);">
+        <h3>⚠️ ОШИБКА НОВИЧКА:</h3>
+        <p>Не пытайтесь съесть 30г сразу, если до этого ели только бургеры. Начните с 5г в день и <strong>пейте +1 литр воды</strong> к вашей норме. Без воды клетчатка превращается в "цемент".</p>
+    </div>
+
+    <button class="btn-action" onclick="shareArticle()">🔗 Поделиться гайдом</button>
+</div>
 
 <footer>
     <div class="container">
-        <div class="safe-notice">
-            <p><strong>ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:</strong> Физические нагрузки имеют противопоказания. Перед началом тренировочного процесса проконсультируйтесь с врачом и квалифицированным тренером. Мы не несем ответственности за травмы, полученные в результате неправильной техники.</p>
-        </div>
-        <p style="text-align: center; margin-top: 30px; font-weight: 900; font-size: 12px; opacity: 0.5;">© 2026 HEALTHLOGIC</p>
+        <p style="font-size: 13px; opacity: 0.7; border: 1px solid #fff; padding: 20px;">
+            ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ: Данные предоставлены для ознакомления. При наличии заболеваний ЖКТ (Крон, колит, СРК в фазе обострения) обязательно проконсультируйтесь с гастроэнтерологом перед введением добавок псиллиума.
+        </p>
+        <p style="text-align: center; margin-top: 30px; font-weight: 900; opacity: 0.5;">© 2026 HEALTHLOGIC</p>
     </div>
 </footer>
 
 <script>
     function shareArticle() {
         if (navigator.share) {
-            navigator.share({
-                title: 'Наука гипертрофии от HealthLogic',
-                url: window.location.href
-            });
+            navigator.share({ title: document.title, url: window.location.href });
         } else {
-            alert("Скопируйте ссылку: " + window.location.href);
+            alert("Ссылка скопирована!");
         }
     }
 </script>
 
 </body>
-            </html>
-                
+    </html>
+    
