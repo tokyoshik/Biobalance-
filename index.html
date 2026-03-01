@@ -58,20 +58,6 @@
         .input-ui label { display: block; font-size: 11px; font-weight: 900; color: var(--accent); margin-bottom: 10px; text-transform: uppercase; }
         .input-ui input, .input-ui select { width: 100%; padding: 18px; background: #222; border: 2px solid var(--accent); color: #fff; font-size: 18px; border-radius: 0; outline: none; }
 
-        /* ИСПРАВЛЕННЫЙ ТЕКСТ В ПОДВАЛЕ — МАКСИМАЛЬНАЯ ВИДИМОСТЬ */
-        .safe-notice { 
-            font-size: 14px; 
-            line-height: 1.6; 
-            color: #FFFFFF !important; /* Принудительно белый цвет */
-            text-align: left; 
-            max-width: 900px; 
-            margin: 0 auto;
-            border: 2px solid #FFFFFF; 
-            padding: 30px;
-            font-weight: 400;
-        }
-        .safe-notice strong { color: #FFFFFF !important; font-weight: 900; text-transform: uppercase; text-decoration: underline; }
-
         @media (max-width: 1000px) {
             .hero-grid { grid-template-columns: 1fr; }
             .img-frame { height: 400px; box-shadow: 15px 15px 0px #000; }
@@ -134,7 +120,7 @@
                     <div id="res-box" style="display: none; margin-top: 40px; border-top: 2px solid #444; padding-top: 20px;">
                         <span style="font-size: 14px; text-transform: uppercase; color: var(--accent);">Твой суточный расход (TDEE):</span>
                         <div id="bmr-val" style="font-size: 60px; font-weight: 900; color: var(--accent); margin-bottom: 15px;">0</div>
-                        <p style="font-size: 11px; color: #FFFFFF; font-style: italic;">Результат носит ознакомительный характер.</p>
+                        <p style="font-size: 11px; color: #FFFFFF; font-style: italic;">Результат является ориентировочным.</p>
                     </div>
                 </div>
                 <div>
@@ -188,15 +174,24 @@
     </section>
 </main>
 
-<footer style="background: #000; color: #fff; padding: 60px 0; border-top: var(--border-thick);">
+<footer style="background: #000; padding: 60px 0; border-top: var(--border-thick);">
     <div class="container">
-        <div class="logo" style="color: #fff; margin-bottom: 35px;">HEALTHLOGIC.</div>
+        <div class="logo" style="color: #FFFFFF !important; margin-bottom: 35px; font-weight: 900;">HEALTHLOGIC.</div>
         
-        <div class="safe-notice">
-            <p style="margin-bottom: 20px;"><strong>ЮРИДИЧЕСКИЙ ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:</strong> Контент на этом сайте (включая расчеты калькулятора и статьи) предоставлен только для образовательных и ознакомительных целей. HEALTHLOGIC не является медицинской организацией. Мы не даем профессиональных медицинских советов, не ставим диагнозы и не лечим заболевания.</p>
-            <p style="margin-bottom: 0px;">Использование любых данных с этого ресурса осуществляется на ваш собственный страх и риск. Администрация проекта не несет ответственности за любые негативные последствия для вашего здоровья, возникшие в результате следования рекомендациям. Перед любым действием — будь то прием БАД или смена режима тренировок — <strong>ОБЯЗАТЕЛЬНО ПРОКОНСУЛЬТИРУЙТЕСЬ С ВРАЧОМ.</strong></p>
+        <div style="font-size: 14px; line-height: 1.6; color: #FFFFFF !important; text-align: left; max-width: 900px; margin: 0 auto; border: 2px solid #FFFFFF; padding: 30px;">
+            <p style="margin-bottom: 20px; color: #FFFFFF !important;">
+                <strong style="color: #FFFFFF !important; font-weight: 900; text-transform: uppercase; text-decoration: underline;">
+                    ЮРИДИЧЕСКИЙ ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:
+                </strong> 
+                Контент на этом сайте (включая расчеты калькулятора и статьи) предоставлен только для образовательных и ознакомительных целей. HEALTHLOGIC не является медицинской организацией. Мы не даем профессиональных медицинских советов, не ставим диагнозы и не лечим заболевания.
+            </p>
+            <p style="margin-bottom: 0px; color: #FFFFFF !important;">
+                Использование любых данных с этого ресурса осуществляется на ваш собственный страх и риск. Администрация проекта не несет ответственности за любые негативные последствия для вашего здоровья, возникшие в результате следования рекомендациям. Перед любым действием — будь то прием БАД или смена режима тренировок — 
+                <strong style="color: #FFFFFF !important; font-weight: 900;">ОБЯЗАТЕЛЬНО ПРОКОНСУЛЬТИРУЙТЕСЬ С ВРАЧОМ.</strong>
+            </p>
         </div>
-        <p style="font-size: 10px; color: #444; margin-top: 30px;">© 2026 HEALTHLOGIC. Независимое медиа.</p>
+
+        <p style="font-size: 10px; color: #666; margin-top: 30px; text-align: center;">© 2026 HEALTHLOGIC. Независимое медиа.</p>
     </div>
 </footer>
 
@@ -216,5 +211,5 @@
 </script>
 
 </body>
-                                               </html>
-    
+    </html>
+                                                                                            
