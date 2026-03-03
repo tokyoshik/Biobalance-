@@ -1,4 +1,4 @@
-// 1. Твой конфиг (Впиши свои ключи!)
+// --- КОНФИГ (ВСТАВЬ СВОИ ДАННЫЕ ТУТ) ---
 
 const firebaseConfig = {
   apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
@@ -11,94 +11,101 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-// 2. Инициализация инструментов
+// --- ИНИЦИАЛИЗАЦИЯ ---
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
 const auth = firebase.auth();
 
-// 3. Функция отрисовки интерфейса (Лайки и Комменты)
-function renderInteractions() {
-    // Определяем ID страницы по названию файла (например, 'training')
-    const pageID = window.location.pathname.split("/").pop().replace(".html", "") || "index";
+// --- ФУНКЦИЯ ОТРИСОВКИ ---
+function initApp() {
+    // 1. Рисуем шапку (Header)
+    const headerHTML = `
+    <header style="padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 2px solid #121212; background: #F5F5DC; position: sticky; top: 0; z-index: 1000;">
+        <a href="index.html" style="font-weight: 900; font-size: 22px; text-decoration: none; color: #121212;">HEALTHLOGIC.</a>
+        <nav style="display: flex; gap: 20px;">
+            <a href="index.html#about-target" style="text-decoration: none; color: #121212; font-weight: 700; font-size: 11px; text-transform: uppercase;">О нас</a>
+            <a href="calc.html" style="text-decoration: none; color: #121212; font-weight: 700; font-size: 11px; text-transform: uppercase;">Калькулятор</a>
+            <a href="auth.html" id="nav-auth-btn" style="text-decoration: none; color: white; background: #121212; padding: 8px 16px; font-size: 11px;">Вход</a>
+        </nav>
+    </header>`;
     
-    const containerHTML = `
-    <section id="feedback-section" style="padding: 60px 10%; background: #fff; border-top: 3px solid #121212; font-family: 'Inter', sans-serif;">
-        <div style="display: flex; align-items: center; gap: 20px; margin-bottom: 30px;">
-            <button id="like-btn" style="background: #121212; color: #fff; border: none; padding: 15px 30px; cursor: pointer; font-weight: 900; font-size: 16px; border-radius: 4px;">
-                ❤ ПОЛЕЗНО <span id="like-count" style="margin-left: 10px; opacity: 0.8;">0</span>
-            </button>
-        </div>
-
-        <h3 style="text-transform: uppercase; font-weight: 900; letter-spacing: -1px;">Обсуждение_</h3>
-        <div id="comm-list" style="margin: 20px 0; max-height: 400px; overflow-y: auto; border-left: 2px solid #eee; padding-left: 20px;">
-            </div>
-
-        <div style="margin-top: 30px;">
-            <textarea id="comm-text" style="width: 100%; height: 100px; padding: 15px; border: 2px solid #121212; font-family: inherit; resize: none;" placeholder="Напишите ваше мнение..."></textarea>
-            <button onclick="sendComment('${pageID}')" style="margin-top: 10px; background: #121212; color: #fff; border: none; padding: 12px 25px; cursor: pointer; font-weight: 700;">ОТПРАВИТЬ</button>
-        </div>
-    </section>`;
-
-    // Вставляем перед футером
-    const footer = document.querySelector('footer');
-    if (footer) {
-        footer.insertAdjacentHTML('beforebegin', containerHTML);
+    // Вставляем шапку в самое начало body
+    if (!document.querySelector('header')) {
+        document.body.insertAdjacentHTML('afterbegin', headerHTML);
     }
 
-    // --- ЛОГИКА ЛАЙКОВ ---
-    const likeRef = db.ref('likes/' + pageID);
-    likeRef.on('value', (snapshot) => {
-        const count = snapshot.val() || 0;
-        const span = document.getElementById('like-count');
-        if (span) span.innerText = count;
-    });
+    // 2. Рисуем лайки и комменты (только на страницах статей)
+    const isArticle = window.location.pathname.includes("training") || 
+                     window.location.pathname.includes("magnesium") || 
+                     window.location.pathname.includes("fiber");
 
-    document.getElementById('like-btn').onclick = () => {
-        likeRef.transaction((current) => (current || 0) + 1);
-    };
+    if (isArticle) {
+        const pageID = window.location.pathname.split("/").pop().replace(".html", "") || "index";
+        const interactionHTML = `
+        <section id="firebase-section" style="padding: 60px 10%; background: #fff; border-top: 2px solid #121212;">
+            <div style="margin-bottom: 30px;">
+                <button id="like-btn" style="background: #fff; border: 2px solid #121212; padding: 12px 25px; cursor: pointer; font-weight: 900; font-family: sans-serif;">
+                    ❤ ЛАЙК <span id="like-count">0</span>
+                </button>
+            </div>
+            <div id="comment-section">
+                <h3 style="text-transform: uppercase; font-weight: 900;">Обсуждение_</h3>
+                <textarea id="comm-text" style="width:100%; height:80px; margin: 15px 0; padding:10px; border:2px solid #121212;" placeholder="Напишите что-нибудь..."></textarea>
+                <button onclick="handleComment('${pageID}')" style="padding:10px 25px; background:#121212; color:#fff; border:none; cursor:pointer; font-weight:700;">ОТПРАВИТЬ</button>
+                <div id="comm-list" style="margin-top:30px;"></div>
+            </div>
+        </section>`;
 
-    // --- ЛОГИКА КОММЕНТАРИЕВ ---
-    const commRef = db.ref('comments/' + pageID);
-    commRef.on('value', (snapshot) => {
-        const list = document.getElementById('comm-list');
-        if (!list) return;
-        list.innerHTML = "";
-        snapshot.forEach((child) => {
-            const data = child.val();
-            list.innerHTML += `
-                <div style="margin-bottom: 20px; background: #f9f9f9; padding: 15px; border-radius: 5px;">
-                    <div style="font-weight: 900; font-size: 12px; margin-bottom: 5px; color: #555;">${data.user}</div>
-                    <div style="font-size: 15px; line-height: 1.4;">${data.text}</div>
-                </div>`;
+        const footer = document.querySelector('footer');
+        if (footer) {
+            footer.insertAdjacentHTML('beforebegin', interactionHTML);
+        } else {
+            document.body.insertAdjacentHTML('beforeend', interactionHTML);
+        }
+
+        // --- ЛОГИКА ЛАЙКОВ ---
+        const likeRef = db.ref('likes/' + pageID);
+        likeRef.on('value', (snap) => {
+            const count = snap.val() || 0;
+            const span = document.getElementById('like-count');
+            if (span) span.innerText = count;
         });
-    });
+
+        document.getElementById('like-btn').onclick = () => {
+            likeRef.transaction(current => (current || 0) + 1);
+        };
+
+        // --- ЛОГИКА КОММЕНТОВ ---
+        const commRef = db.ref('comments/' + pageID);
+        commRef.on('value', (snap) => {
+            const list = document.getElementById('comm-list');
+            if (!list) return;
+            list.innerHTML = "";
+            snap.forEach(child => {
+                const val = child.val();
+                list.innerHTML += `<div style="margin-bottom:15px; border-bottom:1px solid #eee; padding-bottom:10px;">
+                    <small style="font-weight:700;">${val.user}</small>
+                    <p style="margin:5px 0;">${val.text}</p>
+                </div>`;
+            });
+        });
+    }
 }
 
-// Функция отправки комментария
-window.sendComment = (id) => {
-    const textarea = document.getElementById('comm-text');
-    const text = textarea.value.trim();
+// Глобальная функция для отправки комментов
+window.handleComment = (id) => {
+    const text = document.getElementById('comm-text').value;
     if (!text) return;
-
-    const userEmail = auth.currentUser ? auth.currentUser.email : "Анонимный пользователь";
-    
+    const user = auth.currentUser ? auth.currentUser.email : "Аноним";
     db.ref('comments/' + id).push({
-        user: userEmail,
+        user: user,
         text: text,
         timestamp: Date.now()
     });
-
-    textarea.value = "";
+    document.getElementById('comm-text').value = "";
 };
 
-// Запуск при загрузке страницы
-document.addEventListener("DOMContentLoaded", () => {
-    // Запускаем только на страницах статей
-    if (window.location.pathname.includes("training") || 
-        window.location.pathname.includes("magnesium") || 
-        window.location.pathname.includes("fiber")) {
-        renderInteractions();
-    }
-});
+// Запуск
+document.addEventListener("DOMContentLoaded", initApp);
