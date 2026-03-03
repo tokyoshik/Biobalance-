@@ -1,9 +1,14 @@
-// 1. ПРОВЕРКА В КОНСОЛИ
-console.log("HealthLogic: Запуск системы...");
+// Используем анонимную функцию, чтобы не засорять глобальную видимость
+(function() {
+    window.addEventListener('load', function() {
+        // 1. ПРОВЕРКА: Загружен ли Firebase вообще?
+        if (typeof firebase === 'undefined') {
+            console.error("HealthLogic: Ошибка! Firebase SDK не найден. Проверьте подключение скриптов в HTML.");
+            return;
+        }
 
-// 2. ТВОЙ КОНФИГ (Проверь только ссылку databaseURL)
-
-const firebaseConfig = {
+        // 2. КОНФИГУРАЦИЯ (Замени заглушки на свои данные!)
+       var firebaseConfig = {
   apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
   authDomain: "healthlogic-fe5bd.firebaseapp.com",
   projectId: "healthlogic-fe5bd",
@@ -15,49 +20,52 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// 3. ИНИЦИАЛИЗАЦИЯ (ИСПРАВЛЕНО!)
-// Ошибка была здесь. В твоей версии нужно писать firebase.initializeApp
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
+        // 3. ИНИЦИАЛИЗАЦИЯ
+        if (!firebase.apps.length) {
+            firebase.initializeApp(firebaseConfig);
+        }
+        var db = firebase.database();
 
-// 4. ФУНКЦИЯ ОТРИСОВКИ
-function renderLikes() {
-    var db = firebase.database();
-    var pageID = window.location.pathname.split("/").pop().replace(".html", "") || "index";
-    
-    // Создаем кнопку
-    var likeContainer = document.createElement('div');
-    likeContainer.style.cssText = "padding: 50px 0; text-align: center; background: #fff; border-top: 2px solid #000; margin-top: 30px;";
-    likeContainer.innerHTML = `
-        <button id="main-like-btn" style="background: #000; color: #fff; border: none; padding: 15px 40px; font-weight: 900; cursor: pointer; font-size: 18px; text-transform: uppercase;">
-            ❤ ЛАЙКНУТЬ: <span id="main-like-count">0</span>
-        </button>
-    `;
+        // 4. ОПРЕДЕЛЕНИЕ СТРАНИЦЫ
+        var path = window.location.pathname;
+        var pageID = path.split("/").pop().replace(".html", "") || "index";
+        
+        // 5. СОЗДАНИЕ ИНТЕРФЕЙСА (UI)
+        var likeSection = document.createElement('div');
+        likeSection.id = "firebase-like-section";
+        likeSection.style.cssText = "padding: 40px 0; text-align: center; background: #f9f9f9; border-top: 1px solid #ddd; margin-top: 50px; font-family: sans-serif;";
+        
+        likeSection.innerHTML = `
+            <button id="main-like-btn" style="background: #e63946; color: #fff; border: none; padding: 12px 30px; font-weight: bold; cursor: pointer; font-size: 16px; border-radius: 5px; transition: transform 0.2s;">
+                ❤ ЛАЙКОВ: <span id="main-like-count">...</span>
+            </button>
+        `;
 
-    // Вставляем в самый конец страницы
-    document.body.appendChild(likeContainer);
+        // Вставляем перед подвалом или просто в конец body
+        document.body.appendChild(likeSection);
 
-    // Связь с базой
-    var likeRef = db.ref('likes/' + pageID);
-    
-    likeRef.on('value', function(snapshot) {
-        var count = snapshot.val() || 0;
-        document.getElementById('main-like-count').innerText = count;
-    });
-
-    document.getElementById('main-like-btn').onclick = function() {
-        likeRef.transaction(function(current) {
-            return (current || 0) + 1;
+        // 6. РАБОТА С ДАННЫМИ
+        var likeRef = db.ref('likes/' + pageID);
+        
+        // Обновление счетчика в реальном времени
+        likeRef.on('value', function(snapshot) {
+            var count = snapshot.val() || 0;
+            var countDisplay = document.getElementById('main-like-count');
+            if (countDisplay) countDisplay.innerText = count;
         });
-    };
 
-    console.log("HealthLogic: Кнопка создана успешно!");
-}
+        // Обработка клика
+        var btn = document.getElementById('main-like-btn');
+        btn.onclick = function() {
+            // Анимация нажатия
+            btn.style.transform = "scale(0.95)";
+            setTimeout(() => { btn.style.transform = "scale(1)"; }, 100);
 
-// Запуск после загрузки страницы
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', renderLikes);
-} else {
-    renderLikes();
-}
+            likeRef.transaction(function(current) {
+                return (current || 0) + 1;
+            });
+        };
+
+        console.log("HealthLogic: Система инициализирована для [" + pageID + "]");
+    });
+})();
