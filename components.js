@@ -3,14 +3,14 @@ window.addEventListener('load', function() {
 
     // 1. ТВОЯ КОРОБКА С НАСТРОЙКАМИ (const)
     const firebaseConfig = {
-        apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs", 
-        authDomain: "healthlogic-fe5bd.firebaseapp.com",
-        databaseURL: "https://healthlogic-fe5bd-default-rtdb.firebaseio.com", // ТВОЙ URL
-        projectId: "healthlogic-fe5bd",
-        storageBucket: "healthlogic-fe5bd.firebasestorage.app",
-        messagingSenderId: "177114233773",
-        appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
-    };
+    apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs", // Замени на свой
+    authDomain: "healthlogic-fe5bd.firebaseapp.com",
+    databaseURL: "https://healthlogic-fe5bd-default-rtdb.firebaseio.com",
+    projectId: "healthlogic-fe5bd",
+    storageBucket: "healthlogic-fe5bd.appspot.com",
+    messagingSenderId: "177114233773", // Замени на свой
+    appId: "1:177114233773:web:0e341fb52efcf7dc2cff24" // Замени на свой
+};
 
     // 2. ПЕРЕДАЕМ ЭТУ КОРОБКУ В FIREBASE
     // Мы говорим: "Эй, Firebase, используй настройки из const firebaseConfig"
