@@ -2,131 +2,108 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HealthLogic | Магний: Фундамент нейрохимии</title>
     
-    <title>Магний для сна и стресса: какую форму выбрать? | HealthLogic</title>
-    <meta name="description" content="Разбор всех форм магния: от глицината до треоната. Узнайте, какая форма магния лучше всего усваивается и помогает уснуть.">
-    <meta property="og:title" content="Гайд по Магнию: Как выбрать форму для сна и фокуса?">
-    <meta property="og:description" content="Почему оксид магния не работает и зачем вам нужен глицинат. Научный разбор на HealthLogic.">
-    <meta property="og:image" content="https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?w=800">
-    <meta property="og:type" content="article">
-
-    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='48' fill='black'/%3E%3Cpath d='M30 30v40M70 30v40M30 50h40' stroke='white' stroke-width='12' stroke-linecap='square'/%3E%3C/svg%3E">
-    
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=Playfair+Display:ital,wght@1,900&display=swap" rel="stylesheet">
 
     <style>
-        :root {
-            --bg: #FDF5E6; 
-            --black: #000000;
-            --white: #FFFFFF;
-            --accent: #DED7B1;
-            --border-thick: 4px solid #000000;
-        }
-
+        :root { --bg: #F5F5DC; --dark: #121212; --accent: #BC8F8F; --white: #ffffff; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background-color: var(--bg); font-family: 'Inter', sans-serif; color: var(--black); line-height: 1.6; }
-        .container { width: 100%; max-width: 900px; margin: 0 auto; padding: 0 20px; }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--dark); line-height: 1.7; }
 
-        header { background: var(--white); border-bottom: var(--border-thick); padding: 20px 0; position: sticky; top: 0; z-index: 100; }
-        .nav-wrap { display: flex; justify-content: space-between; align-items: center; }
-        .logo { font-weight: 900; font-size: 24px; text-decoration: none; color: #000; letter-spacing: -1px; }
-
-        .article-hero { padding: 60px 0; border-bottom: var(--border-thick); background: var(--white); }
-        h1 { font-size: clamp(32px, 8vw, 64px); font-weight: 900; line-height: 0.9; letter-spacing: -2px; text-transform: uppercase; margin-bottom: 20px; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 80px 5%; }
         
-        .badge { display: inline-block; background: var(--black); color: var(--white); padding: 5px 15px; font-weight: 900; text-transform: uppercase; font-size: 12px; margin-bottom: 20px; }
+        .article-header { margin-bottom: 60px; border-bottom: 2px solid var(--dark); padding-bottom: 30px; }
+        .article-header h1 { font-size: clamp(32px, 7vw, 80px); text-transform: uppercase; font-weight: 900; line-height: 0.9; }
+        .category { font-size: 13px; font-weight: 800; color: var(--accent); text-transform: uppercase; letter-spacing: 3px; }
 
-        .content { padding: 60px 0; font-size: 18px; }
-        .content p { margin-bottom: 25px; }
-        .content h2 { font-size: 32px; font-weight: 900; margin: 50px 0 20px; text-transform: uppercase; border-left: 10px solid var(--black); padding-left: 20px; }
+        .content h2 { margin: 50px 0 25px; text-transform: uppercase; font-size: clamp(22px, 4vw, 32px); font-weight: 900; }
+        .content p { margin-bottom: 25px; font-size: 19px; opacity: 0.95; text-align: justify; }
+        
+        .grid-blocks { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin: 50px 0; }
+        .block-card { border: 1px solid var(--dark); padding: 30px; transition: 0.3s; }
+        .block-card:hover { background: var(--white); transform: translateY(-5px); }
+        .block-card h3 { font-size: 14px; text-transform: uppercase; margin-bottom: 15px; color: var(--accent); }
 
-        .info-card { border: var(--border-thick); padding: 30px; margin: 40px 0; background: var(--white); box-shadow: 15px 15px 0px var(--black); }
-        .info-card h3 { font-weight: 900; text-transform: uppercase; margin-bottom: 15px; }
+        .data-strip { background: var(--dark); color: var(--bg); padding: 40px; margin: 60px 0; border-left: 10px solid var(--accent); }
 
-        table { width: 100%; border-collapse: collapse; margin: 30px 0; border: var(--border-thick); background: #fff; }
-        th, td { padding: 15px; border: 2px solid var(--black); text-align: left; }
-        th { background: var(--black); color: var(--white); font-weight: 900; text-transform: uppercase; }
+        footer { padding: 60px 5%; background: #000; color: #fff; text-align: center; margin-top: 100px; }
+        .disclaimer-box { border: 1px solid #333; padding: 25px; font-size: 11px; margin-bottom: 40px; opacity: 0.6; max-width: 800px; margin-inline: auto; }
 
-        .btn-action { display: inline-block; margin-top: 20px; padding: 15px 30px; background: var(--black); color: var(--white); text-decoration: none; font-weight: 900; text-transform: uppercase; border: none; cursor: pointer; }
-        .btn-action:hover { background: var(--accent); color: #000; }
-
-        footer { background: #000; color: #fff; padding: 60px 0; margin-top: 100px; }
-        .safe-notice { border: 2px solid #fff; padding: 25px; font-size: 14px; color: #fff !important; }
+        @media (max-width: 768px) {
+            .container { padding: 40px 20px; }
+            .content p { text-align: left; font-size: 17px; }
+        }
     </style>
 </head>
 <body>
 
-<header>
-    <div class="container nav-wrap">
-        <a href="index.html" class="logo">HEALTHLOGIC.</a>
-        <a href="index.html" style="text-decoration: none; color: #000; font-weight: 900; font-size: 14px;">← НА ГЛАВНУЮ</a>
+<article class="container">
+    <div class="article-header" data-aos="fade-right">
+        <span class="category">Biological Optimization // Supplement 02</span>
+        <h1>Магний: <br><span style="font-family: 'Playfair Display'; font-style: italic; color: var(--accent); text-transform: none;">Протокол клеточной энергии.</span></h1>
     </div>
-</header>
 
-<main>
-    <article class="article-hero">
-        <div class="container">
-            <span class="badge">Биохимия / 2026</span>
-            <h1>Магний для сна и стресса: разбор всех форм.</h1>
-            <p style="font-size: 22px; font-weight: 700; color: #555;">Почему "просто купить магний" — это ошибка, которая стоит вам денег.</p>
-        </div>
-    </article>
+    <div class="content" data-aos="fade-up">
+        <p>Магний — это не просто минерал, это кофактор для более чем 300 ферментативных реакций в человеческом организме. С точки зрения HealthLogic, дефицит магния — это системная ошибка в коде, которая ведет к снижению когнитивных способностей, хронической усталости и нарушению циклов сна. Без достаточного количества этого элемента производство АТФ (основной энергетической валюты клетки) становится неэффективным.</p>
 
-    <div class="container content">
-        <p>Магний участвует в более чем 300 биохимических реакциях. От него зависит глубина сна и ваше восстановление после тренировок.</p>
+        <h2>Энергия на молекулярном уровне</h2>
+        <p>Каждая молекула АТФ в вашем теле должна быть связана с ионом магния, чтобы стать биологически активной. Это означает, что без магния ваша «батарейка» просто не может отдавать заряд. Спортсмены и люди, занятые интеллектуальным трудом, расходуют магний в два раза быстрее обычного человека. Когда магния не хватает, митохондрии начинают работать со сбоями, что вы ощущаете как "туман в голове" и упадок сил к середине дня.</p>
+
         
-        <h2>Золотая таблица форм</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Форма</th>
-                    <th>Для чего подходит?</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr><td><strong>Глицинат</strong></td><td>Лучший для сна и снятия тревоги.</td></tr>
-                <tr><td><strong>Таурат</strong></td><td>Поддержка сердечно-сосудистой системы.</td></tr>
-                <tr><td><strong>L-Треонат</strong></td><td>Когнитивные функции и память.</td></tr>
-                <tr><td><strong>Цитрат</strong></td><td>Работа ЖКТ (имеет легкий слабительный эффект).</td></tr>
-                <tr><td><strong>Оксид</strong></td><td>Минимальное усвоение (около 4%). Не рекомендуем.</td></tr>
-            </tbody>
-        </table>
 
-        <div class="info-card">
-            <h3>💊 СОВЕТ РЕДАКЦИИ:</h3>
-            <p>Для борьбы со стрессом и улучшения качества сна выбирайте <strong>Бисглицинат магния</strong>. Принимайте 400 мг за 1 час до сна.</p>
+        <div class="data-strip">
+            <h4 style="margin-bottom: 10px; text-transform: uppercase;">Статус: Критическая важность</h4>
+            <p style="font-size: 16px; opacity: 0.8;">Магний регулирует баланс кальция в клетке. Когда магния мало, кальций «затапливает» клетку, вызывая её гипервозбудимость. Результат: судороги, тревожность и аритмия.</p>
         </div>
 
-        <button class="btn-action" onclick="shareArticle()">🔗 Поделиться статьей</button>
-        <br>
-        <a href="index.html" class="btn-action" style="background:none; color:#000; border: 2px solid #000; margin-top: 10px;">Вернуться к статьям</a>
+        <h2>Формы магния: Как не купить мел?</h2>
+        <p>Рынок БАДов забит дешевым оксидом магния, который усваивается лишь на 4%. Мы используем только те формы, которые обладают высокой биодоступностью и специфическим воздействием на целевые системы.</p>
+
+        <div class="grid-blocks">
+            <div class="block-card">
+                <h3>01. Магний Треонат</h3>
+                <p style="font-size: 15px;">Единственная форма, способная проникать через гематоэнцефалический барьер. Лучший выбор для улучшения памяти, обучения и когнитивного долголетия.</p>
+            </div>
+            <div class="block-card">
+                <h3>02. Магний Глицинат</h3>
+                <p style="font-size: 15px;">Связан с аминокислотой глицином. Обладает мощным успокаивающим эффектом. Идеален для приема перед сном для восстановления ЦНС.</p>
+            </div>
+            <div class="block-card">
+                <h3>03. Магний Цитрат</h3>
+                <p style="font-size: 15px;">Классическая форма с высокой скоростью усвоения. Эффективна для восполнения дефицита в мышцах после интенсивного тренинга.</p>
+            </div>
+        </div>
+
+        <h2>Влияние на нейропластичность</h2>
+        <p>Магний блокирует NMDA-рецепторы в мозге. Это предотвращает перевозбуждение нейронов и защищает их от гибели (эксайтотоксичности). Поддерживая оптимальный уровень магния, вы буквально делаете свой мозг более пластичным и устойчивым к стрессу. В долгосрочной перспективе это единственный способ сохранить высокую скорость мышления в условиях жесткого дедлайна или информационной перегрузки.</p>
+        
+        <p>HealthLogic рекомендует: не принимайте магний «на глаз». Сдайте анализ на магний в эритроцитах (он точнее обычного анализа крови) и подбирайте дозировку исходя из веса и уровня физической активности. Обычно это 400–600 мг активного вещества в сутки.</p>
     </div>
-</main>
+</article>
 
 <footer>
-    <div class="container">
-        <div class="safe-notice">
-            <p><strong>ОТКАЗ ОТ ОТВЕТСТВЕННОСТИ:</strong> Данный материал носит сугубо информационный характер. Перед приемом любых добавок необходимо проконсультироваться с лечащим врачом. Мы не несем ответственности за последствия самолечения.</p>
-        </div>
-        <p style="text-align: center; margin-top: 30px; font-weight: 900; font-size: 12px; opacity: 0.5;">© 2026 HEALTHLOGIC</p>
+    <div class="disclaimer-box">
+        ВНИМАНИЕ: Данный материал носит образовательный характер. Перед приемом любых добавок проконсультируйтесь с врачом, чтобы исключить противопоказания, такие как почечная недостаточность.
+    </div>
+    <div style="display: flex; justify-content: space-between; font-weight: 900; font-size: 11px; opacity: 0.8;">
+        <span>LAB@HEALTHLOGIC.COM</span>
+        <span>© 2026 MOLECULAR DATA SYSTEM</span>
     </div>
 </footer>
 
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+<script src="components.js"></script>
+
+<script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
 <script>
-    function shareArticle() {
-        if (navigator.share) {
-            navigator.share({
-                title: 'Магний: разбор форм от HealthLogic',
-                url: window.location.href
-            });
-        } else {
-            alert("Скопируйте ссылку: " + window.location.href);
-        }
-    }
+    AOS.init({ duration: 800, once: true });
 </script>
 
 </body>
     </html>
-                                                                             
+            
