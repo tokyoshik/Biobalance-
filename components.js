@@ -1,6 +1,7 @@
-console.log("HealthLogic: components.js загружен!");
+// 1. Проверка в консоли
+console.log("HealthLogic: Файл загружен, начинаю запуск...");
 
-// 1. ТВОЙ КОНФИГ
+// 2. ТВОЙ КОНФИГ (Вставь свои данные сюда)
 
 const firebaseConfig = {
   apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
@@ -13,49 +14,46 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+// 3. ИНИЦИАЛИЗАЦИЯ (ИСПРАВЛЕНО!)
+// Ошибка была здесь. Мы добавляем firebase. перед initializeApp
+firebase.initializeApp(firebaseConfig);
 
-// 2. ИНИЦИАЛИЗАЦИЯ (ИСПРАВЛЕННАЯ СТРОКА 15)
-// Добавили "firebase.", чтобы убрать ReferenceError
-if (!firebase.apps.length) {
-    firebase.initializeApp(firebaseConfig);
-}
 const db = firebase.database();
 
-// 3. ФУНКЦИЯ ОТРИСОВКИ
-function renderLikeSection() {
+// 4. ФУНКЦИЯ ОТРИСОВКИ
+function renderApp() {
     const pageID = window.location.pathname.split("/").pop().replace(".html", "") || "index";
     
-    // Создаем блок лайка
-    const section = document.createElement('div');
-    section.style.cssText = "padding: 50px 10%; text-align: center; background: #fff; border-top: 2px solid #000; position: relative; z-index: 9999;";
-    section.innerHTML = `
-        <button id="main-like-btn" style="background: #000; color: #fff; border: none; padding: 15px 35px; font-weight: 900; cursor: pointer; font-size: 18px;">
-            ❤ ЛАЙК: <span id="main-like-count">0</span>
+    // Создаем блок кнопки
+    const likeBox = document.createElement('div');
+    likeBox.style.cssText = "padding: 60px 0; text-align: center; background: #fff; border-top: 2px solid #000; margin-top: 50px;";
+    likeBox.innerHTML = `
+        <button id="like-button" style="background: #000; color: #fff; border: none; padding: 20px 40px; font-weight: 900; cursor: pointer; font-size: 20px; text-transform: uppercase;">
+            ❤ ЛАЙКНУТЬ: <span id="like-count">0</span>
         </button>
     `;
 
-    // Вставляем перед футером или в конец body
-    const footer = document.querySelector('footer');
-    if (footer) {
-        footer.before(section);
-    } else {
-        document.body.appendChild(section);
-    }
+    // Вставляем в самый конец страницы (перед </body>)
+    document.body.appendChild(likeBox);
 
-    // Связь с базой
+    // Работа с базой
     const likeRef = db.ref('likes/' + pageID);
+    
     likeRef.on('value', (snap) => {
         const count = snap.val() || 0;
-        const countSpan = document.getElementById('main-like-count');
-        if (countSpan) countSpan.innerText = count;
+        document.getElementById('like-count').innerText = count;
     });
 
-    document.getElementById('main-like-btn').onclick = function() {
+    document.getElementById('like-button').onclick = function() {
         likeRef.transaction(c => (c || 0) + 1);
     };
-    
-    console.log("HealthLogic: Кнопка отрисована успешно!");
+
+    console.log("HealthLogic: Кнопка создана!");
 }
 
 // Запуск
-document.addEventListener("DOMContentLoaded", renderLikeSection);
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', renderApp);
+} else {
+    renderApp();
+}
