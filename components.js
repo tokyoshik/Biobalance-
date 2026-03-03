@@ -1,12 +1,16 @@
 // С - Твой конфиг (ВСТАВЬ СВОИ ДАННЫЕ ВНУТРИ {})
+
 const firebaseConfig = {
-    apiKey: "ТВОЙ_КЛЮЧ",
-    authDomain: "ТВОЙ_ДОМЕН",
-    projectId: "ТВОЙ_ID",
-    storageBucket: "ТВОЙ_БАКЕТ",
-    messagingSenderId: "ТВОЙ_SENDER_ID",
-    appId: "ТВОЙ_APP_ID"
+  apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
+  authDomain: "healthlogic-fe5bd.firebaseapp.com",
+  projectId: "healthlogic-fe5bd",
+  storageBucket: "healthlogic-fe5bd.firebasestorage.app",
+  messagingSenderId: "177114233773",
+  appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
 };
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
 // В
 
 // Инициализация
