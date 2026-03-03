@@ -5,7 +5,7 @@ window.addEventListener('load', function() {
     const firebaseConfig = {
         apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs", 
         authDomain: "healthlogic-fe5bd.firebaseapp.com",
-        databaseURL: "https://console.firebase.google.com/project/healthlogic-fe5bd/database/healthlogic-fe5bd-default-rtdb/data/~2F", // ТВОЙ URL
+        databaseURL: "https://healthlogic-fe5bd-default-rtdb.firebaseio.com", // ТВОЙ URL
         projectId: "healthlogic-fe5bd",
         storageBucket: "healthlogic-fe5bd.firebasestorage.app",
         messagingSenderId: "177114233773",
