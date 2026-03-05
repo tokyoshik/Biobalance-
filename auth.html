@@ -2,141 +2,80 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>HealthLogic | Вход и Регистрация</title>
-    
+    <title>HealthLogic | Авторизация</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+    <script src="components.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #FDF5E6; --black: #000; --border: 4px solid #000; --accent: #DED7B1; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { background: var(--bg); font-family: 'Inter', sans-serif; }
-
-        .auth-container { max-width: 400px; margin: 60px auto; padding: 20px; }
-        .auth-box { background: #fff; border: var(--border); box-shadow: 12px 12px 0px #000; padding: 30px; }
-        h1 { font-weight: 900; text-transform: uppercase; font-size: 28px; margin-bottom: 25px; text-align: center; }
-
-        .input-group { margin-bottom: 20px; }
-        .input-group label { display: block; font-weight: 900; font-size: 12px; text-transform: uppercase; margin-bottom: 8px; }
-        
-        input {
-            width: 100%; padding: 15px; border: var(--border); font-family: inherit;
-            font-weight: 700; outline: none; background: #f9f9f9;
-        }
-        input:focus { background: var(--accent); }
-
-        .btn {
-            width: 100%; padding: 18px; background: #000; color: #fff; border: none;
-            font-weight: 900; text-transform: uppercase; cursor: pointer; transition: 0.2s; margin-bottom: 15px;
-        }
-        .btn:hover { background: var(--accent); color: #000; transform: translate(-3px, -3px); box-shadow: 6px 6px 0px #000; }
-
-        .toggle-auth { text-align: center; font-weight: 800; text-transform: uppercase; font-size: 11px; cursor: pointer; text-decoration: underline; }
-        header#main-header { width: 100%; position: sticky; top: 0; z-index: 1000; background: #fff; border-bottom: var(--border); }
-        .header-nav { display: flex; justify-content: space-between; align-items: center; padding: 15px 20px; max-width: 1200px; margin: 0 auto; }
-        .logo { font-size: 20px; font-weight: 900; text-decoration: none; color: #000; text-transform: uppercase; }
+        body { font-family: 'Inter', sans-serif; background: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
+        .auth-card { background: #fff; border: 4px solid #000; padding: 40px; box-shadow: 15px 15px 0px #000; width: 100%; max-width: 400px; }
+        h2 { text-transform: uppercase; font-weight: 900; margin-bottom: 20px; font-size: 28px; }
+        input { width: 100%; padding: 15px; border: 3px solid #000; margin-bottom: 15px; font-weight: 700; outline: none; font-family: inherit; }
+        button { width: 100%; padding: 15px; background: #000; color: #fff; border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-bottom: 10px; transition: 0.2s; }
+        button:hover { background: #333; }
+        .toggle-btn { background: none; color: #000; border: 2px solid #000; }
+        .toggle-btn:hover { background: #eee; }
     </style>
 </head>
 <body>
 
-    <header id="main-header">
-        <div class="header-nav">
-            <a href="index.html" class="logo">HealthLogic.</a>
-            <div id="auth-status"></div>
-        </div>
-    </header>
+<div class="auth-card">
+    <h2 id="auth-title">Вход</h2>
+    
+    <input type="text" id="reg-name" placeholder="ВАШ НИК (Напр: ТОКИО)" style="display:none;">
+    
+    <input type="email" id="email" placeholder="EMAIL">
+    <input type="password" id="pass" placeholder="ПАРОЛЬ">
+    
+    <button onclick="handleAuth()" id="main-btn">Войти</button>
+    <button onclick="toggleMode()" class="toggle-btn" id="toggle-btn">Создать аккаунт</button>
+</div>
 
-    <div class="auth-container">
-        <div class="auth-box" id="login-box">
-            <h1>Вход</h1>
-            <div class="input-group">
-                <label>Email</label>
-                <input type="email" id="login-email" placeholder="example@mail.com">
-            </div>
-            <div class="input-group">
-                <label>Пароль</label>
-                <input type="password" id="login-password" placeholder="******">
-            </div>
-            <button class="btn" onclick="signIn()">Войти</button>
-            <div class="toggle-auth" onclick="toggleForm('reg')">Нет аккаунта? Создать</div>
-        </div>
+<script>
+    let isLoginMode = true;
 
-        <div class="auth-box" id="reg-box" style="display: none;">
-            <h1>Регистрация</h1>
-            <div class="input-group">
-                <label>Ваше Имя</label>
-                <input type="text" id="reg-name" placeholder="Иван">
-            </div>
-            <div class="input-group">
-                <label>Email</label>
-                <input type="email" id="reg-email" placeholder="example@mail.com">
-            </div>
-            <div class="input-group">
-                <label>Пароль</label>
-                <input type="password" id="reg-password" placeholder="******">
-            </div>
-            <button class="btn" onclick="signUp()">Создать аккаунт</button>
-            <div class="toggle-auth" onclick="toggleForm('login')">Уже есть аккаунт? Войти</div>
-        </div>
-    </div>
+    function toggleMode() {
+        isLoginMode = !isLoginMode;
+        document.getElementById('auth-title').innerText = isLoginMode ? "Вход" : "Регистрация";
+        document.getElementById('main-btn').innerText = isLoginMode ? "Войти" : "Зарегистрироваться";
+        document.getElementById('toggle-btn').innerText = isLoginMode ? "Создать аккаунт" : "Уже есть аккаунт? Войти";
+        document.getElementById('reg-name').style.display = isLoginMode ? "none" : "block";
+    }
 
-    <script>
-        // 2. КОНФИГ (Твой личный ключ)
-        const firebaseConfig = {
-            apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
-            authDomain: "healthlogic-fe5bd.firebaseapp.com",
-            databaseURL: "https://healthlogic-fe5bd-default-rtdb.firebaseio.com",
-            projectId: "healthlogic-fe5bd",
-            storageBucket: "healthlogic-fe5bd.firebasestorage.app",
-            messagingSenderId: "177114233773",
-            appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
-        };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    async function handleAuth() {
+        const email = document.getElementById('email').value;
+        const pass = document.getElementById('pass').value;
+        const name = document.getElementById('reg-name').value;
 
-        const auth = firebase.auth();
-        const db = firebase.database();
+        if (!email || !pass) return alert("Заполни все поля!");
 
-        // Переключение между формами
-        function toggleForm(mode) {
-            document.getElementById('login-box').style.display = mode === 'login' ? 'block' : 'none';
-            document.getElementById('reg-box').style.display = mode === 'reg' ? 'block' : 'none';
+        try {
+            if (isLoginMode) {
+                // ВХОД
+                await auth.signInWithEmailAndPassword(email, pass);
+            } else {
+                // РЕГИСТРАЦИЯ
+                if (!name) return alert("Введите ник!");
+                const res = await auth.createUserWithEmailAndPassword(email, pass);
+                
+                // СРАЗУ создаем запись в базе данных
+                await db.ref('users/' + res.user.uid).set({
+                    username: name,
+                    role: "user" // По умолчанию все юзеры. Админа дашь себе в консоли или через админку.
+                });
+
+                // Обновляем имя в самом профиле Firebase (для подстраховки)
+                await res.user.updateProfile({ displayName: name });
+            }
+            // Если всё ок — на главную
+            window.location.href = 'index.html';
+        } catch (e) {
+            alert("Ошибка: " + e.message);
         }
-
-        // ВХОД
-        function signIn() {
-            const email = document.getElementById('login-email').value;
-            const pass = document.getElementById('login-password').value;
-            auth.signInWithEmailAndPassword(email, pass)
-                .then(() => window.location.href = "index.html")
-                .catch(err => showToast(err.message));
-        }
-
-        // РЕГИСТРАЦИЯ
-        function signUp() {
-            const name = document.getElementById('reg-name').value;
-            const email = document.getElementById('reg-email').value;
-            const pass = document.getElementById('reg-password').value;
-
-            if (!name || !email || !pass) return showToast("Заполни все поля!");
-
-            auth.createUserWithEmailAndPassword(email, pass)
-                .then((result) => {
-                    const user = result.user;
-                    // Сохраняем имя в базу
-                    db.ref('users/' + user.uid).set({
-                        username: name,
-                        role: 'user'
-                    }).then(() => {
-                        window.location.href = "index.html";
-                    });
-                })
-                .catch(err => showToast(err.message));
-        }
-    </script>
-    <script src="components.js"></script>
+    }
+</script>
 </body>
 </html>
