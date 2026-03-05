@@ -2,40 +2,41 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>HL | Панель управления</title>
+    <title>HealthLogic | Admin Panel</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="components.js"></script>
 
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
-
     <style>
         :root { --black: #000; --white: #fff; --accent: #ffcc00; --border: 4px solid #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { font-family: 'Inter', sans-serif; background: #f0f0f0; display: flex; min-height: 100vh; }
 
-        /* Сайдбар */
-        .sidebar { width: 280px; background: var(--black); color: var(--white); padding: 30px; position: fixed; height: 100vh; }
-        .sidebar h2 { font-weight: 900; text-transform: uppercase; margin-bottom: 40px; color: var(--accent); }
-        .menu-btn { display: block; width: 100%; background: none; border: 2px solid #333; color: #fff; padding: 15px; margin-bottom: 10px; text-align: left; cursor: pointer; font-weight: 900; text-transform: uppercase; transition: 0.2s; }
+        /* Сайдбар (Боковое меню) */
+        .sidebar { width: 280px; background: var(--black); color: var(--white); padding: 30px; position: fixed; height: 100vh; display: flex; flex-direction: column; }
+        .sidebar h2 { font-weight: 900; text-transform: uppercase; margin-bottom: 40px; color: var(--accent); font-size: 24px; }
+        .menu-btn { display: block; width: 100%; background: none; border: 2px solid #333; color: #fff; padding: 15px; margin-bottom: 15px; text-align: left; cursor: pointer; font-weight: 900; text-transform: uppercase; transition: 0.2s; }
         .menu-btn:hover, .menu-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
+        .logout-link { margin-top: auto; color: #ff4444; font-weight: 900; text-decoration: none; border: 2px solid #ff4444; padding: 10px; text-align: center; }
 
-        /* Основная область */
-        .main { margin-left: 280px; padding: 50px; width: 100%; }
+        /* Основной контент */
+        .main { margin-left: 280px; padding: 40px; width: calc(100% - 280px); }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
-        /* Формы и таблицы */
+        /* Карточки и Таблицы */
         .card { background: #fff; border: var(--border); padding: 30px; box-shadow: 10px 10px 0px #000; margin-bottom: 30px; }
-        input, textarea { width: 100%; padding: 15px; border: 3px solid #000; margin-bottom: 20px; font-family: inherit; font-weight: 700; outline: none; }
-        button.save-btn { width: 100%; padding: 20px; background: #000; color: #fff; border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; }
+        h1 { margin-bottom: 30px; text-transform: uppercase; font-weight: 900; font-size: 32px; }
+        input, textarea, select { width: 100%; padding: 15px; border: 3px solid #000; margin-bottom: 20px; font-family: inherit; font-weight: 700; outline: none; }
+        .btn-action { width: 100%; padding: 20px; background: #000; color: #fff; border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; }
         
         table { width: 100%; border-collapse: collapse; background: #fff; border: var(--border); }
         th, td { padding: 15px; border: 2px solid #000; text-align: left; }
         th { background: #eee; text-transform: uppercase; font-weight: 900; }
-        .role-badge { padding: 5px 10px; font-weight: 900; text-transform: uppercase; font-size: 12px; }
-        .role-admin { background: #ff4444; color: #fff; }
+        .badge { padding: 5px 10px; font-weight: 900; text-transform: uppercase; font-size: 11px; }
+        .badge-admin { background: #ff4444; color: #fff; }
     </style>
 </head>
 <body>
@@ -45,29 +46,33 @@
     <button class="menu-btn active" onclick="showTab('create', this)">Создать статью</button>
     <button class="menu-btn" onclick="showTab('articles', this); loadArticlesList();">Все статьи</button>
     <button class="menu-btn" onclick="showTab('users', this); loadUsersList();">Пользователи</button>
-    <hr style="border: 1px solid #333; margin: 20px 0;">
-    <a href="index.html" style="color: var(--accent); font-weight: 900; text-decoration: none;">← НА САЙТ</a>
+    <a href="index.html" style="color: #fff; margin-top: 20px; text-decoration: none; font-weight: 900;">← НА САЙТ</a>
+    <a href="#" onclick="auth.signOut().then(()=>location.href='index.html')" class="logout-link">ВЫЙТИ</a>
 </div>
 
 <div class="main">
     <div id="create" class="tab-content active">
         <div class="card">
-            <h1 style="margin-bottom: 20px; text-transform: uppercase; font-weight: 900;">Новая публикация</h1>
-            <input type="text" id="post-title" placeholder="ЗАГОЛОВОК СТАТЬИ">
-            <input type="text" id="post-img" placeholder="URL ГЛАВНОГО ИЗОБРАЖЕНИЯ (ПРЯМАЯ ССЫЛКА)">
-            <textarea id="post-text" rows="10" placeholder="ТЕКСТ СТАТЬИ..."></textarea>
-            <button class="save-btn" onclick="publishPost()">Опубликовать на сайте</button>
+            <h1>Новый пост</h1>
+            <input type="text" id="post-title" placeholder="ЗАГОЛОВОК (Напр: ТРЕНИНГ)">
+            <input type="text" id="post-img" placeholder="URL ГЛАВНОГО ФОТО">
+            <select id="post-category">
+                <option value="none">Без категории</option>
+                <option value="featured">ГЛАВНАЯ (Топ-3)</option>
+            </select>
+            <textarea id="post-text" rows="8" placeholder="ТЕКСТ СТАТЬИ..."></textarea>
+            <button class="btn-action" onclick="publishPost()">Опубликовать</button>
         </div>
     </div>
 
     <div id="articles" class="tab-content">
-        <h1 style="margin-bottom: 20px; text-transform: uppercase; font-weight: 900;">Управление контентом</h1>
+        <h1>Статьи и Статистика</h1>
         <table id="articles-table">
             <thead>
                 <tr>
                     <th>Заголовок</th>
                     <th>Просмотры</th>
-                    <th>Дата</th>
+                    <th>Категория</th>
                     <th>Действие</th>
                 </tr>
             </thead>
@@ -76,11 +81,11 @@
     </div>
 
     <div id="users" class="tab-content">
-        <h1 style="margin-bottom: 20px; text-transform: uppercase; font-weight: 900;">База атлетов</h1>
+        <h1>Зарегистрированные профили</h1>
         <table>
             <thead>
                 <tr>
-                    <th>Имя пользователя</th>
+                    <th>Имя (Ник)</th>
                     <th>Роль</th>
                     <th>UID</th>
                     <th>Действие</th>
@@ -92,20 +97,16 @@
 </div>
 
 <script>
-    // 1. ПРОВЕРКА ПРАВ (БЕЗОПАСНОСТЬ)
+    // ПРОВЕРКА РОЛИ АДМИНА
     auth.onAuthStateChanged(async (user) => {
-        if (!user) { window.location.href = 'auth.html'; return; }
-        
+        if (!user) { location.href = 'auth.html'; return; }
         const snap = await db.ref(`users/${user.uid}`).once('value');
-        const userData = snap.val();
-        
-        if (!userData || userData.role !== 'admin') {
-            alert("ДОСТУП ЗАПРЕЩЕН: ТРЕБУЮТСЯ ПРАВА АДМИНИСТРАТОРА");
-            window.location.href = 'index.html';
+        if (!snap.exists() || snap.val().role !== 'admin') {
+            alert("НЕДОСТАТОЧНО ПРАВ!");
+            location.href = 'index.html';
         }
     });
 
-    // 2. ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК
     function showTab(tabId, btn) {
         document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
         document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
@@ -113,53 +114,40 @@
         btn.classList.add('active');
     }
 
-    // 3. ПУБЛИКАЦИЯ СТАТЬИ
+    // ЛОГИКА СТАТЕЙ
     function publishPost() {
         const title = document.getElementById('post-title').value;
         const img = document.getElementById('post-img').value;
         const text = document.getElementById('post-text').value;
+        const cat = document.getElementById('post-category').value;
 
-        if (!title || !text) return alert("Заполни заголовок и текст!");
+        if (!title || !text) return alert("Заполни поля!");
 
-        const newPost = {
-            title: title,
-            image: img,
+        db.ref('articles').push({
+            title, image: img, category: cat,
             blocks: [{ type: 'text', content: text, width: '100' }],
-            views: 0,
-            timestamp: Date.now()
-        };
-
-        db.ref('articles').push(newPost).then(() => {
-            alert("Статья успешно опубликована!");
-            location.reload();
-        });
+            views: 0, timestamp: Date.now()
+        }).then(() => { alert("Статья создана!"); location.reload(); });
     }
 
-    // 4. СПИСОК СТАТЬИ И УДАЛЕНИЕ
     function loadArticlesList() {
         db.ref('articles').on('value', snap => {
             const list = document.getElementById('articles-list');
             list.innerHTML = '';
             snap.forEach(child => {
-                const post = child.val();
+                const p = child.val();
                 list.innerHTML += `
                     <tr>
-                        <td><b>${post.title}</b></td>
-                        <td>${post.views || 0} 👀</td>
-                        <td>${new Date(post.timestamp).toLocaleDateString()}</td>
-                        <td><button onclick="deletePost('${child.key}')" style="color:red; cursor:pointer;">Удалить</button></td>
+                        <td><b>${p.title}</b></td>
+                        <td>${p.views || 0} 👀</td>
+                        <td>${p.category || '---'}</td>
+                        <td><button onclick="db.ref('articles/${child.key}').remove()" style="color:red;">Удалить</button></td>
                     </tr>`;
             });
         });
     }
 
-    function deletePost(id) {
-        if (confirm("Удалить эту статью навсегда?")) {
-            db.ref(`articles/${id}`).remove();
-        }
-    }
-
-    // 5. УПРАВЛЕНИЕ ПОЛЬЗОВАТЕЛЯМИ
+    // ЛОГИКА ПОЛЬЗОВАТЕЛЕЙ
     function loadUsersList() {
         db.ref('users').on('value', snap => {
             const list = document.getElementById('users-list');
@@ -170,20 +158,14 @@
                 list.innerHTML += `
                     <tr>
                         <td>${u.username || 'Аноним'}</td>
-                        <td><span class="role-badge ${isAdmin ? 'role-admin' : ''}">${u.role}</span></td>
-                        <td style="font-size:10px; color:#888;">${child.key}</td>
+                        <td><span class="badge ${isAdmin ? 'badge-admin' : ''}">${u.role || 'user'}</span></td>
+                        <td style="font-size:10px;">${child.key}</td>
                         <td>
-                            ${!isAdmin ? `<button onclick="makeAdmin('${child.key}')">Сделать админом</button>` : '---'}
+                            ${!isAdmin ? `<button onclick="db.ref('users/${child.key}/role').set('admin')">Сделать админом</button>` : '---'}
                         </td>
                     </tr>`;
             });
         });
-    }
-
-    function makeAdmin(uid) {
-        if (confirm("Дать этому пользователю полные права админа?")) {
-            db.ref(`users/${uid}/role`).set('admin');
-        }
     }
 </script>
 </body>
