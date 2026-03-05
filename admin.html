@@ -2,171 +2,91 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>HealthLogic | Admin Panel</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HL Admin | Блочный редактор</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="components.js"></script>
-
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
     <style>
-        :root { --black: #000; --white: #fff; --accent: #ffcc00; --border: 4px solid #000; }
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: #f0f0f0; display: flex; min-height: 100vh; }
-
-        /* Сайдбар (Боковое меню) */
-        .sidebar { width: 280px; background: var(--black); color: var(--white); padding: 30px; position: fixed; height: 100vh; display: flex; flex-direction: column; }
-        .sidebar h2 { font-weight: 900; text-transform: uppercase; margin-bottom: 40px; color: var(--accent); font-size: 24px; }
-        .menu-btn { display: block; width: 100%; background: none; border: 2px solid #333; color: #fff; padding: 15px; margin-bottom: 15px; text-align: left; cursor: pointer; font-weight: 900; text-transform: uppercase; transition: 0.2s; }
-        .menu-btn:hover, .menu-btn.active { background: var(--accent); color: #000; border-color: var(--accent); }
-        .logout-link { margin-top: auto; color: #ff4444; font-weight: 900; text-decoration: none; border: 2px solid #ff4444; padding: 10px; text-align: center; }
-
-        /* Основной контент */
-        .main { margin-left: 280px; padding: 40px; width: calc(100% - 280px); }
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* Карточки и Таблицы */
-        .card { background: #fff; border: var(--border); padding: 30px; box-shadow: 10px 10px 0px #000; margin-bottom: 30px; }
-        h1 { margin-bottom: 30px; text-transform: uppercase; font-weight: 900; font-size: 32px; }
-        input, textarea, select { width: 100%; padding: 15px; border: 3px solid #000; margin-bottom: 20px; font-family: inherit; font-weight: 700; outline: none; }
-        .btn-action { width: 100%; padding: 20px; background: #000; color: #fff; border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; }
-        
-        table { width: 100%; border-collapse: collapse; background: #fff; border: var(--border); }
-        th, td { padding: 15px; border: 2px solid #000; text-align: left; }
-        th { background: #eee; text-transform: uppercase; font-weight: 900; }
-        .badge { padding: 5px 10px; font-weight: 900; text-transform: uppercase; font-size: 11px; }
-        .badge-admin { background: #ff4444; color: #fff; }
+        body { font-family: 'Inter', sans-serif; background: #f0f0f0; padding: 20px; }
+        .editor-card { max-width: 800px; margin: 0 auto; background: #fff; border: 4px solid #000; padding: 30px; box-shadow: 10px 10px 0 #000; }
+        .block-item { border: 2px solid #000; padding: 15px; margin-bottom: 15px; position: relative; background: #fafafa; }
+        textarea, input { width: 100%; padding: 12px; border: 2px solid #000; font-family: inherit; font-weight: 700; margin-top: 10px; }
+        .btn { padding: 12px 20px; background: #000; color: #fff; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; margin-right: 10px; }
+        .btn-add { background: #ffcc00; color: #000; margin-top: 20px; }
+        .btn-del { background: #ff4444; position: absolute; top: 5px; right: 5px; padding: 5px 10px; font-size: 10px; }
+        .publish-btn { width: 100%; background: #000; font-size: 20px; margin-top: 40px; height: 60px; }
     </style>
 </head>
 <body>
 
-<div class="sidebar">
-    <h2>HL ADMIN</h2>
-    <button class="menu-btn active" onclick="showTab('create', this)">Создать статью</button>
-    <button class="menu-btn" onclick="showTab('articles', this); loadArticlesList();">Все статьи</button>
-    <button class="menu-btn" onclick="showTab('users', this); loadUsersList();">Пользователи</button>
-    <a href="index.html" style="color: #fff; margin-top: 20px; text-decoration: none; font-weight: 900;">← НА САЙТ</a>
-    <a href="#" onclick="auth.signOut().then(()=>location.href='index.html')" class="logout-link">ВЫЙТИ</a>
-</div>
-
-<div class="main">
-    <div id="create" class="tab-content active">
-        <div class="card">
-            <h1>Новый пост</h1>
-            <input type="text" id="post-title" placeholder="ЗАГОЛОВОК (Напр: ТРЕНИНГ)">
-            <input type="text" id="post-img" placeholder="URL ГЛАВНОГО ФОТО">
-            <select id="post-category">
-                <option value="none">Без категории</option>
-                <option value="featured">ГЛАВНАЯ (Топ-3)</option>
-            </select>
-            <textarea id="post-text" rows="8" placeholder="ТЕКСТ СТАТЬИ..."></textarea>
-            <button class="btn-action" onclick="publishPost()">Опубликовать</button>
+<div class="editor-card">
+    <h2>ПРОФЕССИОНАЛЬНЫЙ РЕДАКТОР HL</h2>
+    <input type="text" id="post-title" placeholder="ЗАГОЛОВОК СТАТЬИ" style="font-size: 24px; margin-bottom: 30px;">
+    
+    <div id="blocks-container">
         </div>
-    </div>
 
-    <div id="articles" class="tab-content">
-        <h1>Статьи и Статистика</h1>
-        <table id="articles-table">
-            <thead>
-                <tr>
-                    <th>Заголовок</th>
-                    <th>Просмотры</th>
-                    <th>Категория</th>
-                    <th>Действие</th>
-                </tr>
-            </thead>
-            <tbody id="articles-list"></tbody>
-        </table>
-    </div>
+    <button class="btn btn-add" onclick="addBlock('text')">+ ТЕКСТ</button>
+    <button class="btn btn-add" onclick="addBlock('image')">+ ФОТО</button>
 
-    <div id="users" class="tab-content">
-        <h1>Зарегистрированные профили</h1>
-        <table>
-            <thead>
-                <tr>
-                    <th>Имя (Ник)</th>
-                    <th>Роль</th>
-                    <th>UID</th>
-                    <th>Действие</th>
-                </tr>
-            </thead>
-            <tbody id="users-list"></tbody>
-        </table>
-    </div>
+    <button class="btn publish-btn" onclick="savePost()">ОПУБЛИКОВАТЬ В ПРОТОКОЛ</button>
 </div>
 
 <script>
-    // ПРОВЕРКА РОЛИ АДМИНА
-    auth.onAuthStateChanged(async (user) => {
-        if (!user) { location.href = 'auth.html'; return; }
-        const snap = await db.ref(`users/${user.uid}`).once('value');
-        if (!snap.exists() || snap.val().role !== 'admin') {
-            alert("НЕДОСТАТОЧНО ПРАВ!");
-            location.href = 'index.html';
-        }
-    });
+    let blocks = [];
 
-    function showTab(tabId, btn) {
-        document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(tabId).classList.add('active');
-        btn.classList.add('active');
+    function addBlock(type) {
+        const id = Date.now();
+        blocks.push({ id, type, content: "" });
+        render();
     }
 
-    // ЛОГИКА СТАТЕЙ
-    function publishPost() {
+    function deleteBlock(id) {
+        blocks = blocks.filter(b => b.id !== id);
+        render();
+    }
+
+    function updateBlock(id, value) {
+        const block = blocks.find(b => b.id === id);
+        block.content = value;
+    }
+
+    function render() {
+        const container = document.getElementById('blocks-container');
+        container.innerHTML = "";
+        blocks.forEach(block => {
+            const div = document.createElement('div');
+            div.className = "block-item";
+            div.innerHTML = `
+                <strong>${block.type.toUpperCase()}</strong>
+                <button class="btn btn-del" onclick="deleteBlock(${block.id})">УДАЛИТЬ</button>
+                ${block.type === 'text' 
+                    ? `<textarea oninput="updateBlock(${block.id}, this.value)" placeholder="Пиши здесь...">${block.content}</textarea>`
+                    : `<input type="text" oninput="updateBlock(${block.id}, this.value)" value="${block.content}" placeholder="URL картинки">`
+                }
+            `;
+            container.appendChild(div);
+        });
+    }
+
+    async function savePost() {
         const title = document.getElementById('post-title').value;
-        const img = document.getElementById('post-img').value;
-        const text = document.getElementById('post-text').value;
-        const cat = document.getElementById('post-category').value;
+        if (!title || blocks.length === 0) return alert("ПУСТО!");
 
-        if (!title || !text) return alert("Заполни поля!");
+        const postData = {
+            title: title,
+            blocks: blocks, // Сохраняем весь массив блоков
+            timestamp: Date.now(),
+            views: 0
+        };
 
-        db.ref('articles').push({
-            title, image: img, category: cat,
-            blocks: [{ type: 'text', content: text, width: '100' }],
-            views: 0, timestamp: Date.now()
-        }).then(() => { alert("Статья создана!"); location.reload(); });
-    }
-
-    function loadArticlesList() {
-        db.ref('articles').on('value', snap => {
-            const list = document.getElementById('articles-list');
-            list.innerHTML = '';
-            snap.forEach(child => {
-                const p = child.val();
-                list.innerHTML += `
-                    <tr>
-                        <td><b>${p.title}</b></td>
-                        <td>${p.views || 0} 👀</td>
-                        <td>${p.category || '---'}</td>
-                        <td><button onclick="db.ref('articles/${child.key}').remove()" style="color:red;">Удалить</button></td>
-                    </tr>`;
-            });
-        });
-    }
-
-    // ЛОГИКА ПОЛЬЗОВАТЕЛЕЙ
-    function loadUsersList() {
-        db.ref('users').on('value', snap => {
-            const list = document.getElementById('users-list');
-            list.innerHTML = '';
-            snap.forEach(child => {
-                const u = child.val();
-                const isAdmin = u.role === 'admin';
-                list.innerHTML += `
-                    <tr>
-                        <td>${u.username || 'Аноним'}</td>
-                        <td><span class="badge ${isAdmin ? 'badge-admin' : ''}">${u.role || 'user'}</span></td>
-                        <td style="font-size:10px;">${child.key}</td>
-                        <td>
-                            ${!isAdmin ? `<button onclick="db.ref('users/${child.key}/role').set('admin')">Сделать админом</button>` : '---'}
-                        </td>
-                    </tr>`;
-            });
-        });
+        await db.ref('articles').push(postData);
+        alert("СТАТЬЯ ОПУБЛИКОВАНА!");
+        location.reload();
     }
 </script>
+
 </body>
 </html>
