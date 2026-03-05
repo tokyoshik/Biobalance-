@@ -1,76 +1,230 @@
-<main style="margin-top: 100px; padding: 0 5%;">
-    <div class="hero-section" style="text-align: center; padding: 60px 0;">
-        <h1 style="font-size: clamp(48px, 8vw, 120px); font-weight: 900; letter-spacing: -4px; line-height: 0.9; margin: 0;">Future<br>Biohacking.</h1>
-    </div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HEALTHLOGIC | Future Biohacking</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <style>
+        /* --- БАЗОВЫЕ СТИЛИ (APPLE + SAMSUNG) --- */
+        :root {
+            --bg: #f5f5f7;
+            --card: #ffffff;
+            --radius: 32px;
+            --accent: #007aff;
+            --glass: rgba(255, 255, 255, 0.8);
+        }
 
-    <div class="bento-grid-system">
-        <a href="training.html" class="bento-card dark-card">
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: var(--bg);
+            color: #1d1d1f;
+            line-height: 1.5;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- УНИВЕРСАЛЬНАЯ ШАПКА (ВЕЗДЕ) --- */
+        .main-header {
+            position: fixed;
+            top: 0; width: 100%; height: 64px;
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%;
+            background: var(--glass);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            z-index: 2000;
+            border-bottom: 0.5px solid rgba(0,0,0,0.1);
+        }
+
+        .logo { font-weight: 900; font-size: 1.1rem; letter-spacing: -0.5px; cursor: pointer; }
+        
+        .nav-right { display: flex; gap: 20px; align-items: center; }
+        .nav-right a { text-decoration: none; color: #1d1d1f; font-size: 14px; font-weight: 600; transition: 0.3s; }
+        .nav-right a:hover { opacity: 0.6; }
+        .hidden { display: none !important; }
+
+        /* --- АДАПТИВНАЯ СЕТКА BENTO --- */
+        .content-wrapper { 
+            max-width: 1400px; 
+            margin: 0 auto; 
+            padding: 100px 5% 40px; 
+        }
+
+        .hero { text-align: center; padding: 40px 0 60px; }
+        .hero h1 { font-size: clamp(40px, 10vw, 100px); font-weight: 900; letter-spacing: -4px; line-height: 0.9; }
+
+        .bento-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .bento-item {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 40px;
+            text-decoration: none;
+            color: inherit;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+            border: 1px solid rgba(0,0,0,0.05);
+            animation: appleReveal 0.8s backwards;
+        }
+
+        .bento-item.main-feature { grid-column: span 2; background: #000; color: #fff; }
+        .bento-item:hover { transform: translateY(-8px) scale(1.01); box-shadow: 0 30px 60px rgba(0,0,0,0.08); }
+
+        .card-tag { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 20px; }
+        .card-body h2 { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin-bottom: 15px; line-height: 1.1; }
+        .card-body p { font-size: 17px; opacity: 0.7; }
+
+        /* --- АНИМАЦИИ --- */
+        @keyframes appleReveal {
+            0% { opacity: 0; transform: translateY(30px); filter: blur(10px); }
+            100% { opacity: 1; transform: translateY(0); filter: blur(0); }
+        }
+
+        /* --- УНИВЕРСАЛЬНЫЙ ПОДВАЛ / ДИСКЛЕЙМЕР --- */
+        .main-footer { padding: 80px 5% 40px; background: #fff; border-top: 1px solid rgba(0,0,0,0.05); margin-top: 60px; }
+        .disclaimer-box { 
+            background: rgba(255,59,48,0.03); 
+            padding: 30px; 
+            border-radius: 24px; 
+            border: 1px solid rgba(255,59,48,0.1);
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .disclaimer-box h4 { color: #ff3b30; margin-bottom: 12px; font-weight: 800; }
+        .disclaimer-box p { font-size: 14px; color: #666; line-height: 1.6; }
+        .footer-bottom { 
+            max-width: 1200px; margin: 40px auto 0;
+            display: flex; justify-content: space-between; 
+            font-size: 12px; opacity: 0.4; font-weight: 600;
+        }
+
+        /* --- АДАПТИВНОСТЬ ПОД ТЕЛЕФОНЫ --- */
+        @media (max-width: 768px) {
+            .bento-grid { grid-template-columns: 1fr; }
+            .bento-item.main-feature { grid-column: span 1; }
+            .hero h1 { letter-spacing: -2px; }
+            .bento-item { padding: 30px; min-height: 280px; }
+            .card-body h2 { font-size: 28px; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="main-header">
+    <div class="logo" onclick="window.location.href='index.html'">HEALTHLOGIC</div>
+    <nav class="nav-right">
+        <a href="about.html">О нас</a>
+        <a href="login.html" id="nav-login">Вход</a>
+        <a href="profile.html" id="nav-profile" class="hidden">Профиль</a>
+        <a href="#" id="nav-logout" class="hidden" style="color: #ff3b30;">Выход</a>
+    </nav>
+</header>
+
+<main class="content-wrapper">
+    <section class="hero">
+        <h1>Future<br>Biohacking.</h1>
+    </section>
+
+    <section class="bento-grid">
+        <a href="training.html" class="bento-item main-feature">
             <div class="card-tag">PROTOCOL 01 / CORE</div>
             <div class="card-body">
                 <h2>Training System.</h2>
-                <p>Научно обоснованная методология гипертрофии и развития силы. Оптимизация циклов восстановления.</p>
+                <p>Методология гипертрофии и силы. Оптимизация циклов восстановления.</p>
             </div>
-            <div class="card-footer">→</div>
         </a>
 
-        <a href="magnesium.html" class="bento-card white-card">
-            <div class="card-tag" style="color: #007aff;">PROTOCOL 02 / ESSENTIALS</div>
+        <a href="magnesium.html" class="bento-item">
+            <div class="card-tag" style="color: var(--accent)">PROTOCOL 02 / ESSENTIALS</div>
             <div class="card-body">
                 <h2>Magnesium.</h2>
-                <p>Фундамент нервной системы. Анализ форм для когнитивного здоровья.</p>
+                <p>Фундамент нервной системы и глубокий анализ форм для когнитивного здоровья.</p>
             </div>
         </a>
 
-        <a href="fiber.html" class="bento-card light-card">
-            <div class="card-tag" style="color: #34c759;">PROTOCOL 03 / MICROBIOME</div>
+        <a href="fiber.html" class="bento-item">
+            <div class="card-tag" style="color: #34c759">PROTOCOL 03 / MICROBIOME</div>
             <div class="card-body">
                 <h2>Fiber Architecture.</h2>
                 <p>Проектирование микробиома. Клетчатка как инструмент долголетия.</p>
             </div>
         </a>
-        
+
         <div id="dynamic-articles" style="display: contents;"></div>
-    </div>
+    </section>
 </main>
 
-<style>
-    /* Глобальные исправления сетки */
-    .bento-grid-system {
-        display: grid;
-        grid-template-columns: repeat(2, 1fr);
-        gap: 24px;
-        max-width: 1400px;
-        margin: 0 auto;
+<footer class="main-footer">
+    <div class="disclaimer-box">
+        <h4>⚠️ МЕДИЦИНСКИЙ ДИСКЛЕЙМЕР</h4>
+        <p>Контент на HEALTHLOGIC носит ознакомительный характер. Представленные протоколы не являются медицинской рекомендацией. Всегда консультируйтесь с врачом перед любыми изменениями в режиме тренировок или приеме добавок. Автор не несет ответственности за последствия использования информации.</p>
+    </div>
+    <div class="footer-bottom">
+        <span>© 2026 HEALTHLOGIC</span>
+        <span>Apple & Samsung Aesthetic</span>
+    </div>
+</footer>
+
+<script type="module">
+    import { auth, db, logoutUser } from './components.js';
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+    import { collection, query, getDocs, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const navLogin = document.getElementById('nav-login');
+    const navProfile = document.getElementById('nav-profile');
+    const navLogout = document.getElementById('nav-logout');
+
+    // Логика навигации (Вход/Профиль/Выход)
+    onAuthStateChanged(auth, (user) => {
+        if (user) {
+            navLogin.classList.add('hidden');
+            navProfile.classList.remove('hidden');
+            navLogout.classList.remove('hidden');
+        } else {
+            navLogin.classList.remove('hidden');
+            navProfile.classList.add('hidden');
+            navLogout.classList.add('hidden');
+        }
+    });
+
+    navLogout.onclick = (e) => { e.preventDefault(); logoutUser(); };
+
+    // Загрузка динамических статей с фильтром "ФЫВ"
+    async function loadArticles() {
+        const q = query(collection(db, "articles"), orderBy("createdAt", "desc"));
+        const snap = await getDocs(q);
+        const container = document.getElementById('dynamic-articles');
+        
+        snap.forEach(doc => {
+            const data = doc.data();
+            // Анти-мусор фильтр
+            if (data.title && data.title.length > 3 && !data.title.includes("ФЫВ")) {
+                const card = document.createElement('a');
+                card.href = `article.html?id=${doc.id}`;
+                card.className = 'bento-item';
+                card.innerHTML = `
+                    <div class="card-tag">NEW POST</div>
+                    <div class="card-body">
+                        <h2>${data.title}</h2>
+                        <p>${data.text.substring(0, 100)}...</p>
+                    </div>
+                `;
+                container.appendChild(card);
+            }
+        });
     }
+    loadArticles();
+</script>
 
-    .bento-card {
-        text-decoration: none;
-        color: inherit;
-        padding: 40px;
-        border-radius: 32px; /* Samsung One UI скругление */
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        min-height: 320px;
-        transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
-        animation: appleReveal 0.8s backwards;
-    }
-
-    .dark-card { grid-column: span 2; background: #000; color: #fff; }
-    .white-card { background: #fff; border: 1px solid rgba(0,0,0,0.05); }
-    .light-card { background: #f5f5f7; border: 1px solid rgba(0,0,0,0.05); }
-
-    .bento-card:hover { transform: scale(1.01) translateY(-5px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
-
-    .card-tag { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 20px; }
-    .card-body h2 { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin: 0 0 15px 0; line-height: 1.1; }
-    .card-body p { font-size: 17px; opacity: 0.7; line-height: 1.4; margin: 0; max-width: 450px; }
-    .card-footer { font-size: 24px; align-self: flex-end; }
-
-    /* Адаптив для мобилок */
-    @media (max-width: 768px) {
-        .bento-grid-system { grid-template-columns: 1fr; }
-        .dark-card { grid-column: span 1; }
-        .bento-card { padding: 30px; min-height: 280px; }
-    }
-</style>
+</body>
+</html>
