@@ -81,8 +81,8 @@
     <h1 id="auth-title">Вход</h1>
     
     <div id="auth-form">
-        <input type="email" id="email" placeholder="Email" required>
-        <input type="password" id="password" placeholder="Пароль" required>
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Пароль">
         <button class="main-btn" id="submit-btn">Продолжить</button>
     </div>
 
@@ -91,7 +91,7 @@
         <span class="toggle-link" id="toggle-btn">Создать аккаунт</span>
     </div>
 
-    <a href="/" class="home-link">← На главную</a>
+    <a href="index.html" class="home-link">← НА ГЛАВНУЮ</a>
 </div>
 
 <script type="module">
@@ -111,40 +111,41 @@
 
     let isLoginMode = true;
 
-    // Переключение между Входом и Регистрацией
-    toggleBtn.onclick = () => {
+    // Смена режима: Вход / Регистрация
+    toggleBtn.addEventListener('click', () => {
         isLoginMode = !isLoginMode;
         title.textContent = isLoginMode ? "Вход" : "Регистрация";
         submitBtn.textContent = isLoginMode ? "Войти" : "Создать аккаунт";
         toggleText.textContent = isLoginMode ? "Впервые в Healthlogic?" : "Уже есть аккаунт?";
         toggleBtn.textContent = isLoginMode ? "Создать аккаунт" : "Войти в систему";
-    };
+    });
 
-    // Логика авторизации
-    submitBtn.onclick = async () => {
-        const email = emailInput.value;
+    // Обработка клика по главной кнопке
+    submitBtn.addEventListener('click', async (e) => {
+        e.preventDefault();
+        const email = emailInput.value.trim();
         const password = passInput.value;
 
         if (!email || !password) {
-            alert("Пожалуйста, заполните все поля");
+            alert("Заполните Email и Пароль");
             return;
         }
 
         try {
             if (isLoginMode) {
-                // Вход
                 await signInWithEmailAndPassword(auth, email, password);
+                console.log("Вход выполнен");
             } else {
-                // Регистрация
                 await createUserWithEmailAndPassword(auth, email, password);
+                console.log("Аккаунт создан");
             }
-            // После успеха отправляем на главную
-            window.location.href = '/';
+            // Редирект на index.html (явно указываем файл для GitHub)
+            window.location.href = "index.html";
         } catch (error) {
-            console.error("Ошибка аутентификации:", error);
+            console.error("Auth Error:", error);
             alert("Ошибка: " + error.message);
         }
-    };
+    });
 </script>
 
 </body>
