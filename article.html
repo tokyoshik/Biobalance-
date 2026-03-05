@@ -3,93 +3,116 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HL | Протокол</title>
+    <title>HL | Protocol</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="components.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
     <style>
-        :root { --accent: #00ff41; --bg: #0a0a0a; --card: #141414; }
-        body { background: var(--bg); color: #fff; font-family: 'Inter', sans-serif; margin: 0; line-height: 1.6; }
-        .container { max-width: 800px; margin: 0 auto; padding: 40px 20px; }
+        :root { --blue: #0071e3; --bg: #ffffff; --text: #1d1d1f; }
+        body { font-family: 'Inter', sans-serif; background: var(--bg); color: var(--text); margin: 0; line-height: 1.5; }
+        .nav { padding: 20px 5%; border-bottom: 1px solid #f2f2f2; display: flex; align-items: center; justify-content: space-between; position: sticky; top: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); z-index: 100; }
+        .logo { font-weight: 900; text-decoration: none; color: #000; font-size: 18px; }
         
-        /* СТИЛЬ И ТИПОГРАФИКА */
-        h1 { font-size: clamp(32px, 5vw, 64px); font-weight: 900; text-transform: uppercase; letter-spacing: -2px; margin-bottom: 30px; animation: slideUp 0.8s ease; }
-        .txt { font-size: 18px; color: #ccc; margin-bottom: 25px; }
-        .img-wrap img { width: 100%; border-radius: 20px; border: 1px solid #333; margin: 20px 0; box-shadow: 0 0 30px rgba(0,255,65,0.1); }
+        .content { max-width: 700px; margin: 60px auto; padding: 0 20px; animation: fadeIn 0.8s ease-out; }
+        h1 { font-size: 48px; font-weight: 900; letter-spacing: -2px; line-height: 1.1; margin-bottom: 40px; }
+        .block-text { font-size: 19px; color: #424245; margin-bottom: 25px; }
+        .block-img { width: 100%; border-radius: 22px; margin: 30px 0; box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
 
-        /* ИНТЕРАКТИВ: ЛАЙКИ */
-        .actions { display: flex; align-items: center; gap: 20px; padding: 30px 0; border-top: 1px solid #222; margin-top: 50px; }
-        .like-btn { background: none; border: 2px solid var(--accent); color: var(--accent); padding: 10px 25px; border-radius: 30px; cursor: pointer; font-weight: 800; transition: 0.3s; }
-        .like-btn:hover { background: var(--accent); color: #000; box-shadow: 0 0 20px var(--accent); }
+        /* ИНТЕРАКТИВ */
+        .engagement { display: flex; align-items: center; gap: 15px; margin-top: 60px; padding-top: 40px; border-top: 1px solid #eee; }
+        .btn-like { background: #f5f5f7; border: none; padding: 12px 24px; border-radius: 99px; font-weight: 600; cursor: pointer; transition: 0.3s; }
+        .btn-like.active { background: #fee2e2; color: #ef4444; }
+        .btn-like:disabled { opacity: 0.6; cursor: default; }
 
-        /* КОММЕНТАРИИ */
-        .comments-sec { margin-top: 50px; background: var(--card); padding: 30px; border-radius: 24px; border: 1px solid #222; }
-        .comm-input { width: 100%; background: #000; border: 1px solid #333; padding: 15px; color: #fff; border-radius: 12px; margin-bottom: 15px; box-sizing: border-box; }
-        .comm-item { border-bottom: 1px solid #222; padding: 15px 0; font-size: 14px; }
-        .comm-item b { color: var(--accent); display: block; margin-bottom: 5px; }
+        .comments-box { background: #f5f5f7; border-radius: 30px; padding: 40px; margin-top: 50px; }
+        .comm-input { width: 100%; border: 1px solid #d2d2d7; border-radius: 14px; padding: 15px; font-family: inherit; font-size: 16px; margin-bottom: 15px; box-sizing: border-box; }
+        .btn-send { background: var(--blue); color: #fff; border: none; padding: 12px 25px; border-radius: 99px; font-weight: 600; cursor: pointer; }
+        
+        .comment { background: #fff; padding: 20px; border-radius: 18px; margin-top: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); }
+        .comment b { display: block; margin-bottom: 5px; font-size: 14px; color: var(--blue); }
 
-        @keyframes slideUp { from { opacity:0; transform: translateY(30px); } to { opacity:1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1 id="v-title"></h1>
-        <div id="v-content"></div>
 
-        <div class="actions">
-            <button class="like-btn" onclick="addLike()">⚡️ <span id="like-count">0</span></button>
-            <span>ПРОТОКОЛ ИЗУЧЕН</span>
-        </div>
+<div class="nav">
+    <a href="index.html" class="logo">HEALTHLOGIC</a>
+    <a href="index.html" style="text-decoration: none; color: var(--blue); font-weight: 600;">← На главную</a>
+</div>
 
-        <div class="comments-sec">
-            <h3>ОБСУЖДЕНИЕ</h3>
-            <div id="comm-list"></div>
-            <input type="text" id="c-name" class="comm-input" placeholder="Ваше имя">
-            <textarea id="c-text" class="comm-input" rows="3" placeholder="Ваш комментарий..."></textarea>
-            <button class="like-btn" onclick="addComm()">ОТПРАВИТЬ</button>
-        </div>
+<div class="content">
+    <h1 id="title">Загрузка...</h1>
+    <div id="blocks"></div>
+
+    <div class="engagement">
+        <button id="likeBtn" class="btn-like" onclick="handleLike()">❤️ <span id="l-count">0</span></button>
+        <span style="font-size: 14px; color: #86868b;">Людям это полезно</span>
     </div>
 
-    <script>
-        const id = new URLSearchParams(window.location.search).get('id');
-        if(id) {
-            // Загрузка контента
-            db.ref(`articles/${id}`).on('value', s => {
-                const d = s.val(); if(!d) return;
-                document.getElementById('v-title').innerText = d.title;
-                document.getElementById('like-count').innerText = d.likes || 0;
-                
-                const area = document.getElementById('v-content'); area.innerHTML = "";
-                d.blocks?.forEach(b => {
-                    const el = document.createElement('div');
-                    if(b.type === 'text') { el.className = 'txt'; el.innerText = b.content; }
-                    else { el.className = 'img-wrap'; el.innerHTML = `<img src="${b.content}">`; }
-                    area.appendChild(el);
-                });
+    <div class="comments-box">
+        <h3 style="margin-top:0">Обсуждение</h3>
+        <input type="text" id="c-name" class="comm-input" placeholder="Ваше имя">
+        <textarea id="c-text" class="comm-input" rows="3" placeholder="Ваши мысли..."></textarea>
+        <button class="btn-send" onclick="handleComm()">Отправить</button>
+        
+        <div id="comm-list" style="margin-top: 30px;"></div>
+    </div>
+</div>
+
+<script>
+    const id = new URLSearchParams(window.location.search).get('id');
+    
+    if(id) {
+        // Подгружаем контент
+        db.ref(`articles/${id}`).on('value', s => {
+            const d = s.val(); if(!d) return;
+            document.getElementById('title').innerText = d.title;
+            document.getElementById('l-count').innerText = d.likes || 0;
+            
+            const area = document.getElementById('blocks'); area.innerHTML = "";
+            d.blocks?.forEach(b => {
+                const el = document.createElement(b.type === 'text' ? 'p' : 'img');
+                el.className = b.type === 'text' ? 'block-text' : 'block-img';
+                if(b.type === 'text') el.innerText = b.content; else el.src = b.content;
+                area.appendChild(el);
             });
 
-            // Загрузка комментов
-            db.ref(`comments/${id}`).on('value', s => {
-                const list = document.getElementById('comm-list'); list.innerHTML = "";
-                s.forEach(c => {
-                    const v = c.val();
-                    list.innerHTML += `<div class="comm-item"><b>${v.name}</b>${v.text}</div>`;
-                });
-            });
-        }
-
-        function addLike() {
-            db.ref(`articles/${id}/likes`).transaction(c => (c || 0) + 1);
-        }
-
-        function addComm() {
-            const n = document.getElementById('c-name').value;
-            const t = document.getElementById('c-text').value;
-            if(n && t) {
-                db.ref(`comments/${id}`).push({ name: n, text: t });
-                document.getElementById('c-text').value = "";
+            // Проверка: ставили ли уже лайк
+            if(localStorage.getItem('liked_' + id)) {
+                document.getElementById('likeBtn').classList.add('active');
+                document.getElementById('likeBtn').disabled = true;
             }
+        });
+
+        // Подгружаем комменты
+        db.ref(`comments/${id}`).limitToLast(10).on('value', s => {
+            const list = document.getElementById('comm-list'); list.innerHTML = "";
+            s.forEach(c => {
+                const v = c.val();
+                list.innerHTML += `<div class="comment"><b>${v.name}</b>${v.text}</div>`;
+            });
+        });
+    }
+
+    function handleLike() {
+        if(!localStorage.getItem('liked_' + id)) {
+            db.ref(`articles/${id}/likes`).transaction(c => (c || 0) + 1);
+            localStorage.setItem('liked_' + id, true);
+            document.getElementById('likeBtn').classList.add('active');
+            document.getElementById('likeBtn').disabled = true;
         }
-    </script>
+    }
+
+    function handleComm() {
+        const n = document.getElementById('c-name').value.trim();
+        const t = document.getElementById('c-text').value.trim();
+        if(n.length < 2 || t.length < 3) return alert("Пожалуйста, заполните поля корректно");
+        
+        db.ref(`comments/${id}`).push({ name: n, text: t, date: Date.now() });
+        document.getElementById('c-text').value = "";
+    }
+</script>
 </body>
 </html>
