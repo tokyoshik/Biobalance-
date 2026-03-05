@@ -7,101 +7,54 @@
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="components.js"></script>
     <style>
-        :root { --bg: #ffffff; --black: #000000; --grey: #f5f5f7; }
-        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: var(--grey); margin: 0; display: flex; justify-content: center; padding: 40px 20px; }
-        .editor-container { width: 100%; max-width: 800px; background: var(--bg); border-radius: 20px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
-        
-        input[type="text"], textarea { width: 100%; border: 1px solid #d2d2d7; border-radius: 12px; padding: 15px; font-size: 16px; margin-bottom: 20px; box-sizing: border-box; outline: none; transition: 0.2s; }
-        input[type="text"]:focus { border-color: var(--black); }
-        
-        .title-input { font-size: 32px !important; font-weight: 700; border: none !important; padding: 0 !important; margin-bottom: 40px !important; }
-        
-        .block-card { background: var(--grey); border-radius: 15px; padding: 20px; margin-bottom: 20px; position: relative; animation: slideIn 0.3s ease-out; }
-        @keyframes slideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        
-        .label { font-size: 11px; font-weight: 700; text-transform: uppercase; color: #86868b; letter-spacing: 1px; margin-bottom: 10px; display: block; }
-        
-        .controls { display: flex; gap: 10px; margin-top: 30px; border-top: 1px solid #e5e5e5; padding-top: 30px; }
-        .btn { padding: 12px 24px; border-radius: 980px; font-weight: 600; cursor: pointer; border: none; transition: 0.2s; font-size: 14px; }
-        .btn-add { background: var(--black); color: white; }
-        .btn-add:hover { opacity: 0.8; }
-        
-        .btn-save { background: #0071e3; color: white; margin-left: auto; padding: 12px 40px; }
-        .btn-del { position: absolute; top: 15px; right: 15px; background: none; color: #ff3b30; font-size: 12px; font-weight: 600; cursor: pointer; border: none; }
+        :root { --bg: #ffffff; --black: #000; --apple: #f5f5f7; }
+        body { font-family: -apple-system, sans-serif; background: var(--apple); margin: 0; padding: 40px 20px; display: flex; justify-content: center; }
+        .editor { width: 100%; max-width: 650px; background: var(--bg); border-radius: 24px; padding: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+        .title-in { width: 100%; border: none; font-size: 32px; font-weight: 800; margin-bottom: 30px; outline: none; }
+        .block { background: var(--apple); border-radius: 12px; padding: 20px; margin-bottom: 10px; position: relative; }
+        textarea, input { width: 100%; border: 1px solid #d2d2d7; border-radius: 8px; padding: 10px; margin-top: 5px; box-sizing: border-box; }
+        .controls { display: flex; gap: 10px; margin-top: 20px; border-top: 1px solid #eee; padding-top: 20px; }
+        .btn { padding: 10px 20px; border-radius: 20px; border: none; font-weight: 600; cursor: pointer; }
+        .btn-pub { background: #0071e3; color: #fff; margin-left: auto; }
     </style>
 </head>
 <body>
-
-<div class="editor-container">
-    <input type="text" id="postTitle" class="title-input" placeholder="Заголовок истории">
-    
-    <div id="editor-canvas"></div>
-
+<div class="editor">
+    <input type="text" id="postTitle" class="title-in" placeholder="Заголовок">
+    <div id="canvas"></div>
     <div class="controls">
-        <button class="btn btn-add" onclick="createBlock('text')">+ Текст</button>
-        <button class="btn btn-add" onclick="createBlock('image')">+ Изображение</button>
-        <button class="btn btn-save" onclick="handlePublish()">Опубликовать</button>
+        <button class="btn" onclick="add('text')">+ Текст</button>
+        <button class="btn" onclick="add('image')">+ Фото</button>
+        <button class="btn btn-pub" onclick="publish()">Опубликовать</button>
     </div>
 </div>
-
 <script>
-    let activeBlocks = [];
+    let blocks = [];
+    const database = firebase.database(); // Прямое обращение к базе
 
-    function createBlock(type) {
-        activeBlocks.push({ id: Date.now(), type: type, content: "" });
-        updateUI();
-    }
-
-    function removeBlock(id) {
-        activeBlocks = activeBlocks.filter(b => b.id !== id);
-        updateUI();
-    }
-
-    function syncContent(id, value) {
-        const target = activeBlocks.find(b => b.id === id);
-        if (target) target.content = value;
-    }
-
-    function updateUI() {
-        const canvas = document.getElementById('editor-canvas');
-        canvas.innerHTML = "";
-        activeBlocks.forEach(b => {
-            const el = document.createElement('div');
-            el.className = "block-card";
-            el.innerHTML = `
-                <span class="label">${b.type === 'text' ? 'Абзац текста' : 'Ссылка на фото'}</span>
-                <button class="btn-del" onclick="removeBlock(${b.id})">Удалить</button>
+    function add(t) { blocks.push({ id: Date.now(), type: t, content: "" }); render(); }
+    function render() {
+        const c = document.getElementById('canvas'); c.innerHTML = "";
+        blocks.forEach(b => {
+            const div = document.createElement('div'); div.className = "block";
+            div.innerHTML = `<small>${b.type.toUpperCase()}</small>
                 ${b.type === 'text' 
-                    ? `<textarea oninput="syncContent(${b.id}, this.value)" rows="4" placeholder="Начните писать...">${b.content}</textarea>`
-                    : `<input type="text" oninput="syncContent(${b.id}, this.value)" value="${b.content}" placeholder="https://example.com/image.jpg">`
-                }
-            `;
-            canvas.appendChild(el);
+                ? `<textarea oninput="blocks.find(x=>x.id===${b.id}).content=this.value"></textarea>`
+                : `<input type="text" oninput="blocks.find(x=>x.id===${b.id}).content=this.value" placeholder="URL картинки">`}`;
+            c.appendChild(div);
         });
     }
-
-    async function handlePublish() {
-        const title = document.getElementById('postTitle').value;
-        if(!title || activeBlocks.length === 0) return alert("Добавьте заголовок и контент");
-
-        const finalData = {
-            title: title,
-            blocks: activeBlocks,
-            createdAt: Date.now(),
-            views: 0
-        };
-
+    async function publish() {
+        const t = document.getElementById('postTitle').value;
+        if(!t || blocks.length === 0) return alert("Заполни поля");
         try {
-            // Используем db.ref, как в твоем components.js
-            await db.ref('articles').push(finalData);
-            alert("Протокол обновлен успешно");
-            location.reload();
-        } catch (err) {
-            console.error(err);
-            alert("Ошибка соединения с базой");
+            await database.ref('articles').push({ title: t, blocks: blocks, date: Date.now() });
+            alert("Опубликовано!"); location.reload();
+        } catch(e) { 
+            console.log(e);
+            alert("Ошибка! Проверь Rules в Database в консоли Firebase"); 
         }
     }
 </script>
-
 </body>
 </html>
