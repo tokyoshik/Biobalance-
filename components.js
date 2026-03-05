@@ -1,4 +1,4 @@
-// НАСТРОЙКИ ТОЛЬКО ЗДЕСЬ
+// 1. ЕДИНЫЙ КОНФИГ (Только здесь!)
 const firebaseConfig = {
     apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
     authDomain: "healthlogic-fe5bd.firebaseapp.com",
@@ -9,48 +9,53 @@ const firebaseConfig = {
     appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
 };
 
-// Инициализация (защита от повтора)
+// 2. ИНИЦИАЛИЗАЦИЯ
 if (!firebase.apps.length) {
     firebase.initializeApp(firebaseConfig);
 }
 const db = firebase.database();
 const auth = firebase.auth();
 
-// Функция загрузки статей на главную (index.html)
-function loadArticles() {
-    const container = document.getElementById('articles-container');
-    if (!container) return;
+// 3. УНИВЕРСАЛЬНАЯ ПАНЕЛЬ ПОЛЬЗОВАТЕЛЯ (Вход/Выход/Ник)
+async function initUserPanel() {
+    const nav = document.getElementById('user-panel');
+    if (!nav) return;
 
-    db.ref('articles').on('value', snap => {
-        container.innerHTML = '';
-        const data = snap.val();
-        if (data) {
-            Object.entries(data).reverse().forEach(([id, post]) => {
-                const card = document.createElement('article');
-                card.className = 'article-card';
-                card.onclick = () => { window.location.href = `article.html?id=${id}`; };
-
-                let previewText = "Нажмите, чтобы прочитать...";
-                if (post.blocks) {
-                    const firstText = post.blocks.find(b => b.type === 'text' && b.content);
-                    if (firstText) previewText = firstText.content.substring(0, 100) + "...";
-                }
-
-                card.innerHTML = `
-                    <div class="card-img-wrapper">
-                        <img src="${post.image || 'https://via.placeholder.com/600x300'}">
-                    </div>
-                    <div class="card-content">
-                        <h2>${post.title}</h2>
-                        <p>${previewText}</p>
-                        <span>Читать →</span>
-                    </div>
-                `;
-                container.appendChild(card);
-            });
+    auth.onAuthStateChanged(async (user) => {
+        if (user) {
+            // Получаем данные профиля из базы
+            const snap = await db.ref(`users/${user.uid}`).once('value');
+            const userData = snap.val() || {};
+            const isAdmin = userData.role === 'admin';
+            
+            nav.innerHTML = `
+                <div style="display:flex; gap:15px; align-items:center;">
+                    <span style="font-weight:900; text-transform:uppercase; background:#ffcc00; padding:2px 5px;">
+                        ${userData.username || 'Атлет'}
+                    </span>
+                    ${isAdmin ? '<a href="admin.html" style="color:red; font-weight:900; text-decoration:none; border:2px solid red; padding:2px 5px;">ADMIN</a>' : ''}
+                    <button onclick="auth.signOut().then(()=>location.reload())" 
+                            style="background:none; border:2px solid #000; cursor:pointer; font-weight:900; text-transform:uppercase; padding:5px 10px;">
+                        Выход
+                    </button>
+                </div>
+            `;
+        } else {
+            nav.innerHTML = `
+                <a href="auth.html" style="font-weight:900; text-decoration:none; color:#000; border:4px solid #000; padding:10px 20px; text-transform:uppercase; background:#fff; box-shadow: 5px 5px 0px #000;">
+                    Войти
+                </a>
+            `;
         }
     });
 }
 
-// Запуск при загрузке страницы
-document.addEventListener('DOMContentLoaded', loadArticles);
+// 4. СЧЕТЧИК ПРОСМОТРОВ (Backend-логика)
+function trackView(articleId) {
+    if (!articleId) return;
+    const viewRef = db.ref(`articles/${articleId}/views`);
+    viewRef.transaction(current => (current || 0) + 1);
+}
+
+// Запускаем панель сразу при загрузке любой страницы
+document.addEventListener('DOMContentLoaded', initUserPanel);
