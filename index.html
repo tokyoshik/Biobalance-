@@ -4,44 +4,40 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HealthLogic | Главная</title>
-    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="components.js"></script>
     <style>
-        :root { --accent: #0071e3; --text: #1d1d1f; --bg: #ffffff; }
+        :root { --accent: #00ff41; --brd: 4px solid #000; --shd: 8px 8px 0px #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: -apple-system, sans-serif; background: var(--bg); color: var(--text); overflow-x: hidden; }
-
-        /* HEADER */
-        nav { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; position: sticky; top: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 1px solid #eee; }
-        .logo { font-size: 22px; font-weight: 800; letter-spacing: -1px; text-transform: uppercase; }
-        .nav-links a { text-decoration: none; color: var(--text); font-weight: 600; margin-left: 20px; font-size: 14px; transition: 0.3s; }
-        .nav-links a:hover { color: var(--accent); }
-
-        /* HERO SECTION */
-        .hero { height: 80vh; display: flex; flex-direction: column; justify-content: center; padding: 0 10%; background: radial-gradient(circle at top right, #e3f2ff, #fff); }
-        .hero h1 { font-size: clamp(40px, 8vw, 90px); font-weight: 900; line-height: 0.9; letter-spacing: -4px; margin-bottom: 20px; }
-        .hero p { max-width: 600px; font-size: 18px; color: #86868b; line-height: 1.4; }
-
-        /* TOP 3 ARTICLES */
-        .top-grid { padding: 80px 5%; display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
-        @media (max-width: 900px) { .top-grid { grid-template-columns: 1fr; } }
+        body { font-family: 'Inter', sans-serif; background: #fff; color: #000; line-height: 1.2; }
         
-        .top-card { background: #000; color: #fff; border-radius: 30px; height: 450px; padding: 40px; display: flex; flex-direction: column; justify-content: flex-end; text-decoration: none; transition: 0.5s; background-size: cover; background-position: center; position: relative; overflow: hidden; }
-        .top-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.8), transparent); }
-        .top-card div { position: relative; z-index: 2; }
-        .top-card:hover { transform: scale(0.98); }
+        /* NAV */
+        nav { padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: var(--brd); position: sticky; top: 0; background: #fff; z-index: 100; }
+        .logo { font-size: 28px; font-weight: 900; text-transform: uppercase; letter-spacing: -2px; }
+        .nav-links a, .nav-links button { text-decoration: none; color: #000; font-weight: 900; text-transform: uppercase; margin-left: 20px; font-size: 14px; border: none; background: none; cursor: pointer; }
 
-        /* FEED SECTION */
-        .section-title { padding: 0 5%; font-size: 32px; font-weight: 800; margin-bottom: 30px; }
-        .feed { padding: 0 5% 100px; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px; }
-        .feed-item { background: #f5f5f7; padding: 25px; border-radius: 20px; text-decoration: none; color: inherit; transition: 0.3s; border: 1px solid transparent; }
-        .feed-item:hover { border-color: var(--accent); background: #fff; }
+        /* HERO */
+        .hero { padding: 60px 5%; background: var(--accent); border-bottom: var(--brd); }
+        .hero h1 { font-size: clamp(40px, 10vw, 120px); font-weight: 900; text-transform: uppercase; line-height: 0.8; letter-spacing: -5px; }
+        
+        /* TOP 3 GRID */
+        .top-grid { display: grid; grid-template-columns: repeat(3, 1fr); border-bottom: var(--brd); }
+        @media (max-width: 800px) { .top-grid { grid-template-columns: 1fr; } }
+        .top-item { padding: 40px; border-right: var(--brd); text-decoration: none; color: #000; transition: 0.2s; }
+        .top-item:last-child { border-right: none; }
+        .top-item:hover { background: #eee; }
+        .top-item h2 { font-size: 32px; font-weight: 900; text-transform: uppercase; margin-top: 20px; }
 
-        /* FOOTER & DISCLAIMER */
-        footer { background: #f5f5f7; padding: 60px 10%; border-top: 1px solid #e5e5e5; }
-        .disclaimer { font-size: 12px; color: #86868b; line-height: 1.6; text-align: center; max-width: 800px; margin: 0 auto; }
+        /* FEED */
+        .feed { padding: 40px 5%; display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
+        .card { border: var(--brd); padding: 25px; box-shadow: var(--shd); text-decoration: none; color: #000; transition: 0.1s; }
+        .card:hover { transform: translate(-4px, -4px); box-shadow: 12px 12px 0px #000; }
+
+        /* FOOTER */
+        footer { padding: 60px 5%; background: #000; color: #fff; }
+        .disclaimer { font-size: 12px; font-weight: 700; opacity: 0.7; text-transform: uppercase; }
     </style>
 </head>
 <body>
@@ -50,64 +46,65 @@
         <div class="logo">HealthLogic</div>
         <div class="nav-links">
             <a href="index.html">Главная</a>
-            <a href="admin.html">Админка</a>
-            <a href="#">Вход</a>
+            <span id="admin-link" style="display:none;"><a href="admin.html">Админка</a></span>
+            <a href="login.html" id="login-btn">Вход</a>
+            <button id="logout-btn" style="display:none;" onclick="firebase.auth().signOut()">Выход</button>
         </div>
     </nav>
 
-    <section class="hero" data-aos="fade-up">
-        <h1>Health<br>Logic.</h1>
-        <p>Профессиональный взгляд на биохакинг и медицину будущего. Мы переводим сложные исследования на язык понятных протоколов.</p>
-    </section>
+    <header class="hero">
+        <h1>БЕЗ ПРАВА<br>НА ОШИБКУ.</h1>
+    </header>
 
-    <h2 class="section-title" data-aos="fade-right">Главные темы</h2>
-    <div class="top-grid" id="top-articles">
+    <div class="top-grid" id="top-list">
         </div>
 
-    <h2 class="section-title" data-aos="fade-right">Все протоколы</h2>
-    <div class="feed" id="general-feed"></div>
+    <div class="feed" id="main-feed"></div>
 
     <footer>
-        <div class="disclaimer">
-            <strong>ДИСКЛЕЙМЕР:</strong> Весь контент на сайте HealthLogic носит исключительно информационный характер. Мы не являемся медицинским учреждением. Перед применением любых протоколов, приемом препаратов или изменением образа жизни ОБЯЗАТЕЛЬНО проконсультируйтесь с лечащим врачом. Администрация сайта не несет ответственности за последствия самостоятельного лечения.
-            <br><br>
-            © 2026 HealthLogic Protocol. All rights reserved.
-        </div>
+        <p class="disclaimer">ДИСКЛЕЙМЕР: МЫ НЕ НЕСЕМ ОТВЕТСТВЕННОСТИ. КОНСУЛЬТИРУЙТЕСЬ С ВРАЧОМ. HEALTHLOGIC 2026.</p>
     </footer>
 
-    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
     <script>
-        AOS.init({ duration: 1000, once: true });
+        // СКРЫВАЕМ/ПОКАЗЫВАЕМ АДМИНКУ
+        firebase.auth().onAuthStateChanged(user => {
+            if (user) {
+                document.getElementById('admin-link').style.display = 'inline';
+                document.getElementById('logout-btn').style.display = 'inline';
+                document.getElementById('login-btn').style.display = 'none';
+            } else {
+                document.getElementById('admin-link').style.display = 'none';
+                document.getElementById('logout-btn').style.display = 'none';
+                document.getElementById('login-btn').style.display = 'inline';
+            }
+        });
 
+        // ЗАГРУЗКА СТАТЕЙ
         db.ref('articles').orderByChild('date').on('value', snap => {
             const data = snap.val();
             if(!data) return;
-
             const list = Object.keys(data).map(k => ({id: k, ...data[k]})).reverse();
-            
-            // 1. Рендерим ТОП-3
-            const topArea = document.getElementById('top-articles');
+
+            // ТОП-3 (Тренинг, Магний, Клетчатка)
+            const topArea = document.getElementById('top-list');
             topArea.innerHTML = "";
-            list.slice(0, 3).forEach(post => {
-                const img = post.blocks?.find(b => b.type === 'image')?.content || 'https://images.unsplash.com/photo-1505751172177-5180c4fe2474';
+            list.slice(0, 3).forEach((p, i) => {
                 topArea.innerHTML += `
-                    <a href="article.html?id=${post.id}" class="top-card" style="background-image: url('${img}')" data-aos="zoom-in">
-                        <div>
-                            <small>HOT PROTOCOL</small>
-                            <h3>${post.title}</h3>
-                        </div>
+                    <a href="article.html?id=${p.id}" class="top-item">
+                        <small>0${i+1} / PROTOCOL</small>
+                        <h2>${p.title}</h2>
                     </a>
                 `;
             });
 
-            // 2. Рендерим остальную ленту
-            const feedArea = document.getElementById('general-feed');
+            // ОСТАЛЬНЫЕ
+            const feedArea = document.getElementById('main-feed');
             feedArea.innerHTML = "";
-            list.slice(3).forEach(post => {
+            list.slice(3).forEach(p => {
                 feedArea.innerHTML += `
-                    <a href="article.html?id=${post.id}" class="feed-item" data-aos="fade-up">
-                        <small style="color: var(--accent)">${new Date(post.date).toLocaleDateString()}</small>
-                        <h3 style="margin-top:10px">${post.title}</h3>
+                    <a href="article.html?id=${p.id}" class="card">
+                        <small>${new Date(p.date).toLocaleDateString()}</small>
+                        <h3>${p.title}</h3>
                     </a>
                 `;
             });
