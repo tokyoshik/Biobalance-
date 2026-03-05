@@ -1,51 +1,76 @@
-<section class="bento-container">
-    <a href="training.html" class="bento-item main-card dark-theme" style="grid-column: span 2; background: #000; color: #fff;">
-        <div class="card-content">
-            <span class="protocol-tag">PROTOCOL 01 / CORE</span>
-            <h2>Training System.</h2>
-            <p>Научно обоснованная методология гипертрофии и развития взрывной силы. Оптимизация циклов восстановления.</p>
-            <div class="go-icon">→</div>
-        </div>
-    </a>
+<main style="margin-top: 100px; padding: 0 5%;">
+    <div class="hero-section" style="text-align: center; padding: 60px 0;">
+        <h1 style="font-size: clamp(48px, 8vw, 120px); font-weight: 900; letter-spacing: -4px; line-height: 0.9; margin: 0;">Future<br>Biohacking.</h1>
+    </div>
 
-    <a href="magnesium.html" class="bento-item" style="background: #ffffff;">
-        <div class="card-content">
-            <span class="protocol-tag" style="color: #007aff;">PROTOCOL 02 / ESSENTIALS</span>
-            <h2 style="color: #1d1d1f;">Magnesium.</h2>
-            <p style="color: #86868b;">Фундамент нервной системы. Глубокий анализ форм (Глицинат, Таурат, L-Треонат) для когнитивного здоровья.</p>
-        </div>
-    </a>
+    <div class="bento-grid-system">
+        <a href="training.html" class="bento-card dark-card">
+            <div class="card-tag">PROTOCOL 01 / CORE</div>
+            <div class="card-body">
+                <h2>Training System.</h2>
+                <p>Научно обоснованная методология гипертрофии и развития силы. Оптимизация циклов восстановления.</p>
+            </div>
+            <div class="card-footer">→</div>
+        </a>
 
-    <a href="fiber.html" class="bento-item" style="background: #f5f5f7; border: 1px solid rgba(0,0,0,0.05);">
-        <div class="card-content">
-            <span class="protocol-tag" style="color: #34c759;">PROTOCOL 03 / MICROBIOME</span>
-            <h2 style="color: #1d1d1f;">Fiber Architecture.</h2>
-            <p style="color: #86868b;">Проектирование микробиома. Клетчатка как инструмент долголетия и метаболического контроля.</p>
-        </div>
-    </a>
+        <a href="magnesium.html" class="bento-card white-card">
+            <div class="card-tag" style="color: #007aff;">PROTOCOL 02 / ESSENTIALS</div>
+            <div class="card-body">
+                <h2>Magnesium.</h2>
+                <p>Фундамент нервной системы. Анализ форм для когнитивного здоровья.</p>
+            </div>
+        </a>
 
-    <div id="dynamic-articles-container" style="display: contents;"></div>
-</section>
+        <a href="fiber.html" class="bento-card light-card">
+            <div class="card-tag" style="color: #34c759;">PROTOCOL 03 / MICROBIOME</div>
+            <div class="card-body">
+                <h2>Fiber Architecture.</h2>
+                <p>Проектирование микробиома. Клетчатка как инструмент долголетия.</p>
+            </div>
+        </a>
+        
+        <div id="dynamic-articles" style="display: contents;"></div>
+    </div>
+</main>
 
 <style>
-    /* Специфичные стили для главных карточек */
-    .protocol-tag {
-        font-size: 10px;
-        font-weight: 700;
-        letter-spacing: 1.5px;
-        text-transform: uppercase;
-        margin-bottom: 15px;
-        display: block;
+    /* Глобальные исправления сетки */
+    .bento-grid-system {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 24px;
+        max-width: 1400px;
+        margin: 0 auto;
     }
-    .main-card h2 { font-size: 42px; letter-spacing: -1.5px; margin: 10px 0; }
-    .bento-item h2 { font-size: 28px; letter-spacing: -0.5px; margin: 10px 0; }
-    .bento-item p { font-size: 15px; line-height: 1.5; opacity: 0.8; }
-    .bento-item { text-decoration: none; display: flex; flex-direction: column; justify-content: flex-end; min-height: 250px; }
-    .go-icon { align-self: flex-end; font-size: 24px; margin-top: 20px; }
-    
-    /* Тёмная тема для первой карточки в стиле Apple Watch Ultra */
-    .dark-theme {
-        background: linear-gradient(145deg, #1a1a1c, #000000);
-        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+
+    .bento-card {
+        text-decoration: none;
+        color: inherit;
+        padding: 40px;
+        border-radius: 32px; /* Samsung One UI скругление */
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        min-height: 320px;
+        transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        animation: appleReveal 0.8s backwards;
+    }
+
+    .dark-card { grid-column: span 2; background: #000; color: #fff; }
+    .white-card { background: #fff; border: 1px solid rgba(0,0,0,0.05); }
+    .light-card { background: #f5f5f7; border: 1px solid rgba(0,0,0,0.05); }
+
+    .bento-card:hover { transform: scale(1.01) translateY(-5px); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
+
+    .card-tag { font-size: 11px; font-weight: 800; letter-spacing: 1.2px; text-transform: uppercase; margin-bottom: 20px; }
+    .card-body h2 { font-size: 38px; font-weight: 800; letter-spacing: -1px; margin: 0 0 15px 0; line-height: 1.1; }
+    .card-body p { font-size: 17px; opacity: 0.7; line-height: 1.4; margin: 0; max-width: 450px; }
+    .card-footer { font-size: 24px; align-self: flex-end; }
+
+    /* Адаптив для мобилок */
+    @media (max-width: 768px) {
+        .bento-grid-system { grid-template-columns: 1fr; }
+        .dark-card { grid-column: span 1; }
+        .bento-card { padding: 30px; min-height: 280px; }
     }
 </style>
