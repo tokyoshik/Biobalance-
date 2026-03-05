@@ -1,104 +1,51 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthLogic | Протоколы биохакинга</title>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <script src="components.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
-    <style>
-        :root { --accent: #0071e3; --bg: #f5f5f7; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); margin: 0; color: #1d1d1f; }
-        nav { position: sticky; top: 0; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); padding: 15px 5%; display: flex; justify-content: space-between; align-items: center; z-index: 1000; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .logo { font-weight: 900; font-size: 20px; letter-spacing: -1px; }
-
-        .hero { padding: 100px 5% 60px; text-align: center; }
-        .hero h1 { font-size: clamp(40px, 8vw, 100px); font-weight: 900; letter-spacing: -4px; margin: 0; line-height: 0.9; }
-
-        /* FIXED BENTO GRID (ТРЕЙНИНГ, МАГНИЙ, КЛЕТЧАТКА) */
-        .bento { padding: 0 5% 60px; display: grid; grid-template-columns: repeat(12, 1fr); gap: 20px; }
-        .bento-card { border-radius: 30px; padding: 40px; text-decoration: none; color: inherit; position: relative; overflow: hidden; transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: 0 10px 30px rgba(0,0,0,0.03); }
-        .bento-card:hover { transform: scale(1.02); box-shadow: 0 30px 60px rgba(0,0,0,0.1); }
-        
-        /* Цвета для ключевых статей */
-        .card-training { grid-column: span 8; background: #000; color: #fff; height: 450px; }
-        .card-magnesium { grid-column: span 4; background: #fff; height: 450px; }
-        .card-fiber { grid-column: span 12; background: var(--accent); color: #fff; height: 300px; }
-
-        .bento-card h2 { font-size: 42px; font-weight: 800; margin: 10px 0; letter-spacing: -1px; }
-        .bento-card small { text-transform: uppercase; font-weight: 700; opacity: 0.7; font-size: 12px; letter-spacing: 2px; }
-
-        /* DYNAMIC FEED (ИЗ БАЗЫ) */
-        .feed { padding: 40px 5%; border-top: 1px solid #e5e5e5; }
-        .article-link { display: flex; justify-content: space-between; padding: 25px 0; border-bottom: 1px solid #e5e5e5; text-decoration: none; color: inherit; font-size: 20px; font-weight: 600; }
-        .article-link:hover { color: var(--accent); padding-left: 15px; }
-
-        @media (max-width: 900px) { .bento-card { grid-column: span 12 !important; height: auto !important; } }
-    </style>
-</head>
-<body>
-
-<nav>
-    <div class="logo">HEALTHLOGIC</div>
-    <div class="nav-links" id="nav-links">
-        <a href="login.html" id="login-btn" style="text-decoration:none; color:#000; font-weight:600;">Вход</a>
-    </div>
-</nav>
-
-<header class="hero">
-    <h1>Future<br>Biohacking.</h1>
-</header>
-
-<section class="bento">
-    <a href="training.html" class="bento-card card-training">
-        <small>Protocol 01 / Core</small>
-        <h2>Training<br>System.</h2>
-        <p>Оптимизация гипертрофии и силы.</p>
+<section class="bento-container">
+    <a href="training.html" class="bento-item main-card dark-theme" style="grid-column: span 2; background: #000; color: #fff;">
+        <div class="card-content">
+            <span class="protocol-tag">PROTOCOL 01 / CORE</span>
+            <h2>Training System.</h2>
+            <p>Научно обоснованная методология гипертрофии и развития взрывной силы. Оптимизация циклов восстановления.</p>
+            <div class="go-icon">→</div>
+        </div>
     </a>
-    <a href="magnesium.html" class="bento-card card-magnesium">
-        <small>Protocol 02 / Essentials</small>
-        <h2>Magnesium.</h2>
-        <p>Фундамент нервной системы.</p>
+
+    <a href="magnesium.html" class="bento-item" style="background: #ffffff;">
+        <div class="card-content">
+            <span class="protocol-tag" style="color: #007aff;">PROTOCOL 02 / ESSENTIALS</span>
+            <h2 style="color: #1d1d1f;">Magnesium.</h2>
+            <p style="color: #86868b;">Фундамент нервной системы. Глубокий анализ форм (Глицинат, Таурат, L-Треонат) для когнитивного здоровья.</p>
+        </div>
     </a>
-    <a href="fiber.html" class="bento-card card-fiber">
-        <small>Protocol 03 / Gut Health</small>
-        <h2>Fiber Architecture.</h2>
-        <p>Микробиом и долголетие через клетчатку.</p>
+
+    <a href="fiber.html" class="bento-item" style="background: #f5f5f7; border: 1px solid rgba(0,0,0,0.05);">
+        <div class="card-content">
+            <span class="protocol-tag" style="color: #34c759;">PROTOCOL 03 / MICROBIOME</span>
+            <h2 style="color: #1d1d1f;">Fiber Architecture.</h2>
+            <p style="color: #86868b;">Проектирование микробиома. Клетчатка как инструмент долголетия и метаболического контроля.</p>
+        </div>
     </a>
+
+    <div id="dynamic-articles-container" style="display: contents;"></div>
 </section>
 
-<section class="feed">
-    <h3 style="text-transform: uppercase; letter-spacing: 2px; font-size: 12px; margin-bottom: 30px;">Новые исследования</h3>
-    <div id="dynamic-posts"></div>
-</section>
-
-<script>
-    // Проверка админа для меню
-    firebase.auth().onAuthStateChanged(u => {
-        if(u) document.getElementById('nav-links').innerHTML = `<a href="admin.html" style="text-decoration:none; color:var(--accent); font-weight:600;">Админка</a>`;
-    });
-
-    // Загрузка динамических статей
-    db.ref('articles').on('value', snap => {
-        const data = snap.val(); if(!data) return;
-        const list = Object.keys(data).map(k => ({id: k, ...data[k]})).reverse();
-        const area = document.getElementById('dynamic-posts');
-        area.innerHTML = "";
-        
-        list.forEach(p => {
-            // Проверяем, чтобы не дублировать основные статьи, если они есть в базе
-            if(!['training','magnesium','fiber'].includes(p.id)) {
-                area.innerHTML += `
-                    <a href="article.html?id=${p.id}" class="article-link">
-                        <span>${p.title}</span>
-                        <span>→</span>
-                    </a>`;
-            }
-        });
-    });
-</script>
-</body>
-</html>
+<style>
+    /* Специфичные стили для главных карточек */
+    .protocol-tag {
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 1.5px;
+        text-transform: uppercase;
+        margin-bottom: 15px;
+        display: block;
+    }
+    .main-card h2 { font-size: 42px; letter-spacing: -1.5px; margin: 10px 0; }
+    .bento-item h2 { font-size: 28px; letter-spacing: -0.5px; margin: 10px 0; }
+    .bento-item p { font-size: 15px; line-height: 1.5; opacity: 0.8; }
+    .bento-item { text-decoration: none; display: flex; flex-direction: column; justify-content: flex-end; min-height: 250px; }
+    .go-icon { align-self: flex-end; font-size: 24px; margin-top: 20px; }
+    
+    /* Тёмная тема для первой карточки в стиле Apple Watch Ultra */
+    .dark-theme {
+        background: linear-gradient(145deg, #1a1a1c, #000000);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+</style>
