@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HealthLogic | Статья</title>
+    <title>HealthLogic | Чтение статьи</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
@@ -16,35 +16,72 @@
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: var(--bg); font-family: 'Inter', sans-serif; color: var(--black); line-height: 1.6; }
         
-        .container { max-width: 800px; margin: 40px auto; padding: 0 20px; }
-        header#main-header { background: #fff; border-bottom: var(--border); padding: 15px 0; sticky: top; }
-        .header-nav { display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        .logo { font-size: 20px; font-weight: 900; text-decoration: none; color: #000; text-transform: uppercase; }
+        .container { max-width: 900px; margin: 40px auto; padding: 0 20px; }
+        .back-link { display: inline-block; margin-bottom: 20px; font-weight: 900; text-transform: uppercase; color: #000; text-decoration: none; border-bottom: 3px solid #000; }
 
-        .article-title { font-weight: 900; font-size: clamp(30px, 5vw, 50px); text-transform: uppercase; line-height: 1; margin-bottom: 30px; }
-        .main-image { width: 100%; border: var(--border); box-shadow: 10px 10px 0px #000; margin-bottom: 40px; }
+        /* Заголовок и главная картинка */
+        .article-header { margin-bottom: 40px; }
+        .article-title { font-weight: 900; font-size: clamp(32px, 6vw, 60px); text-transform: uppercase; line-height: 0.9; margin-bottom: 20px; }
+        .main-img { width: 100%; border: var(--border); box-shadow: 12px 12px 0px #000; margin-bottom: 30px; object-fit: cover; max-height: 500px; }
+
+        /* Сетка контента (Квадраты) */
+        #article-content { display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 60px; }
+        .w-100 { width: 100%; }
+        .w-50 { width: calc(50% - 10px); }
+        .block-text { font-size: 19px; font-weight: 500; }
+        .block-img { width: 100%; border: var(--border); display: block; }
+
+        /* Секция Взаимодействия (Лайки) */
+        .interaction-bar { border-top: var(--border); padding-top: 30px; margin-bottom: 40px; }
+        .like-btn { background: #fff; border: var(--border); padding: 15px 30px; font-weight: 900; cursor: pointer; font-size: 24px; transition: 0.2s; display: flex; align-items: center; gap: 10px; }
+        .like-btn:active { transform: scale(0.95); }
+        .like-btn.active { background: #ff4444; color: #fff; }
+
+        /* Комментарии */
+        .comments-section { background: #fff; border: var(--border); padding: 30px; box-shadow: 10px 10px 0px #000; }
+        .comment-item { border-bottom: 2px solid #eee; padding: 15px 0; }
+        .comment-item:last-child { border: none; }
+        .comment-author { font-weight: 900; text-transform: uppercase; font-size: 13px; display: block; margin-bottom: 5px; }
         
-        /* Стили для блоков */
-        .content-block { margin-bottom: 25px; font-size: 18px; font-weight: 400; }
-        .block-image { width: 100%; border: var(--border); margin: 20px 0; }
-        .back-btn { display: inline-block; margin-bottom: 20px; text-decoration: none; color: #000; font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #000; }
+        .comment-form textarea { width: 100%; border: var(--border); padding: 15px; font-family: inherit; font-weight: 700; margin-top: 20px; outline: none; }
+        .comment-form button { background: #000; color: #fff; border: none; padding: 15px 30px; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-top: 10px; width: 100%; }
+
+        @media (max-width: 600px) { .w-50 { width: 100%; } }
     </style>
 </head>
 <body>
 
-<header id="main-header">
-    <div class="header-nav">
-        <a href="index.html" class="logo">HealthLogic.</a>
-        <div id="auth-status"></div>
-    </div>
-</header>
-
 <div class="container">
-    <a href="index.html" class="back-btn">← Назад</a>
-    <h1 id="article-title" class="article-title">Загрузка...</h1>
-    <img id="article-image" class="main-image" src="" style="display:none;">
+    <a href="index.html" class="back-link">← Назад</a>
+    
+    <header class="article-header">
+        <h1 id="article-title" class="article-title">Загрузка...</h1>
+        <img id="article-main-img" class="main-img" src="" style="display:none;">
+    </header>
+
     <div id="article-content">
         </div>
+
+    <div class="interaction-bar">
+        <button id="like-btn" class="like-btn" onclick="toggleLike()">
+            ❤️ <span id="like-count">0</span>
+        </button>
+    </div>
+
+    <section class="comments-section">
+        <h2 style="font-weight: 900; text-transform: uppercase; margin-bottom: 20px;">Мнения читателей</h2>
+        <div id="comments-list">
+            </div>
+
+        <div id="auth-check-msg" style="display:none; font-weight: 700; text-align: center; margin-top: 20px;">
+            Войдите, чтобы оставить след в истории.
+        </div>
+
+        <div id="comment-form-area" class="comment-form" style="display:none;">
+            <textarea id="comment-input" placeholder="Напишите, что вы думаете..."></textarea>
+            <button onclick="sendComment()">Отправить комментарий</button>
+        </div>
+    </section>
 </div>
 
 <script>
@@ -57,44 +94,105 @@
         messagingSenderId: "177114233773",
         appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
     };
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
 
-    // Получаем ID из ссылки
     const urlParams = new URLSearchParams(window.location.search);
     const articleId = urlParams.get('id');
 
-    if (articleId) {
-        firebase.database().ref('articles/' + articleId).once('value').then(snap => {
-            const data = snap.val();
-            if (data) {
-                document.getElementById('article-title').innerText = data.title;
-                if (data.image) {
-                    const img = document.getElementById('article-image');
-                    img.src = data.image;
-                    img.style.display = 'block';
-                }
+    if (!articleId) { window.location.href = 'index.html'; }
+
+    // 1. ЗАГРУЗКА КОНТЕНТА СТАТЬИ
+    db.ref('articles/' + articleId).once('value').then(snap => {
+        const data = snap.val();
+        if (!data) return;
+
+        document.getElementById('article-title').innerText = data.title;
+        if (data.image) {
+            const mImg = document.getElementById('article-main-img');
+            mImg.src = data.image;
+            mImg.style.display = 'block';
+        }
+
+        const contentArea = document.getElementById('article-content');
+        if (data.blocks) {
+            data.blocks.forEach(block => {
+                const div = document.createElement('div');
+                div.className = block.width === '50' ? 'w-50' : 'w-100';
                 
-                // Если данные блочные (массив), выводим их
-                const contentDiv = document.getElementById('article-content');
-                if (data.blocks) {
-                    data.blocks.forEach(block => {
-                        const div = document.createElement('div');
-                        div.className = 'content-block';
-                        if (block.type === 'text') {
-                            div.innerText = block.content;
-                        } else if (block.type === 'image') {
-                            div.innerHTML = `<img src="${block.content}" class="block-image">`;
-                        }
-                        contentDiv.appendChild(div);
-                    });
-                } else {
-                    // Если старый формат (просто текст)
-                    contentDiv.innerText = data.text;
+                if (block.type === 'text') {
+                    div.innerHTML = `<p class="block-text">${block.content}</p>`;
+                } else if (block.type === 'image') {
+                    div.innerHTML = `<img src="${block.content}" class="block-img">`;
                 }
-            }
+                contentArea.appendChild(div);
+            });
+        }
+    });
+
+    // 2. ЛОГИКА ЛАЙКОВ
+    function toggleLike() {
+        const user = firebase.auth().currentUser;
+        if (!user) return alert("Войдите в аккаунт!");
+
+        const likeRef = db.ref(`likes/${articleId}/${user.uid}`);
+        likeRef.once('value').then(snap => {
+            if (snap.exists()) likeRef.remove();
+            else likeRef.set(true);
         });
     }
+
+    db.ref(`likes/${articleId}`).on('value', snap => {
+        const likes = snap.val() || {};
+        const count = Object.keys(likes).length;
+        document.getElementById('like-count').innerText = count;
+        
+        const user = firebase.auth().currentUser;
+        const btn = document.getElementById('like-btn');
+        if (user && likes[user.uid]) btn.classList.add('active');
+        else btn.classList.remove('active');
+    });
+
+    // 3. ЛОГИКА КОММЕНТАРИЕВ
+    function sendComment() {
+        const text = document.getElementById('comment-input').value;
+        const user = firebase.auth().currentUser;
+        if (!text || !user) return;
+
+        db.ref(`comments/${articleId}`).push({
+            uid: user.uid,
+            author: user.displayName || "Анонимный атлет",
+            text: text,
+            date: Date.now()
+        }).then(() => {
+            document.getElementById('comment-input').value = '';
+        });
+    }
+
+    db.ref(`comments/${articleId}`).on('value', snap => {
+        const list = document.getElementById('comments-list');
+        list.innerHTML = '';
+        snap.forEach(child => {
+            const c = child.val();
+            list.innerHTML += `
+                <div class="comment-item">
+                    <span class="comment-author">${c.author}</span>
+                    <p style="font-weight:600;">${c.text}</p>
+                </div>
+            `;
+        });
+    });
+
+    // 4. ПРОВЕРКА АВТОРИЗАЦИИ ДЛЯ ФОРМЫ
+    firebase.auth().onAuthStateChanged(user => {
+        if (user) {
+            document.getElementById('comment-form-area').style.display = 'block';
+            document.getElementById('auth-check-msg').style.display = 'none';
+        } else {
+            document.getElementById('comment-form-area').style.display = 'none';
+            document.getElementById('auth-check-msg').style.display = 'block';
+        }
+    });
 </script>
-<script src="components.js"></script>
 </body>
 </html>
