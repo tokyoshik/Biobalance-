@@ -2,95 +2,59 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>HealthLogic | Debug Admin</title>
+    <title>HL | Admin Panel</title>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
-    <style>
+    <script src="components.js"></script> <style>
         body { font-family: 'Inter', sans-serif; background: #f0f0f0; padding: 20px; }
         .debug-panel { background: #000; color: #0f0; padding: 15px; margin-bottom: 20px; font-family: monospace; border: 4px solid #0f0; }
-        .magazine-editor { background: #fff; border: 4px solid #000; max-width: 800px; margin: 0 auto; padding: 40px; box-shadow: 15px 15px 0px #000; }
-        input, textarea { width: 100%; margin-bottom: 20px; padding: 15px; border: 3px solid #000; font-size: 16px; font-weight: bold; }
-        .btn-publish { background: #000; color: #fff; padding: 20px; width: 100%; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; }
-        .grid { display: flex; gap: 20px; }
-        .col { flex: 1; }
+        .editor { background: #fff; border: 4px solid #000; max-width: 800px; margin: 0 auto; padding: 40px; box-shadow: 15px 15px 0px #000; }
+        input, textarea { width: 100%; margin-bottom: 20px; padding: 15px; border: 3px solid #000; font-weight: bold; }
+        .btn-pub { background: #000; color: #fff; padding: 20px; width: 100%; border: none; font-weight: 900; cursor: pointer; text-transform: uppercase; }
+        .grid { display: flex; gap: 20px; } .col { flex: 1; }
     </style>
 </head>
 <body>
-
-    <div class="debug-panel" id="debug">Проверка авторизации...</div>
-
-    <div class="magazine-editor">
-        <h1 style="text-transform: uppercase; font-weight: 900;">Новая статья (Шаблон)</h1>
-        
-        <input type="text" id="title" placeholder="ЗАГОЛОВОК СТАТЬИ">
-        <input type="text" id="mainImg" placeholder="ССЫЛКА НА ГЛАВНОЕ ФОТО">
-
+    <div class="debug-panel" id="debug">Проверка...</div>
+    <div class="editor">
+        <h1 style="text-transform: uppercase; font-weight: 900; margin-bottom: 20px;">Новый пост</h1>
+        <input type="text" id="title" placeholder="ЗАГОЛОВОК">
+        <input type="text" id="mainImg" placeholder="ГЛАВНОЕ ФОТО (URL)">
         <div class="grid">
+            <div class="col"><textarea id="txt1" placeholder="Текст (50%)" rows="8"></textarea></div>
             <div class="col">
-                <textarea id="txt1" placeholder="Текст слева..." rows="10"></textarea>
-            </div>
-            <div class="col">
-                <input type="text" id="sideImg" placeholder="ССЫЛКА НА БОКОВОЕ ФОТО">
-                <textarea id="txt2" placeholder="Подпись справа..." rows="5"></textarea>
+                <input type="text" id="sideImg" placeholder="Фото (50%)">
+                <textarea id="txt2" placeholder="Финальный текст" rows="4"></textarea>
             </div>
         </div>
-
-        <button class="btn-publish" onclick="save()">ОПУБЛИКОВАТЬ</button>
+        <button class="btn-pub" onclick="save()">ОПУБЛИКОВАТЬ СТАТЬЮ</button>
     </div>
 
-<script>
-    const firebaseConfig = {
-        apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
-        authDomain: "healthlogic-fe5bd.firebaseapp.com",
-        databaseURL: "https://healthlogic-fe5bd-default-rtdb.firebaseio.com",
-        projectId: "healthlogic-fe5bd",
-        storageBucket: "healthlogic-fe5bd.firebasestorage.app",
-        messagingSenderId: "177114233773",
-        appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
-    };
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.database();
-    const auth = firebase.auth();
+    <script>
+        auth.onAuthStateChanged(user => {
+            const debug = document.getElementById('debug');
+            if (user) {
+                db.ref('users/' + user.uid).once('value').then(snap => {
+                    const role = snap.val() ? snap.val().role : "НЕТ РОЛИ";
+                    debug.innerHTML = `UID: ${user.uid} | ROLE: ${role}`;
+                });
+            } else { debug.innerHTML = "НЕ АВТОРИЗОВАН"; }
+        });
 
-    // Детектор прав
-    auth.onAuthStateChanged(user => {
-        const debug = document.getElementById('debug');
-        if (user) {
-            db.ref('users/' + user.uid).once('value').then(snap => {
-                const userData = snap.val();
-                const role = userData ? userData.role : "НЕТ РОЛИ";
-                debug.innerHTML = `UID: ${user.uid} | РОЛЬ В БАЗЕ: ${role} | СТАТУС: ВОШЕЛ`;
-                if(role !== 'admin') debug.style.color = "red";
-            });
-        } else {
-            debug.innerHTML = "СТАТУС: НЕ ЗАЛОГИНЕН. Срочно зайди через auth.html!";
-            debug.style.color = "red";
+        function save() {
+            const data = {
+                title: document.getElementById('title').value,
+                image: document.getElementById('mainImg').value,
+                blocks: [
+                    { type: 'text', width: '50', content: document.getElementById('txt1').value },
+                    { type: 'image', width: '50', content: document.getElementById('sideImg').value },
+                    { type: 'text', width: '100', content: document.getElementById('txt2').value }
+                ],
+                timestamp: Date.now()
+            };
+            db.ref('articles').push(data).then(() => { alert("Готово!"); location.reload(); });
         }
-    });
-
-    function save() {
-        const user = auth.currentUser;
-        if (!user) return alert("Сначала войди в аккаунт!");
-
-        const data = {
-            title: document.getElementById('title').value,
-            image: document.getElementById('mainImg').value,
-            blocks: [
-                { type: 'text', width: '50', content: document.getElementById('txt1').value },
-                { type: 'image', width: '50', content: document.getElementById('sideImg').value },
-                { type: 'text', width: '100', content: document.getElementById('txt2').value }
-            ],
-            timestamp: Date.now()
-        };
-
-        db.ref('articles').push(data)
-            .then(() => alert("УРА! Статья в базе!"))
-            .catch(err => {
-                console.error(err);
-                alert("ОШИБКА: " + err.message);
-            });
-    }
-</script>
+    </script>
 </body>
 </html>
