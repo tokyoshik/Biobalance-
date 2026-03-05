@@ -2,97 +2,72 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HealthLogic | Главная</title>
     
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
+    <script src="components.js"></script>
+
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
 
     <style>
-        :root { --bg: #FDF5E6; --black: #000; --border: 4px solid #000; --accent: #DED7B1; }
+        :root { --bg: #f0f0f0; --white: #fff; --black: #000; --accent: #DED7B1; --border: 4px solid #000; }
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        html, body { overflow-x: hidden; width: 100%; background: var(--bg); font-family: 'Inter', sans-serif; color: var(--black); }
+        body { background: var(--bg); font-family: 'Inter', sans-serif; padding: 20px; }
 
-        .container { width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px; }
+        .header { max-width: 1200px; margin: 0 auto 40px; display: flex; justify-content: space-between; align-items: center; }
+        .logo { font-weight: 900; font-size: 32px; text-transform: uppercase; letter-spacing: -1px; }
 
-        /* Стили шапки (прописаны сразу) */
-        header#main-header { 
-            width: 100%; position: sticky; top: 0; z-index: 1000; 
-            background: #fff; border-bottom: var(--border);
+        /* Сетка статей */
+        #articles-container { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 30px; 
+            max-width: 1200px; 
+            margin: 0 auto; 
         }
-        .header-nav {
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 15px 20px; max-width: 1200px; margin: 0 auto;
+
+        /* Стиль карточки (Брутализм) */
+        .article-card { 
+            background: var(--white); 
+            border: var(--border); 
+            padding: 0; 
+            box-shadow: 10px 10px 0px var(--black); 
+            transition: 0.2s; 
+            cursor: pointer;
+            overflow: hidden;
         }
-        .logo { font-size: 20px; font-weight: 900; text-decoration: none; color: #000; text-transform: uppercase; }
+        .article-card:hover { transform: translate(-5px, -5px); box-shadow: 15px 15px 0px var(--accent); }
         
-        /* Кнопка входа по умолчанию */
-        #auth-status a, #auth-status button {
-            text-decoration: none; font-weight: 900; color: #000; 
-            border: 2px solid #000; padding: 6px 12px; font-size: 12px;
-            background: #fff; cursor: pointer;
-        }
+        .card-img-wrapper img { width: 100%; height: 200px; object-fit: cover; border-bottom: var(--border); display: block; }
+        .card-content { padding: 20px; }
+        .card-content h2 { font-weight: 900; text-transform: uppercase; font-size: 20px; margin-bottom: 10px; line-height: 1.1; }
+        .card-content p { font-size: 14px; color: #444; margin-bottom: 15px; }
+        .card-content span { font-weight: 900; text-transform: uppercase; border-bottom: 2px solid #000; font-size: 12px; }
 
-        .hero { margin: 40px 0; }
-        .hero h1 { font-weight: 900; font-size: clamp(40px, 10vw, 80px); text-transform: uppercase; line-height: 0.9; }
-        
-        .main-nav { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 50px; }
-        @media (min-width: 768px) { .main-nav { grid-template-columns: repeat(4, 1fr); } }
-
-        .nav-card {
-            background: #fff; border: var(--border); padding: 20px; text-align: left;
-            text-decoration: none; color: #000; transition: 0.2s; display: flex; flex-direction: column;
-        }
-        .nav-card:hover { background: var(--accent); transform: translate(-4px, -4px); box-shadow: 6px 6px 0px #000; }
-        .nav-card span { font-weight: 900; font-size: 18px; text-transform: uppercase; }
-
-        #articles-container { display: grid; grid-template-columns: 1fr; gap: 25px; margin-bottom: 50px; }
-        @media (min-width: 768px) { #articles-container { grid-template-columns: repeat(3, 1fr); } }
+        .admin-link { text-decoration: none; color: #000; font-weight: 900; border: 2px solid #000; padding: 10px 20px; text-transform: uppercase; font-size: 12px; }
     </style>
 </head>
 <body>
 
-    <header id="main-header">
-        <div class="header-nav">
-            <a href="index.html" class="logo">HealthLogic.</a>
-            <div id="auth-status">
-                <a href="auth.html">ВХОД</a>
-            </div>
-        </div>
+    <header class="header">
+        <div class="logo">HealthLogic</div>
+        <nav>
+            <a href="admin.html" class="admin-link">Админка</a>
+        </nav>
     </header>
 
-    <div class="container">
-        <section class="hero">
-            <h1>HEALTH<br>LOGIC.</h1>
-            <p style="font-weight: 700; margin-top: 15px;">БАЗА ЗНАНИЙ О ТВОЕМ ТЕЛЕ</p>
-        </section>
-        
-        <nav class="main-nav">
-            <a href="training.html" class="nav-card"><span>Тренинг</span></a>
-            <a href="magnesium.html" class="nav-card"><span>Магний</span></a>
-            <a href="fiber.html" class="nav-card"><span>Клетчатка</span></a>
-            <a href="about.html" class="nav-card"><span>О нас</span></a>
-        </nav>
-
-        <main id="articles-container">
-            </main>
-    </div>
+    <main id="articles-container">
+        <p style="font-weight: 900; text-transform: uppercase;">Загрузка контента...</p>
+    </main>
 
     <script>
-        const firebaseConfig = {
-            apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
-            authDomain: "healthlogic-fe5bd.firebaseapp.com",
-            databaseURL: "https://healthlogic-fe5bd-default-rtdb.firebaseio.com",
-            projectId: "healthlogic-fe5bd",
-            storageBucket: "healthlogic-fe5bd.firebasestorage.app",
-            messagingSenderId: "177114233773",
-            appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
-        };
-        if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
+        // Здесь в HTML ничего писать не нужно! 
+        // Функция loadArticles() запустится сама из components.js
     </script>
-    <script src="components.js"></script>
+
 </body>
 </html>
