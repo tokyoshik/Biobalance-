@@ -2,22 +2,82 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>HealthLogic | Авторизация</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HL | Вход в систему</title>
+    
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-auth-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
     <script src="components.js"></script>
 
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
     <style>
-        body { font-family: 'Inter', sans-serif; background: #f0f0f0; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .auth-card { background: #fff; border: 4px solid #000; padding: 40px; box-shadow: 15px 15px 0px #000; width: 100%; max-width: 400px; }
-        h2 { text-transform: uppercase; font-weight: 900; margin-bottom: 20px; font-size: 28px; }
-        input { width: 100%; padding: 15px; border: 3px solid #000; margin-bottom: 15px; font-weight: 700; outline: none; font-family: inherit; }
-        button { width: 100%; padding: 15px; background: #000; color: #fff; border: none; font-weight: 900; text-transform: uppercase; cursor: pointer; margin-bottom: 10px; transition: 0.2s; }
-        button:hover { background: #333; }
-        .toggle-btn { background: none; color: #000; border: 2px solid #000; }
-        .toggle-btn:hover { background: #eee; }
+        :root { --accent: #ffcc00; --border: 4px solid #000; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: #f0f0f0; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            padding: 10px; /* Уменьшил для мобилок */
+        }
+
+        /* Адаптивная карточка */
+        .auth-card { 
+            background: #fff; 
+            border: var(--border); 
+            padding: 30px; 
+            box-shadow: 12px 12px 0px #000; 
+            width: 100%; 
+            max-width: 420px; /* Идеально для ПК */
+        }
+
+        h2 { text-transform: uppercase; font-weight: 900; font-size: clamp(20px, 6vw, 28px); margin-bottom: 25px; letter-spacing: -1px; }
+        
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            border: 3px solid #000; 
+            margin-bottom: 15px; 
+            font-weight: 700; 
+            font-family: inherit; 
+            font-size: 16px;
+            outline: none;
+            border-radius: 0; /* Убираем скругления на iOS */
+        }
+        input:focus { background: var(--accent); }
+
+        button { 
+            width: 100%; 
+            padding: 18px; 
+            background: #000; 
+            color: #fff; 
+            border: none; 
+            font-weight: 900; 
+            text-transform: uppercase; 
+            cursor: pointer; 
+            margin-bottom: 12px; 
+            font-size: 16px;
+            transition: 0.1s;
+        }
+        button:active { transform: translate(2px, 2px); }
+
+        .toggle-btn { 
+            background: none; 
+            color: #000; 
+            border: 2px solid #000; 
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        /* Полная адаптивность под мобилки */
+        @media (max-width: 480px) {
+            .auth-card { padding: 20px; box-shadow: 6px 6px 0px #000; border-width: 3px; }
+            input { padding: 12px; border-width: 2px; }
+        }
     </style>
 </head>
 <body>
@@ -25,8 +85,7 @@
 <div class="auth-card">
     <h2 id="auth-title">Вход</h2>
     
-    <input type="text" id="reg-name" placeholder="ВАШ НИК (Напр: ТОКИО)" style="display:none;">
-    
+    <input type="text" id="reg-name" placeholder="ПРИДУМАЙТЕ НИК" style="display:none;">
     <input type="email" id="email" placeholder="EMAIL">
     <input type="password" id="pass" placeholder="ПАРОЛЬ">
     
@@ -46,34 +105,52 @@
     }
 
     async function handleAuth() {
-        const email = document.getElementById('email').value;
+        const email = document.getElementById('email').value.trim();
         const pass = document.getElementById('pass').value;
-        const name = document.getElementById('reg-name').value;
+        const name = document.getElementById('reg-name').value.trim();
 
-        if (!email || !pass) return alert("Заполни все поля!");
+        if (!email || !pass) return showNotify("ЗАПОЛНИТЕ ВСЕ ПОЛЯ!");
 
         try {
             if (isLoginMode) {
                 // ВХОД
                 await auth.signInWithEmailAndPassword(email, pass);
+                window.location.href = 'index.html';
             } else {
                 // РЕГИСТРАЦИЯ
-                if (!name) return alert("Введите ник!");
+                if (!name) return showNotify("ВВЕДИТЕ НИК!");
+                
+                // 1. ЗАЩИТА ТВОЕГО НИКА
+                const forbidden = ["ТОКИО", "TOKYO", "ADMIN", "АДМИН"];
+                if (forbidden.includes(name.toUpperCase())) {
+                    return showNotify("НИК ЗАРЕЗЕРВИРОВАН!");
+                }
+
+                // 2. ПРОВЕРКА УНИКАЛЬНОСТИ НИКА (Один ник = один юзер)
+                const snapshot = await db.ref('users').orderByChild('username').equalTo(name).once('value');
+                if (snapshot.exists()) {
+                    return showNotify("ЭТОТ НИК УЖЕ ЗАНЯТ!");
+                }
+
                 const res = await auth.createUserWithEmailAndPassword(email, pass);
                 
-                // СРАЗУ создаем запись в базе данных
+                // Создаем профиль в БД
                 await db.ref('users/' + res.user.uid).set({
                     username: name,
-                    role: "user" // По умолчанию все юзеры. Админа дашь себе в консоли или через админку.
+                    role: "user"
                 });
 
-                // Обновляем имя в самом профиле Firebase (для подстраховки)
-                await res.user.updateProfile({ displayName: name });
+                showNotify("УСПЕШНАЯ РЕГИСТРАЦИЯ!");
+                setTimeout(() => { window.location.href = 'index.html'; }, 1500);
             }
-            // Если всё ок — на главную
-            window.location.href = 'index.html';
         } catch (e) {
-            alert("Ошибка: " + e.message);
+            if (e.code === 'auth/email-already-in-use') {
+                showNotify("ЭТОТ EMAIL УЖЕ ЗАНЯТ!");
+            } else if (e.code === 'auth/weak-password') {
+                showNotify("ПАРОЛЬ СЛИШКОМ СЛАБЫЙ!");
+            } else {
+                showNotify("ОШИБКА: " + e.message);
+            }
         }
     }
 </script>
