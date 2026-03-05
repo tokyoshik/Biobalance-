@@ -1,130 +1,72 @@
-// 1. СТИЛИ
-const coreStyles = document.createElement('style');
-coreStyles.innerHTML = `
-    .toast-container {
-        position: fixed; bottom: -100px; left: 50%; transform: translateX(-50%);
-        background: #fff; border: 4px solid #000; box-shadow: 10px 10px 0px #000;
-        padding: 20px 30px; display: flex; align-items: center; gap: 20px; z-index: 10000;
-        transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); min-width: 300px;
-    }
-    .toast-container.show { bottom: 30px; }
-    .toast-text { font-weight: 900; text-transform: uppercase; font-size: 13px; color: #000; }
-    .toast-close { cursor: pointer; font-weight: 900; background: #000; color: #fff; border: none; padding: 5px 12px; }
-    .like-btn.active { background: #DED7B1 !important; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px #000; }
-    .admin-badge { color: #FF0000 !important; font-weight: 900; border: 2px solid #FF0000 !important; padding: 4px 8px; font-size: 11px; margin-right: 10px; text-decoration: none; }
-    .article-card { background:#fff; border:4px solid #000; box-shadow:10px 10px 0px #000; padding:20px; transition: 0.3s; display: flex; flex-direction: column; margin-bottom: 20px; }
-`;
-document.head.appendChild(coreStyles);
+// Инициализация базы (проверь, чтобы конфиг совпадал с твоим)
+const firebaseConfig = {
+    apiKey: "AIzaSyBgjwzfctB0Z9Lyak4WXTo_wxb2vS5L-rs",
+    authDomain: "healthlogic-fe5bd.firebaseapp.com",
+    databaseURL: "https://healthlogic-fe5bd-default-rtdb.firebaseio.com",
+    projectId: "healthlogic-fe5bd",
+    storageBucket: "healthlogic-fe5bd.firebasestorage.app",
+    messagingSenderId: "177114233773",
+    appId: "1:177114233773:web:0e341fb52efcf7dc2cff24"
+};
 
-// 2. УВЕДОМЛЕНИЯ
-function showToast(message) {
-    const oldToast = document.querySelector('.toast-container');
-    if (oldToast) oldToast.remove();
-    const toast = document.createElement('div');
-    toast.className = 'toast-container';
-    toast.innerHTML = '<span class="toast-text">' + message + '</span><button class="toast-close" onclick="this.parentElement.classList.remove(\'show\')">✕</button>';
-    document.body.appendChild(toast);
-    setTimeout(function() { toast.classList.add('show'); }, 100);
-    setTimeout(function() { 
-        if(toast) { 
-            toast.classList.remove('show'); 
-            setTimeout(function() { toast.remove(); }, 500); 
-        } 
-    }, 5000);
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
 }
+const db = firebase.database();
 
-// 3. ИНИЦИАЛИЗАЦИЯ
-document.addEventListener('DOMContentLoaded', function() {
-    const auth = firebase.auth();
-    const db = firebase.database();
-
-    auth.onAuthStateChanged(function(user) {
-        const authStatus = document.getElementById('auth-status');
-        if (!authStatus) return;
-
-        if (user) {
-            db.ref('users/' + user.uid + '/role').once('value').then(function(snap) {
-                const isAdmin = (snap.val() === 'admin');
-                authStatus.innerHTML = 
-                    (isAdmin ? '<a href="admin.html" class="admin-badge">ADMIN</a>' : '') +
-                    '<a href="profile.html" style="font-weight: 800; margin-right: 15px; text-decoration: none; color: #000; border-bottom: 2px solid #000; font-size: 13px;">ПРОФИЛЬ</a>' +
-                    '<button id="logout-btn" style="background:#000; color:#fff; border:none; padding:6px 12px; font-weight:900; cursor:pointer; font-size: 11px;">ВЫХОД</button>';
-                
-                document.getElementById('logout-btn').onclick = function() {
-                    auth.signOut().then(function() { location.reload(); });
-                };
-            });
-        } else {
-            authStatus.innerHTML = '<a href="auth.html" style="text-decoration:none; font-weight:900; color:#000; border:2px solid #000; padding:6px 12px; font-size: 12px;">ВХОД</a>';
-        }
-        loadArticles(db, auth);
-    });
-});
-
-// 4. ЗАГРУЗКА СТАТЕЙ
-function loadArticles(db, auth) {
+// Функция загрузки статей на главную
+function loadArticles() {
     const container = document.getElementById('articles-container');
     if (!container) return;
 
-    db.ref('articles').on('value', function(snap) {
-        const data = snap.val();
-        if (!data) {
-            container.innerHTML = '<div style="grid-column: 1/-1; text-align:center; font-weight:900;">СТАТЕЙ ПОКА НЕТ</div>';
-            return;
-        }
-
+    db.ref('articles').on('value', snap => {
         container.innerHTML = '';
-        const keys = Object.keys(data).reverse();
-        keys.forEach(function(id) {
-            const post = data[id];
-            const card = document.createElement('article');
-            card.className = 'article-card';
-            card.innerHTML = 
-                '<img src="' + post.image + '" style="width:100%; height:200px; object-fit:cover; border:2px solid #000; margin-bottom:15px;">' +
-                '<h2 style="font-weight:900; text-transform:uppercase; font-size:18px; margin-bottom:10px;">' + post.title + '</h2>' +
-                '<p style="font-size:14px; margin-bottom:20px;">' + post.text.substring(0, 100) + '...</p>' +
-                '<div style="display:flex; justify-content:space-between; align-items:center;">' +
-                    '<button class="like-btn" data-id="' + id + '" style="background:#fff; border:2px solid #000; padding:8px 12px; font-weight:900; cursor:pointer;">' +
-                        '❤ <span class="like-count">0</span>' +
-                    '</button>' +
-                '</div>';
-            container.appendChild(card);
-        });
-        initLikes(db, auth);
-    });
-}
-
-// 5. ЛАЙКИ
-function initLikes(db, auth) {
-    const likeButtons = document.querySelectorAll('.like-btn');
-    likeButtons.forEach(function(btn) {
-        const articleId = btn.getAttribute('data-id');
-        const countSpan = btn.querySelector('.like-count');
+        const data = snap.val();
         
-        db.ref('likes/' + articleId).on('value', function(snap) {
-            const data = snap.val() || {};
-            countSpan.innerText = Object.keys(data).length;
-            if (auth.currentUser && data[auth.currentUser.uid]) {
-                btn.classList.add('active');
-            } else {
-                btn.classList.remove('active');
-            }
-        });
+        if (data) {
+            Object.entries(data).reverse().forEach(([id, post]) => {
+                const card = document.createElement('article');
+                card.className = 'article-card';
+                card.style.border = '4px solid #000';
+                card.style.padding = '20px';
+                card.style.background = '#fff';
+                card.style.marginBottom = '20px';
+                card.style.cursor = 'pointer';
 
-        btn.onclick = function() {
-            const user = auth.currentUser;
-            if (!user) {
-                showToast("Нужна регистрация!");
-                return;
-            }
-            const ref = db.ref('likes/' + articleId + '/' + user.uid);
-            ref.once('value', function(s) {
-                if (s.exists()) {
-                    ref.remove();
-                } else {
-                    ref.set(true);
+                // Переход в статью при клике на всю карточку
+                card.onclick = () => { window.location.href = `article.html?id=${id}`; };
+
+                // Ищем первый попавшийся текст в блоках для описания
+                let previewText = "Нажмите, чтобы прочитать полностью...";
+                if (post.blocks && Array.isArray(post.blocks)) {
+                    const firstText = post.blocks.find(b => b.type === 'text' && b.content);
+                    if (firstText) {
+                        previewText = firstText.content.substring(0, 120) + "...";
+                    }
                 }
+
+                card.innerHTML = `
+                    <div style="overflow:hidden; border-bottom:4px solid #000; margin:-20px -20px 20px -20px;">
+                        <img src="${post.image || 'https://via.placeholder.com/600x300'}" 
+                             style="width:100%; height:250px; object-fit:cover; display:block;">
+                    </div>
+                    <h2 style="font-weight:900; text-transform:uppercase; font-size:24px; margin-bottom:10px; line-height:1;">
+                        ${post.title}
+                    </h2>
+                    <p style="font-size:16px; color:#333; margin-bottom:15px; font-weight:500;">
+                        ${previewText}
+                    </p>
+                    <span style="font-weight:900; text-transform:uppercase; border-bottom:3px solid #000;">
+                        Читать →
+                    </span>
+                `;
+                container.appendChild(card);
             });
-        };
+        } else {
+            container.innerHTML = '<p style="font-weight:900; text-transform:uppercase;">Статей пока нет. Создай первую в админке!</p>';
+        }
     });
 }
+
+// Вызываем загрузку при старте
+document.addEventListener('DOMContentLoaded', loadArticles);
