@@ -1,4 +1,4 @@
-// 1. ГЛОБАЛЬНЫЕ СТИЛИ
+// 1. СТИЛИ
 const coreStyles = document.createElement('style');
 coreStyles.innerHTML = `
     .toast-container {
@@ -8,15 +8,15 @@ coreStyles.innerHTML = `
         transition: bottom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); min-width: 300px;
     }
     .toast-container.show { bottom: 30px; }
-    .toast-text { font-weight: 900; text-transform: uppercase; font-size: 13px; color: #000; line-height: 1.2; }
+    .toast-text { font-weight: 900; text-transform: uppercase; font-size: 13px; color: #000; }
     .toast-close { cursor: pointer; font-weight: 900; background: #000; color: #fff; border: none; padding: 5px 12px; }
     .like-btn.active { background: #DED7B1 !important; transform: translate(-2px, -2px); box-shadow: 4px 4px 0px #000; }
     .admin-badge { color: #FF0000 !important; font-weight: 900; border: 2px solid #FF0000 !important; padding: 4px 8px; font-size: 11px; margin-right: 10px; text-decoration: none; }
-    .article-card { background:#fff; border:4px solid #000; box-shadow:10px 10px 0px #000; padding:20px; transition: 0.3s; display: flex; flex-direction: column; }
+    .article-card { background:#fff; border:4px solid #000; box-shadow:10px 10px 0px #000; padding:20px; transition: 0.3s; display: flex; flex-direction: column; margin-bottom: 20px;}
 `;
 document.head.appendChild(coreStyles);
 
-// 2. ФУНКЦИЯ УВЕДОМЛЕНИЙ
+// 2. УВЕДОМЛЕНИЯ
 function showToast(message) {
     const oldToast = document.querySelector('.toast-container');
     if (oldToast) oldToast.remove();
@@ -103,11 +103,10 @@ function initLikes(db, auth) {
         btn.onclick = () => {
             const user = auth.currentUser;
             if (!user) {
-                if (typeof showToast === 'function') showToast("Нужна регистрация!");
-                else alert("Нужна регистрация!");
+                showToast("Нужна регистрация!");
                 return;
             }
-            const ref = db.ref(\`likes/\${articleId}/\${user.uid}\`);
+            const ref = db.ref('likes/' + articleId + '/' + user.uid);
             ref.once('value', s => s.exists() ? ref.remove() : ref.set(true));
         };
     });
