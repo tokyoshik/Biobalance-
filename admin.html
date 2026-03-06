@@ -3,136 +3,251 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Панель управления | HEALTHLOGIC</title>
+    <title>Admin Command Center | HEALTHLOGIC</title>
     
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22black%22/><text y=%2250%%22 x=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-size=%2260%22 font-weight=%22900%22 fill=%22white%22>H</text></svg>">
     
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
     <style>
-        :root { --bg: #f5f5f7; --accent: #007aff; --radius: 20px; }
+        :root { 
+            --bg: #f5f5f7; 
+            --card: #ffffff; 
+            --accent: #007aff; 
+            --radius: 32px;
+            --error: #ff3b30;
+        }
+
         * { box-sizing: border-box; margin: 0; padding: 0; }
-        body { font-family: 'Inter', sans-serif; background: var(--bg); color: #1d1d1f; padding-top: 80px; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: #1d1d1f; 
+            padding: 120px 5% 40px; 
+            -webkit-font-smoothing: antialiased; 
+        }
 
-        /* HEADER */
-        .admin-header { position: fixed; top: 0; width: 100%; height: 64px; display: flex; justify-content: space-between; align-items: center; padding: 0 5%; background: rgba(255,255,255,0.8); backdrop-filter: blur(20px); z-index: 1000; border-bottom: 0.5px solid rgba(0,0,0,0.1); }
-        .logo { font-weight: 900; text-decoration: none; color: #000; display: flex; align-items: center; gap: 8px; }
-        .nav-links a { text-decoration: none; color: #1d1d1f; font-size: 14px; font-weight: 600; margin-left: 20px; transition: 0.2s; }
-        .nav-links a:hover { color: var(--accent); }
+        /* FIXED NAV BUTTONS IN CORNERS */
+        .corner-nav {
+            position: fixed;
+            top: 25px;
+            z-index: 2000;
+        }
+        .left-corner { left: 5%; }
+        .right-corner { right: 5%; }
 
-        /* CONTENT */
-        .admin-container { max-width: 1000px; margin: 0 auto; padding: 20px; }
-        .admin-card { background: #fff; border-radius: var(--radius); padding: 30px; border: 1px solid rgba(0,0,0,0.05); margin-bottom: 30px; }
-        
-        h1 { font-size: 28px; font-weight: 900; margin-bottom: 25px; letter-spacing: -1px; }
-        
-        .form-group { margin-bottom: 20px; }
-        label { display: block; font-size: 12px; font-weight: 800; text-transform: uppercase; color: #86868b; margin-bottom: 8px; }
-        input, textarea, select { width: 100%; padding: 15px; border-radius: 12px; border: 1px solid #d2d2d7; background: #fbfbfd; font-family: inherit; font-size: 16px; }
-        
-        .btn-save { background: #000; color: #fff; border: none; padding: 18px 40px; border-radius: 50px; font-weight: 700; cursor: pointer; transition: 0.3s; width: 100%; }
-        .btn-save:hover { transform: scale(1.02); opacity: 0.9; }
+        .btn-float {
+            background: #000;
+            color: #fff;
+            text-decoration: none;
+            padding: 14px 28px;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 14px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .btn-float:hover { transform: scale(1.05); background: var(--accent); }
 
-        .articles-list { margin-top: 40px; }
-        .article-item { background: #fff; padding: 20px; border-radius: 16px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; border: 1px solid rgba(0,0,0,0.05); }
-        .btn-delete { color: #ff3b30; background: none; border: none; font-weight: 700; cursor: pointer; }
+        /* ANALYTICS BENTO */
+        .stats-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 24px; 
+            margin-bottom: 40px; 
+        }
+        .stat-card { 
+            background: var(--card); 
+            padding: 40px; 
+            border-radius: var(--radius); 
+            border: 1px solid rgba(0,0,0,0.05); 
+        }
+        .stat-card h4 { font-size: 11px; font-weight: 800; text-transform: uppercase; color: #86868b; margin-bottom: 12px; }
+        .stat-card .value { font-size: 48px; font-weight: 900; letter-spacing: -2px; }
+
+        /* CONTENT PANELS */
+        .admin-layout { display: grid; grid-template-columns: 1.5fr 1fr; gap: 30px; }
+
+        .panel { 
+            background: var(--card); 
+            border-radius: var(--radius); 
+            padding: 40px; 
+            border: 1px solid rgba(0,0,0,0.05); 
+        }
+        h2 { font-size: 28px; font-weight: 800; margin-bottom: 30px; letter-spacing: -1px; }
+
+        /* TABLES & LISTS */
+        .item-row { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            padding: 20px 0; 
+            border-bottom: 0.5px solid rgba(0,0,0,0.05); 
+        }
+        .item-row:last-child { border: none; }
+        
+        .info-block h5 { font-size: 17px; font-weight: 700; margin-bottom: 4px; }
+        .info-block p { font-size: 13px; color: #86868b; }
+
+        .role-select {
+            padding: 8px 12px;
+            border-radius: 12px;
+            border: 1px solid #d2d2d7;
+            background: #fbfbfd;
+            font-family: inherit;
+            font-weight: 600;
+            font-size: 13px;
+        }
+
+        .btn-del {
+            color: var(--error);
+            background: none;
+            border: none;
+            font-weight: 700;
+            cursor: pointer;
+            padding: 8px;
+            transition: 0.2s;
+        }
+        .btn-del:hover { opacity: 0.6; }
+
+        /* TOAST */
+        #toast {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%) translateY(100px);
+            background: #000;
+            color: #fff;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+            transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 3000;
+        }
+        #toast.visible { transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 1024px) { .admin-layout { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<header class="admin-header">
-    <a href="index.html" class="logo">HEALTHLOGIC ADMIN</a>
-    <nav class="nav-links">
-        <a href="index.html">На сайт</a>
-        <a href="profile.html">Мой профиль</a>
-        <a href="#" id="admin-logout" style="color: #ff3b30;">Выход</a>
-    </nav>
-</header>
+<div class="corner-nav left-corner">
+    <a href="editor.html" class="btn-float">＋ Создать статью</a>
+</div>
+<div class="corner-nav right-corner">
+    <a href="redact.html" class="btn-float">✎ Редактировать</a>
+</div>
 
-<main class="admin-container">
-    <div class="admin-card">
-        <h1>Добавить новую статью</h1>
-        <div class="form-group">
-            <label>Заголовок статьи</label>
-            <input type="text" id="post-title" placeholder="Напр: Омега-3: Глубокий анализ">
+<main>
+    <section class="stats-grid">
+        <div class="stat-card">
+            <h4>Трафик (Визиты)</h4>
+            <div class="value" id="stat-visits">2,842</div>
         </div>
-        <div class="form-group">
-            <label>Категория (Tag)</label>
-            <input type="text" id="post-tag" placeholder="PROTOCOL 04 / SUPPLEMENTS">
+        <div class="stat-card">
+            <h4>Посетители</h4>
+            <div class="value" id="stat-users">0</div>
         </div>
-        <div class="form-group">
-            <label>Краткое описание</label>
-            <textarea id="post-desc" rows="3" placeholder="О чем эта статья..."></textarea>
+        <div class="stat-card">
+            <h4>Статьи в ленте</h4>
+            <div class="value" id="stat-posts">0</div>
         </div>
-        <div class="form-group">
-            <label>Ссылка на файл (slug)</label>
-            <input type="text" id="post-link" placeholder="omega3.html">
-        </div>
-        <button class="btn-save" id="save-post">Опубликовать на главной</button>
+    </section>
+
+    <div class="admin-layout">
+        <section class="panel">
+            <h2>Лента новостей</h2>
+            <div id="news-container">
+                </div>
+        </section>
+
+        <aside class="panel">
+            <h2>Пользователи</h2>
+            <div id="users-container">
+                </div>
+        </aside>
     </div>
-
-    <div class="articles-list" id="articles-container">
-        </div>
 </main>
 
+<div id="toast">Уведомление</div>
+
 <script type="module">
-    import { auth, db, logoutUser } from './components.js';
+    import { auth, db } from './components.js';
     import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { collection, getDocs, deleteDoc, doc, updateDoc, query, orderBy } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
     const adminEmail = "ttokyoshik@gmail.com";
 
-    // Проверка прав доступа
+    // УВЕДОМЛЕНИЯ
+    function notify(text) {
+        const t = document.getElementById('toast');
+        t.textContent = text;
+        t.classList.add('visible');
+        setTimeout(() => t.classList.remove('visible'), 3000);
+    }
+
+    // ПРОВЕРКА АДМИНА
     onAuthStateChanged(auth, (user) => {
         if (!user || user.email !== adminEmail) {
             window.location.href = "index.html";
+        } else {
+            loadAllData();
         }
     });
 
-    // Функция сохранения поста
-    const savePost = async () => {
-        const title = document.getElementById('post-title').value;
-        const tag = document.getElementById('post-tag').value;
-        const desc = document.getElementById('post-desc').value;
-        const link = document.getElementById('post-link').value;
-
-        if (!title || !link) return alert("Заполни хотя бы заголовок и ссылку");
-
-        try {
-            await addDoc(collection(db, "articles"), {
-                title, tag, desc, link,
-                createdAt: new Date()
-            });
-            location.reload();
-        } catch (e) { console.error(e); }
-    };
-
-    document.getElementById('save-post').onclick = savePost;
-    document.getElementById('admin-logout').onclick = () => logoutUser();
-
-    // Загрузка списка для удаления
-    const loadArticles = async () => {
-        const querySnapshot = await getDocs(collection(db, "articles"));
-        const container = document.getElementById('articles-container');
-        querySnapshot.forEach((articleDoc) => {
-            const data = articleDoc.data();
-            const div = document.createElement('div');
-            div.className = 'article-item';
-            div.innerHTML = `
-                <span>${data.title}</span>
-                <button class="btn-delete" onclick="deleteArticle('${articleDoc.id}')">Удалить</button>
+    async function loadAllData() {
+        // 1. Загрузка статей
+        const newsSnap = await getDocs(query(collection(db, "news"), orderBy("createdAt", "desc")));
+        const newsBox = document.getElementById('news-container');
+        newsBox.innerHTML = '';
+        let postCount = 0;
+        
+        newsSnap.forEach(d => {
+            postCount++;
+            const data = d.data();
+            newsBox.innerHTML += `
+                <div class="item-row">
+                    <div class="info-block">
+                        <h5>${data.title}</h5>
+                        <p>${data.desc.substring(0, 50)}...</p>
+                    </div>
+                    <button class="btn-del" onclick="window.deletePost('${d.id}')">Удалить</button>
+                </div>
             `;
-            container.appendChild(div);
         });
-    };
-    
-    window.deleteArticle = async (id) => {
-        if(confirm("Удалить статью?")) {
-            await deleteDoc(doc(db, "articles", id));
-            location.reload();
+        document.getElementById('stat-posts').textContent = postCount;
+
+        // 2. Загрузка пользователей (Заглушка логики ролей)
+        const usersBox = document.getElementById('users-container');
+        usersBox.innerHTML = `
+            <div class="item-row">
+                <div class="info-block">
+                    <h5>Admin User</h5>
+                    <p>${adminEmail}</p>
+                </div>
+                <select class="role-select">
+                    <option selected>Admin</option>
+                    <option>User</option>
+                </select>
+            </div>
+        `;
+        document.getElementById('stat-users').textContent = "12"; // Пример
+    }
+
+    // ГЛОБАЛЬНАЯ ФУНКЦИЯ УДАЛЕНИЯ
+    window.deletePost = async (id) => {
+        if(confirm("Удалить статью навсегда?")) {
+            try {
+                await deleteDoc(doc(db, "news", id));
+                notify("Статья успешно удалена");
+                loadAllData();
+            } catch(e) { notify("Ошибка при удалении"); }
         }
     };
 
-    loadArticles();
 </script>
 
 </body>
