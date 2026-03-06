@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Article | HEALTHLOGIC</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 rx=%2220%22 fill=%22black%22/><text y=%2250%%22 x=%2250%%22 dominant-baseline=%22central%22 text-anchor=%22middle%22 font-family=%22Inter, sans-serif%22 font-size=%2260%22 font-weight=%22900%22 fill=%22white%22>H</text></svg>">
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        :root { 
+            --bg: #ffffff; 
+            --accent: #ff9500; /* Цвет редактирования - оранжевый Apple */
+            --secondary: #f5f5f7;
+            --radius: 20px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background-color: var(--bg); 
+            color: #1d1d1f; 
+            padding-bottom: 100px;
+        }
+
+        /* HEADER */
+        .editor-header {
+            position: fixed; top: 0; width: 100%; height: 70px;
+            background: rgba(255,255,255,0.8); backdrop-filter: blur(20px);
+            display: flex; justify-content: space-between; align-items: center;
+            padding: 0 5%; z-index: 1000; border-bottom: 0.5px solid rgba(0,0,0,0.1);
+        }
+        .btn-back { text-decoration: none; color: #86868b; font-weight: 600; transition: 0.3s; }
+        .btn-back:hover { color: #000; }
+
+        .btn-save {
+            background: #000; color: #fff; border: none;
+            padding: 10px 24px; border-radius: 50px; font-weight: 700;
+            cursor: pointer; transition: 0.3s;
+        }
+        .btn-save:hover { background: var(--accent); transform: scale(1.05); }
+
+        /* CANVAS */
+        .canvas { max-width: 800px; margin: 120px auto 40px; padding: 0 20px; }
+        
+        .main-title-input {
+            width: 100%; border: none; outline: none;
+            font-size: 48px; font-weight: 900; letter-spacing: -2px;
+            margin-bottom: 40px; color: #000;
+        }
+
+        /* BLOCKS */
+        .block-wrapper { position: relative; margin-bottom: 25px; animation: fadeIn 0.4s ease; }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .input-text { width: 100%; border: none; outline: none; font-size: 18px; line-height: 1.6; resize: none; }
+        .input-subtitle { width: 100%; border: none; outline: none; font-size: 24px; font-weight: 700; letter-spacing: -0.5px; }
+        .input-image-url { width: 100%; padding: 12px; border-radius: 12px; background: var(--secondary); border: 1px solid #d2d2d7; margin-bottom: 10px; }
+        .preview-img { width: 100%; border-radius: 16px; max-height: 450px; object-fit: cover; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+
+        .btn-remove-block {
+            position: absolute; right: -40px; top: 0; color: #ff3b30;
+            background: none; border: none; cursor: pointer; font-size: 18px; opacity: 0.3;
+        }
+        .block-wrapper:hover .btn-remove-block { opacity: 1; }
+
+        /* TOOLBAR */
+        .toolbar {
+            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+            background: #1d1d1f; padding: 8px; border-radius: 50px;
+            display: flex; gap: 8px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+        }
+        .tool-btn {
+            background: none; border: none; color: #fff; padding: 12px 20px;
+            font-weight: 700; font-size: 13px; cursor: pointer; border-radius: 40px;
+        }
+        .tool-btn:hover { background: rgba(255,255,255,0.1); }
+
+        /* TOAST */
+        #toast {
+            position: fixed; bottom: 100px; left: 50%; transform: translateX(-50%) translateY(100px);
+            background: var(--accent); color: #fff; padding: 16px 32px; border-radius: 50px;
+            font-weight: 700; transition: 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275); opacity: 0; z-index: 2000;
+        }
+        #toast.visible { opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        @media (max-width: 900px) { .btn-remove-block { right: 0; top: -25px; } }
+    </style>
+</head>
+<body>
+
+<header class="editor-header">
+    <a href="admin.html" class="btn-back">← Назад</a>
+    <div style="font-weight: 800; font-size: 14px; color: var(--accent)">РЕЖИМ ПРАВКИ</div>
+    <button class="btn-save" id="update-btn">Сохранить изменения</button>
+</header>
+
+<main class="canvas">
+    <input type="text" class="main-title-input" id="main-title" placeholder="Заголовок">
+    <div id="editor-content">
+        </div>
+</main>
+
+<div class="toolbar">
+    <button class="tool-btn" onclick="addBlock('text')">+ Текст</button>
+    <button class="tool-btn" onclick="addBlock('subtitle')">+ Подзаголовок</button>
+    <button class="tool-btn" onclick="addBlock('image')">+ Фото</button>
+</div>
+
+<div id="toast">Обновлено</div>
+
+<script type="module">
+    import { db, auth } from './components.js';
+    import { doc, getDoc, updateDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+    import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+    const contentArea = document.getElementById('editor-content');
+    const urlParams = new URLSearchParams(window.location.search);
+    const articleId = urlParams.get('id');
+
+    // Проверка доступа
+    onAuthStateChanged(auth, (user) => {
+        if (!user || user.email !== "ttokyoshik@gmail.com") window.location.href = "index.html";
+        if (articleId) loadArticleData();
+    });
+
+    function notify(text) {
+        const t = document.getElementById('toast');
+        t.textContent = text;
+        t.classList.add('visible');
+        setTimeout(() => t.classList.remove('visible'), 3000);
+    }
+
+    // Загрузка данных статьи
+    async function loadArticleData() {
+        const docRef = doc(db, "news", articleId);
+        const docSnap = await getDoc(docRef);
+
+        if (docSnap.exists()) {
+            const data = docSnap.data();
+            document.getElementById('main-title').value = data.title;
+            
+            data.content.forEach(block => {
+                addBlock(block.type, block.content);
+            });
+        } else {
+            notify("Статья не найдена");
+        }
+    }
+
+    window.addBlock = (type, content = '') => {
+        const wrapper = document.createElement('div');
+        wrapper.className = 'block-wrapper';
+        
+        let inner = '';
+        if (type === 'text') {
+            inner = `<textarea class="input-text" placeholder="Текст..." oninput="autoHeight(this)">${content}</textarea>`;
+        } else if (type === 'subtitle') {
+            inner = `<input type="text" class="input-subtitle" placeholder="Подзаголовок" value="${content}">`;
+        } else if (type === 'image') {
+            inner = `
+                <input type="text" class="input-image-url" placeholder="Ссылка на фото" value="${content}" onchange="previewImg(this)">
+                <img src="${content}" class="preview-img" style="display: ${content ? 'block' : 'none'}">
+            `;
+        }
+        
+        wrapper.innerHTML = inner + `<button class="btn-remove-block" onclick="this.parentElement.remove()">×</button>`;
+        contentArea.appendChild(wrapper);
+        
+        // Авто-высота для загруженного текста
+        const txt = wrapper.querySelector('textarea');
+        if(txt) autoHeight(txt);
+    };
+
+    window.autoHeight = (el) => {
+        el.style.height = "auto";
+        el.style.height = (el.scrollHeight) + "px";
+    };
+
+    window.previewImg = (el) => {
+        const img = el.nextElementSibling;
+        img.src = el.value;
+        img.style.display = 'block';
+    };
+
+    // Обновление
+    document.getElementById('update-btn').onclick = async () => {
+        const title = document.getElementById('main-title').value;
+        const blocks = [];
+        const wrappers = document.querySelectorAll('.block-wrapper');
+        
+        wrappers.forEach(w => {
+            const text = w.querySelector('.input-text');
+            const sub = w.querySelector('.input-subtitle');
+            const img = w.querySelector('.input-image-url');
+            
+            if (text) blocks.push({ type: 'text', content: text.value });
+            if (sub) blocks.push({ type: 'subtitle', content: sub.value });
+            if (img) blocks.push({ type: 'image', content: img.value });
+        });
+
+        try {
+            await updateDoc(doc(db, "news", articleId), {
+                title: title,
+                desc: blocks.find(b => b.type === 'text')?.content || "",
+                content: blocks
+            });
+            notify("Изменения сохранены!");
+            setTimeout(() => window.location.href = "admin.html", 1500);
+        } catch (e) {
+            notify("Ошибка сохранения");
+        }
+    };
+</script>
+
+</body>
+</html>
